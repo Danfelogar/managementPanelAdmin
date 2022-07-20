@@ -6,10 +6,12 @@ import { UIContext, uiReducer } from './'
 
 export interface UIState {
     theme: 'light' | 'dark'
+    isMenuOpen: boolean
 }
 
 const UI_INITIAL_STATE: UIState = {
     theme: 'light',
+    isMenuOpen: false,
 }
 
 interface Props {
@@ -31,6 +33,10 @@ export const UIProvider: FC<Props> = ({ children }) => {
         dispatch({ type: '[UI] Change theme', payload: themeByCookies !== undefined ? themeByCookies : 'light' })
     }, [])
 
+    const toggleSideMenu = () => {
+        dispatch({ type: '[UI] Toggle Menu' })
+    }
+
     return (
         <UIContext.Provider
             value={{
@@ -38,6 +44,7 @@ export const UIProvider: FC<Props> = ({ children }) => {
 
                 //funtions
                 changeTheme,
+                toggleSideMenu,
             }}
         >
             {children}

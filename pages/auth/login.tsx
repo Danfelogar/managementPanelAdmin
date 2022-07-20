@@ -21,12 +21,9 @@ import {
     WrapperCardAuth,
 } from '../../components'
 import { InputText, InputPassword } from '../../components/ui/inputs'
+import { ITheme } from '../../interface'
 
-interface Props {
-    toggleTheme: (theme: 'light' | 'dark') => void
-}
-
-const LoginPage: NextPage<Props> = ({ toggleTheme }) => {
+const LoginPage: NextPage<ITheme> = ({ toggleTheme }) => {
     const { theme, changeTheme } = useContext(UIContext)
     const { onLoginUser, formsMethods } = useLogin()
 
