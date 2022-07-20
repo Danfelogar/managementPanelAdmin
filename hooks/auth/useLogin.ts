@@ -1,8 +1,11 @@
 import { signIn } from 'next-auth/react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
 
-type FormData = {
+import { validateLogin } from '../../utils/validations/validateLogin'
+
+export interface FormData {
     email: string
     contrasena: string
 }
@@ -10,11 +13,10 @@ type FormData = {
 export const useLogin = () => {
     const [showPassword, setshowPassword] = useState(false)
     const [showError, setShowError] = useState(false)
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm<FormData>()
+
+    const formsMethods = useForm<FormData>({
+        resolver: yupResolver(validateLogin),
+    })
 
     const handleOnChangeShowPassword = () => {
         setshowPassword(!showPassword)
@@ -30,13 +32,12 @@ export const useLogin = () => {
         //states
         showPassword,
         showError,
-        errors,
 
         //methods
+        formsMethods,
+
         //funtions
         handleOnChangeShowPassword,
-        register,
-        handleSubmit,
         onLoginUser,
     }
 }
