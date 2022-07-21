@@ -5,6 +5,7 @@ import {
     EngineeringOutlined,
     GroupOutlined,
     PrecisionManufacturingOutlined,
+    TimelapseOutlined,
     WarningAmberOutlined,
 } from '@mui/icons-material'
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest'
@@ -44,19 +45,25 @@ const HomePage: NextPage<ITheme> = ({ toggleTheme }) => {
 
                 <SummaryTile
                     icon={<BackspaceOutlined color="error" sx={{ fontSize: 65 }} />}
-                    subTitle="Fuera de Stock en repuestos"
+                    subTitle={`Fuera de Stock en repuestos`}
                     title={10}
                 />
 
                 <SummaryTile
                     icon={<WarningAmberOutlined color="warning" sx={{ fontSize: 65 }} />}
-                    subTitle="Existencias bajas en repuesto"
+                    subTitle={`Existencias bajas en repuesto`}
                     title={10}
                 />
 
                 <SummaryTile
                     icon={<EngineeringOutlined color="info" sx={{ fontSize: 65 }} />}
                     subTitle="Seguimiento"
+                    title={10}
+                />
+
+                <SummaryTile
+                    icon={<TimelapseOutlined color="disabled" sx={{ fontSize: 65 }} />}
+                    subTitle="Tiempo para la actualización"
                     title={10}
                 />
             </Grid>
