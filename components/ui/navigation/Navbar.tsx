@@ -24,7 +24,7 @@ export const Navbar: FC<Props> = ({ toggleTheme }) => {
     }
 
     return (
-        <AppBar color="inherit" sx={{ height: '6vh' }}>
+        <AppBar color="inherit">
             <Toolbar>
                 <CardMedia sx={{ width: '100px', paddingTop: '0.1px' }}>
                     <Image alt="logoMtto" height={135} layout="responsive" src={logoMtto} width={310} />

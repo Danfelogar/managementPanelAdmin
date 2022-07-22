@@ -3,7 +3,7 @@
 import { PeopleOutline } from '@mui/icons-material'
 import { Grid, MenuItem, Select } from '@mui/material'
 import { Box, Container } from '@mui/system'
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid'
+import { DataGrid, GridColDef, GridToolbar, GridValueGetterParams } from '@mui/x-data-grid'
 import { NextPage } from 'next'
 
 // import { tesloApi } from '../../api'
@@ -150,7 +150,15 @@ const UsersPage: NextPage<ITheme> = ({ toggleTheme }) => {
         >
             <Grid container className="fadeIn">
                 <Grid item sx={{ height: 650, width: '100%' }} xs={12}>
-                    <DataGrid columns={columns} pageSize={10} rows={rows} rowsPerPageOptions={[10]} />
+                    <DataGrid
+                        columns={columns}
+                        components={{
+                            Toolbar: GridToolbar,
+                        }}
+                        pageSize={10}
+                        rows={rows}
+                        rowsPerPageOptions={[10]}
+                    />
                 </Grid>
             </Grid>
         </AdminLayout>

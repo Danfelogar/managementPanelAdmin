@@ -27,6 +27,7 @@ const inventarioSchema = new Schema(
         imagenes: [{ type: String, required: true }],
         fechaDeEntrada: { type: String, required: true },
         fechaDeActualizacion: { type: String, required: true },
+
         //maquina condicional
         id_maquina: { type: String, unique: true },
         capacidadNominal: { type: String },
@@ -50,6 +51,7 @@ const inventarioSchema = new Schema(
             },
         },
         subLocacion: { type: Number },
+
         //repuesto condicional
         id_repuesto: { type: String, unique: true },
         existencia: { type: Number },
