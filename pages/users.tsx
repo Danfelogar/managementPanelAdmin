@@ -1,22 +1,25 @@
-// import { useState, useEffect } from 'react'
+// import { useState, useEffect, useContext } from 'react';
 // import useSWR from 'swr'
-import { PeopleOutline } from '@mui/icons-material'
+import { NextPage } from 'next'
+import { useContext } from 'react'
 import { Grid, MenuItem, Select } from '@mui/material'
 import { Box, Container } from '@mui/system'
 import { DataGrid, GridColDef, GridToolbar, GridValueGetterParams } from '@mui/x-data-grid'
-import { NextPage } from 'next'
-
-// import { tesloApi } from '../../api'
-// import { AdminLayout } from '../../components/layouts'
-// import { IUser } from '../../interfaces'
+import { PeopleOutline } from '@mui/icons-material'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import IconButton from '@mui/material/IconButton'
 
+// import { tesloApi } from '../../api'
+// import { AdminLayout } from '../../components/layouts'
+// import { IUser } from '../../interfaces'
+
 import { ITheme } from '../interface'
-import { AdminLayout } from '../components'
+import { AdminLayout, ModalUsers } from '../components'
+import { UIContext } from '../context'
 
 const UsersPage: NextPage<ITheme> = ({ toggleTheme }) => {
+    const { toggleModalUsers } = useContext(UIContext)
     // const { data, error} = useSWR<IUser[]>('/api/admin/users')
     // const [users, setUsers] = useState<IUser[]>([])
 
@@ -88,7 +91,7 @@ const UsersPage: NextPage<ITheme> = ({ toggleTheme }) => {
                                 height: '100%',
                             }}
                         >
-                            <IconButton color="secondary" onClick={() => console.log(`yo edito a ${row.id}`)}>
+                            <IconButton color="secondary" onClick={toggleModalUsers}>
                                 <EditIcon />
                             </IconButton>
                             <IconButton color="error" onClick={() => console.log(`yo borro a ${row.id}`)}>
@@ -161,6 +164,7 @@ const UsersPage: NextPage<ITheme> = ({ toggleTheme }) => {
                     />
                 </Grid>
             </Grid>
+            <ModalUsers />
         </AdminLayout>
     )
 }

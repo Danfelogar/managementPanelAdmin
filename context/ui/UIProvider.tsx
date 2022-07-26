@@ -7,11 +7,13 @@ import { UIContext, uiReducer } from './'
 export interface UIState {
     theme: 'light' | 'dark'
     isMenuOpen: boolean
+    isModalUsersOpen: boolean
 }
 
 const UI_INITIAL_STATE: UIState = {
     theme: 'light',
     isMenuOpen: false,
+    isModalUsersOpen: false,
 }
 
 interface Props {
@@ -36,6 +38,9 @@ export const UIProvider: FC<Props> = ({ children }) => {
     const toggleSideMenu = () => {
         dispatch({ type: '[UI] Toggle Menu' })
     }
+    const toggleModalUsers = () => {
+        dispatch({ type: '[UI] Toggle Modal Users' })
+    }
 
     return (
         <UIContext.Provider
@@ -45,6 +50,7 @@ export const UIProvider: FC<Props> = ({ children }) => {
                 //funtions
                 changeTheme,
                 toggleSideMenu,
+                toggleModalUsers,
             }}
         >
             {children}
