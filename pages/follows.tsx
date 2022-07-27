@@ -1,12 +1,19 @@
 import { NextPage } from 'next'
 import { DataGrid, GridToolbar, GridColDef, GridValueGetterParams, GridRenderCellParams } from '@mui/x-data-grid'
-import { Box, CardMedia, Grid, Typography } from '@mui/material'
+import { Box, CardMedia, Container, Grid, IconButton, Typography } from '@mui/material'
 import { EngineeringOutlined } from '@mui/icons-material'
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete'
+import { useContext } from 'react'
 
 import { AdminLayout } from '../components/layouts/AdminLayout'
 import { ITheme } from '../interface/theme'
+import { ModalFollows } from '../components'
+import { UIContext } from '../context'
 
 const FollowsPager: NextPage<ITheme> = ({ toggleTheme }) => {
+    const { toggleModalFollows } = useContext(UIContext)
+
     const columns: GridColDef[] = [
         {
             field: 'imgDeVerificacion',
@@ -60,8 +67,36 @@ const FollowsPager: NextPage<ITheme> = ({ toggleTheme }) => {
         },
         {
             field: 'maquina_id_relacion',
-            headerName: 'Maquina de Reparacion',
+            headerName: 'Maquina de Relación',
             width: 200,
+        },
+        {
+            field: 'actions',
+            headerName: 'Acciones',
+            width: 150,
+            renderCell: ({ row }: GridValueGetterParams) => {
+                return (
+                    <Container>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                width: '100%',
+                                height: '100%',
+                            }}
+                        >
+                            <IconButton color="secondary" onClick={toggleModalFollows}>
+                                <EditIcon />
+                            </IconButton>
+                            <IconButton color="error" onClick={() => console.log(`yo borro a ${row.id}`)}>
+                                <DeleteIcon />
+                            </IconButton>
+                        </Box>
+                    </Container>
+                )
+            },
         },
     ]
 
@@ -113,6 +148,7 @@ const FollowsPager: NextPage<ITheme> = ({ toggleTheme }) => {
                     />
                 </Grid>
             </Grid>
+            <ModalFollows />
         </AdminLayout>
     )
 }

@@ -34,12 +34,6 @@ export const Navbar: FC<Props> = ({ toggleTheme }) => {
                 </IconButton>
 
                 <Box flex={1} />
-                <Button>
-                    {/* <NextLink passHref href="/">
-                        <Link alignItems="center" display="flex"> */}
-                    {/* </Link>
-                    </NextLink> */}
-                </Button>
                 {theme === 'dark' ? (
                     <IconButton color="secondary" sx={{ ml: 1 }} onClick={() => handleChangeTheme('light')}>
                         <Brightness7Icon />

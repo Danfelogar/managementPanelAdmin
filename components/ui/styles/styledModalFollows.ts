@@ -1,7 +1,7 @@
 import { Container } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
-export const WrapperModalUser = {
+export const WrapperModalFollow = {
     position: 'absolute' as 'absolute',
     top: '50%',
     left: '50%',
@@ -18,7 +18,7 @@ export const WrapperModalUser = {
     alignItems: 'center',
 }
 
-export const WrapperModalHeaderUser = styled(Container)(() => ({
+export const WrapperModalHeaderFollow = styled(Container)(() => ({
     width: '100%',
     display: 'flex',
     flexDirection: 'row',

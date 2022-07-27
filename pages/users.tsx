@@ -2,12 +2,13 @@
 // import useSWR from 'swr'
 import { NextPage } from 'next'
 import { useContext } from 'react'
-import { Grid, MenuItem, Select } from '@mui/material'
+import { Button, Grid, MenuItem, Select } from '@mui/material'
 import { Box, Container } from '@mui/system'
 import { DataGrid, GridColDef, GridToolbar, GridValueGetterParams } from '@mui/x-data-grid'
 import { PeopleOutline } from '@mui/icons-material'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
+import CreateIcon from '@mui/icons-material/Create'
 import IconButton from '@mui/material/IconButton'
 
 // import { tesloApi } from '../../api'
@@ -69,7 +70,6 @@ const UsersPage: NextPage<ITheme> = ({ toggleTheme }) => {
                         <MenuItem value="admin_mtto">Admin Mantenimiento</MenuItem>
                         <MenuItem value="bodega">Bodega</MenuItem>
                         <MenuItem value="mtto">Mantenimiento</MenuItem>
-                        <MenuItem value="SEO">SEO</MenuItem>
                     </Select>
                 )
             },
@@ -152,6 +152,14 @@ const UsersPage: NextPage<ITheme> = ({ toggleTheme }) => {
             toggleTheme={toggleTheme}
         >
             <Grid container className="fadeIn">
+                <Grid
+                    sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mb: 1, mt: 1 }}
+                    xs={12}
+                >
+                    <Button color="secondary" startIcon={<CreateIcon />} variant="outlined">
+                        Crear nuevo usuario
+                    </Button>
+                </Grid>
                 <Grid item sx={{ height: 650, width: '100%' }} xs={12}>
                     <DataGrid
                         columns={columns}

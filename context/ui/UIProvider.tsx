@@ -8,12 +8,14 @@ export interface UIState {
     theme: 'light' | 'dark'
     isMenuOpen: boolean
     isModalUsersOpen: boolean
+    isModalFollowsOpen: boolean
 }
 
 const UI_INITIAL_STATE: UIState = {
     theme: 'light',
     isMenuOpen: false,
     isModalUsersOpen: false,
+    isModalFollowsOpen: false,
 }
 
 interface Props {
@@ -41,6 +43,9 @@ export const UIProvider: FC<Props> = ({ children }) => {
     const toggleModalUsers = () => {
         dispatch({ type: '[UI] Toggle Modal Users' })
     }
+    const toggleModalFollows = () => {
+        dispatch({ type: '[UI] Toggle Modal Follows' })
+    }
 
     return (
         <UIContext.Provider
@@ -51,6 +56,7 @@ export const UIProvider: FC<Props> = ({ children }) => {
                 changeTheme,
                 toggleSideMenu,
                 toggleModalUsers,
+                toggleModalFollows,
             }}
         >
             {children}
