@@ -1,6 +1,6 @@
 import { NextPage } from 'next'
 import { DataGrid, GridToolbar, GridColDef, GridValueGetterParams, GridRenderCellParams } from '@mui/x-data-grid'
-import { Box, CardMedia, Container, Grid, IconButton, Typography } from '@mui/material'
+import { Box, CardMedia, Container, Grid, IconButton } from '@mui/material'
 import { EngineeringOutlined } from '@mui/icons-material'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -8,13 +8,21 @@ import { useContext } from 'react'
 
 import { AdminLayout } from '../components/layouts/AdminLayout'
 import { ITheme } from '../interface/theme'
-import { ModalFollows } from '../components'
+import { ModalFollows, SnackbarError, SnackbarSuccess } from '../components'
 import { UIContext } from '../context'
+import { useFollows } from '../hooks'
 
 const FollowsPager: NextPage<ITheme> = ({ toggleTheme }) => {
-    const { toggleModalFollows } = useContext(UIContext)
+    const { toggleModalFollows, toggleSnackBarError, toggleSnackBarSuccess, isSnackbarSuccess, isSnackbarError } =
+        useContext(UIContext)
+    const { msmTextDelete, handleDeletedFollow } = useFollows()
 
     const columns: GridColDef[] = [
+        {
+            field: 'id',
+            headerName: 'Identificación',
+            width: 110,
+        },
         {
             field: 'imgDeVerificacion',
             headerName: 'Imagen De Verificación',
@@ -90,7 +98,7 @@ const FollowsPager: NextPage<ITheme> = ({ toggleTheme }) => {
                             <IconButton color="secondary" onClick={toggleModalFollows}>
                                 <EditIcon />
                             </IconButton>
-                            <IconButton color="error" onClick={() => console.log(`yo borro a ${row.id}`)}>
+                            <IconButton color="error" onClick={() => handleDeletedFollow(row.id)}>
                                 <DeleteIcon />
                             </IconButton>
                         </Box>
@@ -149,6 +157,16 @@ const FollowsPager: NextPage<ITheme> = ({ toggleTheme }) => {
                 </Grid>
             </Grid>
             <ModalFollows />
+            <SnackbarError
+                handleChangeSnackbar={toggleSnackBarError}
+                isOpen={isSnackbarError}
+                msmText={`Se ha borrando exitosamente el seguimiento ${msmTextDelete}`}
+            />
+            <SnackbarSuccess
+                handleChangeSnackbar={toggleSnackBarSuccess}
+                isOpen={isSnackbarSuccess}
+                msmText={`se ha actualizado exitosamente el seguimiento`}
+            />
         </AdminLayout>
     )
 }

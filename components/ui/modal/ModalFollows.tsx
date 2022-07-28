@@ -24,9 +24,11 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 
 import { WrapperModalHeaderFollow, WrapperModalFollow } from '../styles'
 import { UIContext } from '../../../context'
+import { useFollows } from '../../../hooks'
 
 export const ModalFollows = () => {
     const { toggleModalFollows, isModalFollowsOpen } = useContext(UIContext)
+    const { handleUpdateFollow } = useFollows()
     const fileInputRef = useRef<HTMLInputElement>(null)
 
     return (
@@ -51,10 +53,21 @@ export const ModalFollows = () => {
                     </IconButton>
                 </WrapperModalHeaderFollow>
                 <Grid container>
-                    <Grid flexDirection="row" md={5.5} sx={{ m: 2 }} xs={12}>
-                        <Grid item sm={6} sx={{ mr: 1 }} xs={6}>
+                    <Grid item md={5.5} sx={{ m: 2, display: 'flex', flexDirection: 'row' }} xs={11}>
+                        <Box display="flex" flexDirection="column" sx={{ width: '50%', pr: 2 }}>
                             <FormLabel sx={{ mb: 1 }}>Image</FormLabel>
                             <Button
+                                fullWidth
+                                color="secondary"
+                                component="label"
+                                startIcon={<CloudUploadIcon />}
+                                sx={{ mb: 3 }}
+                                variant="contained"
+                            >
+                                Upload
+                                <input hidden multiple accept="image/*" type="file" />
+                            </Button>
+                            {/* <Button
                                 fullWidth
                                 color="secondary"
                                 startIcon={<CloudUploadIcon />}
@@ -72,17 +85,17 @@ export const ModalFollows = () => {
                                 type="file"
                                 //cuando cambie vamos a empezar el procedimiento de la carga de las imgs
                                 // onChange={ onFilesSelected }
-                            />
+                            /> */}
                             <Chip
                                 color="error"
                                 label="At least 2 images are required"
                                 sx={{ display: 'flex' }}
                                 variant="outlined"
                             />
-                        </Grid>
+                        </Box>
 
-                        <Grid item sm={4.2} xs={4.2}>
-                            <Card>
+                        <Box display="flex" flexDirection="column" sx={{ width: '50%', pl: 2 }}>
+                            <Card sx={{ width: '100%', height: '100%' }}>
                                 <CardMedia
                                     alt="img demo"
                                     className="fadeIn"
@@ -100,7 +113,7 @@ export const ModalFollows = () => {
                                     </Button>
                                 </CardActions>
                             </Card>
-                        </Grid>
+                        </Box>
                     </Grid>
                     <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
                         <TextField fullWidth multiline id="outlined-multiline-flexible" label="Comentario" maxRows={7} />
@@ -135,7 +148,7 @@ export const ModalFollows = () => {
                 </Grid>
                 <Grid container sx={{ p: 2 }}>
                     <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                        <Button color="secondary" startIcon={<SaveIcon />} variant="outlined">
+                        <Button color="secondary" startIcon={<SaveIcon />} variant="outlined" onClick={handleUpdateFollow}>
                             Guardar cambios
                         </Button>
                     </Box>

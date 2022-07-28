@@ -9,6 +9,8 @@ export interface UIState {
     isMenuOpen: boolean
     isModalUsersOpen: boolean
     isModalFollowsOpen: boolean
+    isSnackbarSuccess: boolean
+    isSnackbarError: boolean
 }
 
 const UI_INITIAL_STATE: UIState = {
@@ -16,6 +18,8 @@ const UI_INITIAL_STATE: UIState = {
     isMenuOpen: false,
     isModalUsersOpen: false,
     isModalFollowsOpen: false,
+    isSnackbarSuccess: false,
+    isSnackbarError: false,
 }
 
 interface Props {
@@ -47,6 +51,14 @@ export const UIProvider: FC<Props> = ({ children }) => {
         dispatch({ type: '[UI] Toggle Modal Follows' })
     }
 
+    const toggleSnackBarSuccess = () => {
+        dispatch({ type: '[UI] Toggle Snackbar Success' })
+    }
+
+    const toggleSnackBarError = () => {
+        dispatch({ type: '[UI] Toggle Snackbar Error' })
+    }
+
     return (
         <UIContext.Provider
             value={{
@@ -57,6 +69,8 @@ export const UIProvider: FC<Props> = ({ children }) => {
                 toggleSideMenu,
                 toggleModalUsers,
                 toggleModalFollows,
+                toggleSnackBarSuccess,
+                toggleSnackBarError,
             }}
         >
             {children}

@@ -16,11 +16,14 @@ import IconButton from '@mui/material/IconButton'
 // import { IUser } from '../../interfaces'
 
 import { ITheme } from '../interface'
-import { AdminLayout, ModalUsers } from '../components'
+import { AdminLayout, ModalUsers, SnackbarError, SnackbarSuccess } from '../components'
 import { UIContext } from '../context'
+import { useUsers } from '../hooks'
 
 const UsersPage: NextPage<ITheme> = ({ toggleTheme }) => {
-    const { toggleModalUsers } = useContext(UIContext)
+    const { toggleModalUsers, toggleSnackBarError, toggleSnackBarSuccess, isSnackbarError, isSnackbarSuccess } =
+        useContext(UIContext)
+    const { msmTextDelete, handleDeletedUser } = useUsers()
     // const { data, error} = useSWR<IUser[]>('/api/admin/users')
     // const [users, setUsers] = useState<IUser[]>([])
 
@@ -94,7 +97,7 @@ const UsersPage: NextPage<ITheme> = ({ toggleTheme }) => {
                             <IconButton color="secondary" onClick={toggleModalUsers}>
                                 <EditIcon />
                             </IconButton>
-                            <IconButton color="error" onClick={() => console.log(`yo borro a ${row.id}`)}>
+                            <IconButton color="error" onClick={() => handleDeletedUser(row.email)}>
                                 <DeleteIcon />
                             </IconButton>
                         </Box>
@@ -153,6 +156,7 @@ const UsersPage: NextPage<ITheme> = ({ toggleTheme }) => {
         >
             <Grid container className="fadeIn">
                 <Grid
+                    item
                     sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mb: 1, mt: 1 }}
                     xs={12}
                 >
@@ -173,6 +177,16 @@ const UsersPage: NextPage<ITheme> = ({ toggleTheme }) => {
                 </Grid>
             </Grid>
             <ModalUsers />
+            <SnackbarError
+                handleChangeSnackbar={toggleSnackBarError}
+                isOpen={isSnackbarError}
+                msmText={`Se ha borrando exitosamente el usuario ${msmTextDelete}`}
+            />
+            <SnackbarSuccess
+                handleChangeSnackbar={toggleSnackBarSuccess}
+                isOpen={isSnackbarSuccess}
+                msmText={`se ha actualizado exitosamente el usuario`}
+            />
         </AdminLayout>
     )
 }

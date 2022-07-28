@@ -18,9 +18,11 @@ import SaveIcon from '@mui/icons-material/Save'
 
 import { WrapperModalHeaderUser, WrapperModalUser } from '../styles'
 import { UIContext } from '../../../context'
+import { useUsers } from '../../../hooks'
 
 export const ModalUsers = () => {
     const { toggleModalUsers, isModalUsersOpen } = useContext(UIContext)
+    const { handleUpdateUser } = useUsers()
 
     return (
         <Modal
@@ -66,7 +68,7 @@ export const ModalUsers = () => {
                 </Grid>
                 <Grid container sx={{ p: 2 }}>
                     <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                        <Button color="secondary" startIcon={<SaveIcon />} variant="outlined">
+                        <Button color="secondary" startIcon={<SaveIcon />} variant="outlined" onClick={handleUpdateUser}>
                             Guardar cambios
                         </Button>
                     </Box>

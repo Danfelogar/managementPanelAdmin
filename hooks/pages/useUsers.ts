@@ -1,18 +1,27 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+
+import { UIContext } from '../../context'
 
 export const useUsers = () => {
-    //TODO: remember deleted this functions
-    const [isModalUserOpen, setIsModalUserOpen] = useState(false)
+    const { toggleSnackBarError, toggleSnackBarSuccess, toggleModalUsers } = useContext(UIContext)
+    const [msmTextDelete, setMsmTextDelete] = useState('')
 
-    const handleChangeModalUser = () => {
-        setIsModalUserOpen(!isModalUserOpen)
+    const handleUpdateUser = () => {
+        toggleModalUsers()
+        toggleSnackBarSuccess()
+    }
+
+    const handleDeletedUser = (email: string) => {
+        setMsmTextDelete(email)
+        toggleSnackBarError()
     }
 
     return {
         //states
-        isModalUserOpen,
+        msmTextDelete,
         //methods
         //functions
-        handleChangeModalUser,
+        handleUpdateUser,
+        handleDeletedUser,
     }
 }
