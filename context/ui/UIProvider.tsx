@@ -9,6 +9,7 @@ export interface UIState {
     isMenuOpen: boolean
     isModalUsersOpen: boolean
     isModalFollowsOpen: boolean
+    isModalOTsOpen: boolean
     isSnackbarSuccess: boolean
     isSnackbarError: boolean
 }
@@ -18,6 +19,7 @@ const UI_INITIAL_STATE: UIState = {
     isMenuOpen: false,
     isModalUsersOpen: false,
     isModalFollowsOpen: false,
+    isModalOTsOpen: false,
     isSnackbarSuccess: false,
     isSnackbarError: false,
 }
@@ -51,6 +53,10 @@ export const UIProvider: FC<Props> = ({ children }) => {
         dispatch({ type: '[UI] Toggle Modal Follows' })
     }
 
+    const toggleModalOTs = () => {
+        dispatch({ type: '[UI] Toggle Modal OTs' })
+    }
+
     const toggleSnackBarSuccess = () => {
         dispatch({ type: '[UI] Toggle Snackbar Success' })
     }
@@ -69,6 +75,7 @@ export const UIProvider: FC<Props> = ({ children }) => {
                 toggleSideMenu,
                 toggleModalUsers,
                 toggleModalFollows,
+                toggleModalOTs,
                 toggleSnackBarSuccess,
                 toggleSnackBarError,
             }}

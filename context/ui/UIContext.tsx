@@ -6,6 +6,7 @@ interface ContextProps {
     isMenuOpen: boolean
     isModalUsersOpen: boolean
     isModalFollowsOpen: boolean
+    isModalOTsOpen: boolean
     isSnackbarSuccess: boolean
     isSnackbarError: boolean
 
@@ -14,6 +15,7 @@ interface ContextProps {
     toggleSideMenu: () => void
     toggleModalUsers: () => void
     toggleModalFollows: () => void
+    toggleModalOTs: () => void
     toggleSnackBarSuccess: () => void
     toggleSnackBarError: () => void
 }

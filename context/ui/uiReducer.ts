@@ -5,6 +5,7 @@ type UIActionType =
     | { type: '[UI] Toggle Menu' }
     | { type: '[UI] Toggle Modal Users' }
     | { type: '[UI] Toggle Modal Follows' }
+    | { type: '[UI] Toggle Modal OTs' }
     | { type: '[UI] Toggle Snackbar Success' }
     | { type: '[UI] Toggle Snackbar Error' }
 
@@ -29,6 +30,11 @@ export const uiReducer = (state: UIState, action: UIActionType): UIState => {
             return {
                 ...state,
                 isModalFollowsOpen: !state.isModalFollowsOpen,
+            }
+        case '[UI] Toggle Modal OTs':
+            return {
+                ...state,
+                isModalOTsOpen: !state.isModalOTsOpen,
             }
         case '[UI] Toggle Snackbar Success':
             return {
