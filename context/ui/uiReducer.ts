@@ -3,6 +3,7 @@ import { UIState } from './UIProvider'
 type UIActionType =
     | { type: '[UI] Change theme'; payload: 'light' | 'dark' }
     | { type: '[UI] Toggle Menu' }
+    | { type: '[UI] Toggle Modal Warring Deleted' }
     | { type: '[UI] Toggle Modal Users' }
     | { type: '[UI] Toggle Modal Follows' }
     | { type: '[UI] Toggle Modal OTs' }
@@ -20,6 +21,11 @@ export const uiReducer = (state: UIState, action: UIActionType): UIState => {
             return {
                 ...state,
                 isMenuOpen: !state.isMenuOpen,
+            }
+        case '[UI] Toggle Modal Warring Deleted':
+            return {
+                ...state,
+                isModalWarringDeleted: !state.isModalWarringDeleted,
             }
         case '[UI] Toggle Modal Users':
             return {

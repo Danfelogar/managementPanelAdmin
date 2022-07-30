@@ -7,6 +7,7 @@ import { UIContext, uiReducer } from './'
 export interface UIState {
     theme: 'light' | 'dark'
     isMenuOpen: boolean
+    isModalWarringDeleted: boolean
     isModalUsersOpen: boolean
     isModalFollowsOpen: boolean
     isModalOTsOpen: boolean
@@ -17,6 +18,7 @@ export interface UIState {
 const UI_INITIAL_STATE: UIState = {
     theme: 'light',
     isMenuOpen: false,
+    isModalWarringDeleted: false,
     isModalUsersOpen: false,
     isModalFollowsOpen: false,
     isModalOTsOpen: false,
@@ -46,9 +48,15 @@ export const UIProvider: FC<Props> = ({ children }) => {
     const toggleSideMenu = () => {
         dispatch({ type: '[UI] Toggle Menu' })
     }
+
+    const toggleModalWarringDeleted = () => {
+        dispatch({ type: '[UI] Toggle Modal Warring Deleted' })
+    }
+
     const toggleModalUsers = () => {
         dispatch({ type: '[UI] Toggle Modal Users' })
     }
+
     const toggleModalFollows = () => {
         dispatch({ type: '[UI] Toggle Modal Follows' })
     }
@@ -73,6 +81,7 @@ export const UIProvider: FC<Props> = ({ children }) => {
                 //funtions
                 changeTheme,
                 toggleSideMenu,
+                toggleModalWarringDeleted,
                 toggleModalUsers,
                 toggleModalFollows,
                 toggleModalOTs,

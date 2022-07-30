@@ -9,13 +9,13 @@ import { ConfirmationNumberOutlined } from '@mui/icons-material'
 
 import { ITheme } from '../interface'
 import { UIContext } from '../context'
-import { AdminLayout, SnackbarError, SnackbarSuccess } from '../components'
+import { AdminLayout, ModalWarringDeleted, SnackbarError, SnackbarSuccess } from '../components'
 import { useOTs } from '../hooks'
 
 const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
     const { toggleSnackBarError, toggleSnackBarSuccess, toggleModalOTs, isSnackbarError, isSnackbarSuccess } =
         useContext(UIContext)
-    const { msmTextDelete, handleDeletedOT } = useOTs()
+    const { msmTextDelete, handleDeletedOT, warningDeletedOT } = useOTs()
 
     const columns: GridColDef[] = [
         {
@@ -145,7 +145,7 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
                             <IconButton color="secondary" onClick={toggleModalOTs}>
                                 <EditIcon />
                             </IconButton>
-                            <IconButton color="error" onClick={() => handleDeletedOT(row.id)}>
+                            <IconButton color="error" onClick={() => warningDeletedOT(row.id)}>
                                 <DeleteIcon />
                             </IconButton>
                         </Box>
@@ -250,6 +250,12 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
                 </Grid>
             </Grid>
             {/* <ModalOTs /> */}
+            <ModalWarringDeleted
+                actionDeleted={handleDeletedOT}
+                genericTextDeleted={`Estas apunto de borrar la "${msmTextDelete}"
+                ,si deseas seguir oprime el botón de "Aceptar", sino oprime en "Cancelar" o fuera de la pantalla.`}
+                idDeleted={msmTextDelete}
+            />
             <SnackbarError
                 handleChangeSnackbar={toggleSnackBarError}
                 isOpen={isSnackbarError}

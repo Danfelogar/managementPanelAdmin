@@ -3,7 +3,7 @@ import { useContext, useState } from 'react'
 import { UIContext } from '../../context'
 
 export const useFollows = () => {
-    const { toggleSnackBarError, toggleSnackBarSuccess, toggleModalFollows } = useContext(UIContext)
+    const { toggleSnackBarError, toggleSnackBarSuccess, toggleModalFollows, toggleModalWarringDeleted } = useContext(UIContext)
     const [msmTextDelete, setMsmTextDelete] = useState('')
 
     const handleUpdateFollow = () => {
@@ -11,8 +11,13 @@ export const useFollows = () => {
         toggleSnackBarSuccess()
     }
 
-    const handleDeletedFollow = (id: string) => {
+    const warningDeletedFollow = (id: string) => {
         setMsmTextDelete(id)
+        toggleModalWarringDeleted()
+    }
+
+    const handleDeletedFollow = () => {
+        toggleModalWarringDeleted()
         toggleSnackBarError()
     }
 
@@ -23,5 +28,6 @@ export const useFollows = () => {
         //functions
         handleUpdateFollow,
         handleDeletedFollow,
+        warningDeletedFollow,
     }
 }

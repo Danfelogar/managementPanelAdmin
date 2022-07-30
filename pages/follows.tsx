@@ -8,14 +8,14 @@ import { useContext } from 'react'
 
 import { AdminLayout } from '../components/layouts/AdminLayout'
 import { ITheme } from '../interface/theme'
-import { ModalFollows, SnackbarError, SnackbarSuccess } from '../components'
+import { ModalFollows, ModalWarringDeleted, SnackbarError, SnackbarSuccess } from '../components'
 import { UIContext } from '../context'
 import { useFollows } from '../hooks'
 
 const FollowsPager: NextPage<ITheme> = ({ toggleTheme }) => {
     const { toggleModalFollows, toggleSnackBarError, toggleSnackBarSuccess, isSnackbarSuccess, isSnackbarError } =
         useContext(UIContext)
-    const { msmTextDelete, handleDeletedFollow } = useFollows()
+    const { msmTextDelete, handleDeletedFollow, warningDeletedFollow } = useFollows()
 
     const columns: GridColDef[] = [
         {
@@ -98,7 +98,7 @@ const FollowsPager: NextPage<ITheme> = ({ toggleTheme }) => {
                             <IconButton color="secondary" onClick={toggleModalFollows}>
                                 <EditIcon />
                             </IconButton>
-                            <IconButton color="error" onClick={() => handleDeletedFollow(row.id)}>
+                            <IconButton color="error" onClick={() => warningDeletedFollow(row.id)}>
                                 <DeleteIcon />
                             </IconButton>
                         </Box>
@@ -158,6 +158,12 @@ const FollowsPager: NextPage<ITheme> = ({ toggleTheme }) => {
                 </Grid>
             </Grid>
             <ModalFollows />
+            <ModalWarringDeleted
+                actionDeleted={handleDeletedFollow}
+                genericTextDeleted={`Estas apunto de borrar el Seguimiento "${msmTextDelete}"
+                ,si deseas seguir oprime el botón de "Aceptar", sino oprime en "Cancelar" o fuera de la pantalla.`}
+                idDeleted={msmTextDelete}
+            />
             <SnackbarError
                 handleChangeSnackbar={toggleSnackBarError}
                 isOpen={isSnackbarError}

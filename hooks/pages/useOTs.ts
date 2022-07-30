@@ -3,7 +3,7 @@ import { useContext, useState } from 'react'
 import { UIContext } from '../../context'
 
 export const useOTs = () => {
-    const { toggleSnackBarError, toggleSnackBarSuccess, toggleModalUsers } = useContext(UIContext)
+    const { toggleSnackBarError, toggleSnackBarSuccess, toggleModalUsers, toggleModalWarringDeleted } = useContext(UIContext)
     const [msmTextDelete, setMsmTextDelete] = useState('')
 
     const handleUpdateOT = () => {
@@ -11,8 +11,13 @@ export const useOTs = () => {
         toggleSnackBarSuccess()
     }
 
-    const handleDeletedOT = (ot_id: string) => {
+    const warningDeletedOT = (ot_id: string) => {
         setMsmTextDelete(ot_id)
+        toggleModalWarringDeleted()
+    }
+
+    const handleDeletedOT = () => {
+        toggleModalWarringDeleted()
         toggleSnackBarError()
     }
 
@@ -23,5 +28,6 @@ export const useOTs = () => {
         //functions
         handleUpdateOT,
         handleDeletedOT,
+        warningDeletedOT,
     }
 }

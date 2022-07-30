@@ -16,14 +16,14 @@ import IconButton from '@mui/material/IconButton'
 // import { IUser } from '../../interfaces'
 
 import { ITheme } from '../interface'
-import { AdminLayout, ModalUsers, SnackbarError, SnackbarSuccess } from '../components'
+import { AdminLayout, ModalUsers, ModalWarringDeleted, SnackbarError, SnackbarSuccess } from '../components'
 import { UIContext } from '../context'
 import { useUsers } from '../hooks'
 
 const UsersPage: NextPage<ITheme> = ({ toggleTheme }) => {
     const { toggleModalUsers, toggleSnackBarError, toggleSnackBarSuccess, isSnackbarError, isSnackbarSuccess } =
         useContext(UIContext)
-    const { msmTextDelete, handleDeletedUser } = useUsers()
+    const { msmTextDelete, handleDeletedUser, warringDeletedUser } = useUsers()
     // const { data, error} = useSWR<IUser[]>('/api/admin/users')
     // const [users, setUsers] = useState<IUser[]>([])
 
@@ -97,7 +97,7 @@ const UsersPage: NextPage<ITheme> = ({ toggleTheme }) => {
                             <IconButton color="secondary" onClick={toggleModalUsers}>
                                 <EditIcon />
                             </IconButton>
-                            <IconButton color="error" onClick={() => handleDeletedUser(row.email)}>
+                            <IconButton color="error" onClick={() => warringDeletedUser(row.email)}>
                                 <DeleteIcon />
                             </IconButton>
                         </Box>
@@ -177,6 +177,12 @@ const UsersPage: NextPage<ITheme> = ({ toggleTheme }) => {
                 </Grid>
             </Grid>
             <ModalUsers />
+            <ModalWarringDeleted
+                actionDeleted={handleDeletedUser}
+                genericTextDeleted={`Estas apunto de borrar al usuario "${msmTextDelete}"
+            ,si deseas seguir oprime el botón de "Aceptar", sino oprime en "Cancelar" o fuera de la pantalla.`}
+                idDeleted={msmTextDelete}
+            />
             <SnackbarError
                 handleChangeSnackbar={toggleSnackBarError}
                 isOpen={isSnackbarError}
