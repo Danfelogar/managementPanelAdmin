@@ -12,7 +12,7 @@ import { ModalFollows, ModalWarringDeleted, SnackbarError, SnackbarSuccess } fro
 import { UIContext } from '../context'
 import { useFollows } from '../hooks'
 
-const FollowsPager: NextPage<ITheme> = ({ toggleTheme }) => {
+const FollowsPage: NextPage<ITheme> = ({ toggleTheme }) => {
     const { toggleModalFollows, toggleSnackBarError, toggleSnackBarSuccess, isSnackbarSuccess, isSnackbarError } =
         useContext(UIContext)
     const { msmTextDelete, handleDeletedFollow, warningDeletedFollow } = useFollows()
@@ -120,7 +120,7 @@ const FollowsPager: NextPage<ITheme> = ({ toggleTheme }) => {
             tiempoDeFuncionamiento: 120,
             tiempoDeReparacion: 60,
 
-            maquina_id_relacion: 'Maq1',
+            maquina_id_relacion: 'maq1',
         },
     ]
 
@@ -178,4 +178,4 @@ const FollowsPager: NextPage<ITheme> = ({ toggleTheme }) => {
     )
 }
 
-export default FollowsPager
+export default FollowsPage

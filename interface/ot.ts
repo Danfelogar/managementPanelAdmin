@@ -4,7 +4,6 @@ export interface IOT {
     ot_id: string
     slug: string
 
-    maquina: string
     repuesto?: string
     tecnico_ing: string
 
@@ -18,16 +17,16 @@ export interface IOT {
 
     imgDeLaMaquina: string
 
-    tareas?: ITareasOT[]
+    tareas?: string
     comentario?: string
 
-    maquina_id_relacion: string | string[]
+    maquina: string
 
     createdAt: string
     updatedAt: string
 }
 
-export interface ITareasOT {
-    nombreDeActividad_o_descripcion_de_la_orden: string
-    cantidad_de_actividad: string
-}
+// export interface ITareasOT {
+//     nombreDeActividad_o_descripcion_de_la_orden: string
+//     cantidad_de_actividad: string
+// }

@@ -29,15 +29,14 @@ const otSchema = new Schema(
 
         imgDeLaMaquina: { type: String },
 
-        tareas: [
-            {
-                nombreDeActividad_o_descripcion_de_la_orden: { type: String, required: true },
-                cantidad_de_actividad: { type: String, required: true },
-            },
-        ],
+        tareas: { type: String, required: true },
+        // [
+        //     {
+        //         nombreDeActividad_o_descripcion_de_la_orden: { type: String, required: true },
+        //         cantidad_de_actividad: { type: String, required: true },
+        //     },
+        // ],
         comentario: { type: String },
-
-        maquina_id_relacion: { type: String, required: true },
     },
     {
         timestamps: true,

@@ -9,7 +9,7 @@ import { ConfirmationNumberOutlined } from '@mui/icons-material'
 
 import { ITheme } from '../interface'
 import { UIContext } from '../context'
-import { AdminLayout, ModalWarringDeleted, SnackbarError, SnackbarSuccess } from '../components'
+import { AdminLayout, ModalOTs, ModalWarringDeleted, SnackbarError, SnackbarSuccess } from '../components'
 import { useOTs } from '../hooks'
 
 const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
@@ -54,7 +54,7 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
         },
         {
             field: 'numero_de_orden_de_compra',
-            headerName: 'numero de orden de compra',
+            headerName: 'Numero de orden de compra',
             width: 200,
         },
         {
@@ -121,11 +121,6 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
             },
         },
         {
-            field: 'maquina_id_relacion',
-            headerName: 'Maquina Relacionada',
-            width: 160,
-        },
-        {
             field: 'actions',
             headerName: 'Acciones',
             width: 150,
@@ -159,7 +154,7 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
         {
             _id: 1,
             ot_id: 'OT1',
-            maquina: 'maquina 1',
+            maquina: 'maq1',
             repuesto: 'repuesto 1',
             tecnico_ing: 'hennry',
             estado_de_OT: 'pendiente',
@@ -176,12 +171,11 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
             `,
             comentario:
                 'Es un hecho establecido hace demasiado tiempo que un lector se distraerá con el contenido del texto de un sitio mientras que mira su diseño. El punto de usar Lorem Ipsum es que tiene una distribución más o menos normal de las letras, de contrario de usar textos como por ejemplo "Contenido aquí, contenido aquí". Estos textos hacen parecerlo un español que se puede leer. Muchos paquetes de autoedición y editores de páginas web usan el Lorem Ipsum como su texto por defecto.',
-            maquina_id_relacion: 'm1',
         },
         {
             _id: 2,
             ot_id: 'OT2',
-            maquina: 'maquina 2',
+            maquina: 'maq2',
             repuesto: 'repuesto 2',
             tecnico_ing: 'hennry',
             estado_de_OT: 'en progreso',
@@ -198,7 +192,6 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
             `,
             comentario:
                 'Es un hecho establecido hace demasiado tiempo que un lector se distraerá con el contenido del texto de un sitio mientras que mira su diseño. El punto de usar Lorem Ipsum es que tiene una distribución más o menos normal de las letras, al contrario de usar textos como por ejemplo "Contenido aquí, contenido aquí". Estos textos hacen parecerlo un español que se puede leer. Muchos paquetes de autoedición y editores de páginas web usan el Lorem Ipsum como su texto por defecto.',
-            maquina_id_relacion: 'm2',
         },
     ]
 
@@ -215,7 +208,6 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
         imgDeLaMaquina: ot.imgDeLaMaquina,
         tareas: ot.tareas,
         comentario: ot.comentario,
-        maquina_id_relacion: ot.maquina_id_relacion,
     }))
 
     return (
@@ -249,7 +241,7 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
                     />
                 </Grid>
             </Grid>
-            {/* <ModalOTs /> */}
+            <ModalOTs />
             <ModalWarringDeleted
                 actionDeleted={handleDeletedOT}
                 genericTextDeleted={`Estas apunto de borrar la "${msmTextDelete}"
