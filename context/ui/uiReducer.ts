@@ -7,6 +7,7 @@ type UIActionType =
     | { type: '[UI] Toggle Modal Users' }
     | { type: '[UI] Toggle Modal Follows' }
     | { type: '[UI] Toggle Modal OTs' }
+    | { type: '[UI] Toggle Modal Inventario' }
     | { type: '[UI] Toggle Snackbar Success' }
     | { type: '[UI] Toggle Snackbar Error' }
 
@@ -41,6 +42,11 @@ export const uiReducer = (state: UIState, action: UIActionType): UIState => {
             return {
                 ...state,
                 isModalOTsOpen: !state.isModalOTsOpen,
+            }
+        case '[UI] Toggle Modal Inventario':
+            return {
+                ...state,
+                isModalInventarioOpen: !state.isModalInventarioOpen,
             }
         case '[UI] Toggle Snackbar Success':
             return {
