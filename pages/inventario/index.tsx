@@ -23,6 +23,16 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
             width: 110,
         },
         {
+            field: 'tipoInventario',
+            headerName: 'Tipo de Inventario',
+            width: 140,
+        },
+        {
+            field: 'nombre',
+            headerName: 'Nombre',
+            width: 160,
+        },
+        {
             field: 'imgQR',
             headerName: 'Código QR',
             width: 230,
@@ -67,7 +77,7 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
         },
         {
             field: 'fechaDeActualizacion',
-            headerName: 'Fecha De Actualizacion',
+            headerName: 'Fecha De Actualización',
             width: 170,
         },
         //maquina
@@ -273,6 +283,8 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
 
     const rows = inventarios.map((inventario) => ({
         id: inventario._id,
+        tipoInventario: inventario.tipoInventario,
+        nombre: inventario.nombre,
         imgQR: inventario.imgQR,
         estado: inventario.estado,
         imagenes: inventario.imagenes,
