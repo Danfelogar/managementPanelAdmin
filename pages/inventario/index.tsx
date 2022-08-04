@@ -25,12 +25,12 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
         {
             field: 'tipoInventario',
             headerName: 'Tipo de Inventario',
-            width: 140,
+            width: 170,
         },
         {
             field: 'nombre',
             headerName: 'Nombre',
-            width: 160,
+            width: 180,
         },
         {
             field: 'imgQR',
