@@ -36,11 +36,13 @@ const inventarioSchema = new Schema(
         voltaje: { type: Number },
         corriente: { type: Number },
         observacionGeneral: { type: String },
-        ind: {
-            frecuencia_de_reparacion: { type: Number },
-            frecuencia_de_falla: { type: Number },
-            porcentaje_de_disponibilidad: { type: Number },
-        },
+        ind: [
+            {
+                frecuencia_de_reparacion: { type: Number },
+                frecuencia_de_falla: { type: Number },
+                porcentaje_de_disponibilidad: { type: Number },
+            },
+        ],
         locacion: {
             type: String,
             enum: {

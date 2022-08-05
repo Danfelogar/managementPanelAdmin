@@ -41,16 +41,7 @@ const LoginPage: NextPage<ITheme> = ({ toggleTheme }) => {
 
     return (
         <AuthLayout title="Login">
-            <WrapperAuth
-                sx={{
-                    width: '100%',
-                    height: '100vh',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    backgroundColor: '#e3f2fd',
-                }}
-            >
+            <WrapperAuth>
                 <WrapperAuthHeader color="primary">
                     <Box sx={{ flexGrow: 1 }}>
                         <AppBar color="inherit" position="static">

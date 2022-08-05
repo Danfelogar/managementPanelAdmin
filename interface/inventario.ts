@@ -17,7 +17,7 @@ export interface IInventario {
     voltaje?: number //V
     corriente?: number //A
     observacionGeneral?: string
-    ind?: IInd
+    ind?: IInd[]
 
     locacion?: 'produccion' | 'taller' | 'bodega' | 'oficina_administrativa'
     subLocacion?: number
