@@ -26,6 +26,7 @@ const HomePage: NextPage<ITheme> = ({ toggleTheme }) => {
             <Grid container spacing={2}>
                 <SummaryTile
                     icon={<ConfirmationNumberOutlined color="primary" sx={{ fontSize: 65 }} />}
+                    navigation={'/ots'}
                     subTitle="OTs generadas"
                     title={10}
                 />
@@ -41,7 +42,12 @@ const HomePage: NextPage<ITheme> = ({ toggleTheme }) => {
                     title={10}
                 />
 
-                <SummaryTile icon={<GroupOutlined color="action" sx={{ fontSize: 65 }} />} subTitle="Usuarios" title={10} />
+                <SummaryTile
+                    icon={<GroupOutlined color="action" sx={{ fontSize: 65 }} />}
+                    navigation={'/users'}
+                    subTitle="Usuarios"
+                    title={10}
+                />
 
                 <SummaryTile
                     icon={<BackspaceOutlined color="error" sx={{ fontSize: 65 }} />}
@@ -57,6 +63,7 @@ const HomePage: NextPage<ITheme> = ({ toggleTheme }) => {
 
                 <SummaryTile
                     icon={<EngineeringOutlined color="info" sx={{ fontSize: 65 }} />}
+                    navigation={'/follows'}
                     subTitle="Seguimiento"
                     title={10}
                 />

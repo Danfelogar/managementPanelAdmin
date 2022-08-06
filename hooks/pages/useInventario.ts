@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
 
 import { UIContext } from '../../context'
@@ -67,17 +68,22 @@ const dataTest = [
 ]
 
 export const useInventario = () => {
-    const { toggleSnackBarError, toggleSnackBarSuccess, toggleModalInventario, toggleModalWarringDeleted } = useContext(UIContext)
+    const { toggleSnackBarError, toggleSnackBarSuccess, toggleModalWarringDeleted } = useContext(UIContext)
 
     const [msmTextDelete, setMsmTextDelete] = useState('')
     const [dataBar, setDataBar] = useState<IInd[] | []>([])
+
+    const { push } = useRouter()
+
+    const navigateToUpate = (url: string) => {
+        push(url)
+    }
 
     useEffect(() => {
         setDataBar(dataTest)
     }, [])
 
     const handleUpdateInventario = () => {
-        toggleModalInventario()
         toggleSnackBarSuccess()
     }
 
@@ -97,6 +103,7 @@ export const useInventario = () => {
         dataBar,
         //methods
         //functions
+        navigateToUpate,
         handleUpdateInventario,
         handleDeletedInventario,
         warningDeletedInventario,

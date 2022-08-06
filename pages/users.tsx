@@ -55,53 +55,27 @@ const UsersPage: NextPage<ITheme> = ({ toggleTheme }) => {
     const columns: GridColDef[] = [
         { field: 'email', headerName: 'Email', width: 250 },
         { field: 'nombre', headerName: 'Nombre Completo', width: 300 },
-        {
-            field: 'rol',
-            headerName: 'Rol',
-            width: 300,
-            //recuerda que row tiene todas las variables de la linea (id,email, rol, nombre)
-            renderCell: ({ row }: GridValueGetterParams) => {
-                return (
-                    <Select
-                        label="Rol"
-                        sx={{ width: '100%' }}
-                        value={row.rol}
-                        // onChange={({ target }) => onRoleUpdate(row.id, target.value)}
-                    >
-                        <MenuItem value="super_admin">Super Admin</MenuItem>
-                        <MenuItem value="admin_bodega">Admin Bodega</MenuItem>
-                        <MenuItem value="admin_mtto">Admin Mantenimiento</MenuItem>
-                        <MenuItem value="bodega">Bodega</MenuItem>
-                        <MenuItem value="mtto">Mantenimiento</MenuItem>
-                    </Select>
-                )
-            },
-        },
+        { field: 'rol', headerName: 'Rol', width: 150 },
         {
             field: 'actions',
             headerName: 'Acciones',
             width: 150,
             renderCell: ({ row }: GridValueGetterParams) => {
                 return (
-                    <Container>
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                flexDirection: 'row',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                width: '100%',
-                                height: '100%',
-                            }}
-                        >
-                            <IconButton color="secondary" onClick={toggleModalUsers}>
-                                <EditIcon />
-                            </IconButton>
-                            <IconButton color="error" onClick={() => warringDeletedUser(row.email)}>
-                                <DeleteIcon />
-                            </IconButton>
-                        </Box>
-                    </Container>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            p: 0,
+                        }}
+                    >
+                        <IconButton color="secondary" onClick={toggleModalUsers}>
+                            <EditIcon />
+                        </IconButton>
+                        <IconButton color="error" onClick={() => warringDeletedUser(row.email)}>
+                            <DeleteIcon />
+                        </IconButton>
+                    </Box>
                 )
             },
         },

@@ -66,7 +66,7 @@ const LoginPage: NextPage<ITheme> = ({ toggleTheme }) => {
                         <WrapperCardAuth>
                             <CardContentAuth>
                                 <CardMedia sx={{ width: '100%' }}>
-                                    <Image alt="logoMtto" layout="responsive" src={logoMtto} />
+                                    <Image priority alt="logoMtto" layout="responsive" src={logoMtto} />
                                 </CardMedia>
                                 <CardContent>
                                     <Typography align="center" color="secondary" sx={{ fontWeight: 'bold' }} variant="h6">

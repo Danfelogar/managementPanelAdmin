@@ -1,10 +1,11 @@
-import { CardMedia, Chip, Grid, IconButton, Box, Container } from '@mui/material'
+import { CardMedia, Chip, Grid, IconButton, Box, Container, Link } from '@mui/material'
 import { NextPage } from 'next'
-import { Fragment, useContext } from 'react'
+import { useContext } from 'react'
 import { DataGrid, GridColDef, GridRenderCellParams, GridToolbar, GridValueGetterParams } from '@mui/x-data-grid'
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
+import NextLink from 'next/link'
 
 import { AdminLayout, ModalWarringDeleted, SnackbarError, SnackbarSuccess } from '../../components'
 import { ITheme } from '../../interface'
@@ -12,9 +13,8 @@ import { UIContext } from '../../context'
 import { useInventario } from '../../hooks'
 
 const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
-    const { toggleSnackBarError, toggleSnackBarSuccess, toggleModalInventario, isSnackbarError, isSnackbarSuccess } =
-        useContext(UIContext)
-    const { msmTextDelete, handleDeletedInventario, warningDeletedInventario } = useInventario()
+    const { toggleSnackBarError, toggleSnackBarSuccess, isSnackbarError, isSnackbarSuccess } = useContext(UIContext)
+    const { msmTextDelete, handleDeletedInventario, warningDeletedInventario, navigateToUpate } = useInventario()
 
     const columns: GridColDef[] = [
         {
@@ -134,46 +134,14 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
             headerName: 'IND',
             width: 270,
             renderCell: ({ row }: GridRenderCellParams) => {
-                if (!row.ind) {
+                if (row.tipoInventario !== 'maquina') {
                     return <></>
                 }
-                const keyObj = Object.keys(row.ind)
-
-                console.log({ keyObj })
 
                 return (
-                    <Box
-                        sx={{
-                            overflow: 'hidden',
-                            maxWidth: '100%',
-                            whiteSpace: 'normal !important',
-                        }}
-                    >
-                        {keyObj.map((key, idx) => (
-                            <Box
-                                key={idx}
-                                sx={{
-                                    display: 'flex',
-                                    width: '100%',
-                                    justify: 'center',
-                                    align: 'center',
-                                    flexDirection: 'row',
-                                }}
-                            >
-                                {['object', 'array'].includes(typeof row.ind[key]) ? (
-                                    <>
-                                        <Box>{key}:&nbsp;</Box>
-                                        <Box>{JSON.stringify(row.ind[key])}</Box>
-                                    </>
-                                ) : (
-                                    <>
-                                        <Box>{key}:&nbsp;</Box>
-                                        <>{row.ind[key]}</>
-                                    </>
-                                )}
-                            </Box>
-                        ))}
-                    </Box>
+                    <NextLink passHref href={`/graphics/${row.id_maquina}`}>
+                        <Link underline="always">Ver gráfica IND</Link>
+                    </NextLink>
                 )
             },
         },
@@ -225,7 +193,7 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
                                 height: '100%',
                             }}
                         >
-                            <IconButton color="secondary" onClick={toggleModalInventario}>
+                            <IconButton color="secondary" onClick={() => navigateToUpate(`/inventory/${row.id}`)}>
                                 <EditIcon />
                             </IconButton>
                             <IconButton color="error" onClick={() => warningDeletedInventario(row.id)}>
@@ -256,11 +224,11 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
             voltaje: 120,
             corriente: 80,
             observacionesGeneral: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
-            ind: {
-                frecuencia_de_reparacion: 100,
-                frecuencia_de_falla: 120,
-                porcentaje_de_disponibilidad: 130,
-            },
+            // ind: {
+            //     frecuencia_de_reparacion: 100,
+            //     frecuencia_de_falla: 120,
+            //     porcentaje_de_disponibilidad: 130,
+            // },
             locacion: 'produccion',
             subLocacion: 3,
         },
@@ -298,7 +266,7 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
         voltaje: inventario?.voltaje || null,
         corriente: inventario?.corriente || null,
         observacionesGeneral: inventario?.observacionesGeneral || null,
-        ind: inventario?.ind || null,
+        // ind: inventario?.ind || null,
         locacion: inventario?.locacion || null,
         subLocacion: inventario?.subLocacion || null,
         //repuesto

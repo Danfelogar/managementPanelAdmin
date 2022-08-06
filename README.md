@@ -3,7 +3,7 @@ primero se debe de mirar el archivo de ".env.template" par ver que keys faltan y
 
 ## Inciar proyecto en desarrollo
 
-si no se ve la carpeta "node_modules" ejecutar el comando: yarn install o npm install
+si no se ve la carpeta "node_modules" ejecutar el comando: yarn install
 
-levantar proyecto: yarn dev o npm dev
+levantar proyecto: yarn dev
 

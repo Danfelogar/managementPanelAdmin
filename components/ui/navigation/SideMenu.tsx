@@ -12,12 +12,19 @@ import { CardMedia, Drawer, List, ListItem, ListItemIcon, ListItemText, Divider,
 import { Box } from '@mui/system'
 import Image from 'next/image'
 import { useContext } from 'react'
+import { useRouter } from 'next/router'
 
 import logoMtto from '../../../public/mtto.png'
 import { UIContext } from '../../../context/ui/UIContext'
 
 export const SideMenu = () => {
     const { toggleSideMenu, isMenuOpen } = useContext(UIContext)
+    const { push, asPath } = useRouter()
+
+    const navigateTo = (url: string) => {
+        toggleSideMenu()
+        push(url)
+    }
 
     return (
         <Drawer
@@ -28,9 +35,9 @@ export const SideMenu = () => {
         >
             <Box sx={{ width: 250, paddingTop: 5, height: '100%' }}>
                 <List sx={{ display: 'flex', flexFlow: 'column', pb: 2, height: '100%' }}>
-                    <ListItem button>
+                    <ListItem>
                         <CardMedia sx={{ width: '100%', paddingTop: '0.1px' }}>
-                            <Image alt="logoMtto" layout="responsive" src={logoMtto} />
+                            <Image priority alt="logoMtto" layout="responsive" src={logoMtto} />
                         </CardMedia>
                     </ListItem>
                     <Divider variant="middle" />
@@ -43,10 +50,7 @@ export const SideMenu = () => {
                         <ListItemText primary={'Perfil'} />
                     </ListItem>
 
-                    <ListItem
-                        button
-                        // onClick={() => navigateTo('/orders/history')}
-                    >
+                    <ListItem button onClick={() => navigateTo('/')}>
                         <ListItemIcon>
                             <DashboardOutlined />
                         </ListItemIcon>
@@ -55,31 +59,21 @@ export const SideMenu = () => {
                     {/* </>
                     )} */}
 
-                    <ListItem
-                        button
-                        //sx={{ display: { xs: '', sm: 'none' } }}
-                        //onClick={() => navigateTo('/category/men')}
-                    >
+                    <ListItem button onClick={() => navigateTo('/inventory')}>
                         <ListItemIcon>
                             <InventoryOutlinedIcon />
                         </ListItemIcon>
                         <ListItemText primary={'Inventario'} />
                     </ListItem>
 
-                    <ListItem
-                        button
-                        //onClick={() => navigateTo('/category/women')}
-                    >
+                    <ListItem button onClick={() => navigateTo('/ots')}>
                         <ListItemIcon>
                             <ConfirmationNumberOutlined />
                         </ListItemIcon>
                         <ListItemText primary={'OTs'} />
                     </ListItem>
 
-                    <ListItem
-                        button
-                        //onClick={() => navigateTo('/category/kid')}
-                    >
+                    <ListItem button onClick={() => navigateTo('/follows')}>
                         <ListItemIcon>
                             <EngineeringIcon />
                         </ListItemIcon>
@@ -87,10 +81,7 @@ export const SideMenu = () => {
                     </ListItem>
 
                     {/* {isLoggedIn ? ( */}
-                    <ListItem
-                        button
-                        //onClick={logout}
-                    >
+                    <ListItem button onClick={() => navigateTo('/users')}>
                         <ListItemIcon>
                             <AdminPanelSettings />
                         </ListItemIcon>

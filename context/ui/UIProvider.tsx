@@ -11,7 +11,6 @@ export interface UIState {
     isModalUsersOpen: boolean
     isModalFollowsOpen: boolean
     isModalOTsOpen: boolean
-    isModalInventarioOpen: boolean
     isSnackbarSuccess: boolean
     isSnackbarError: boolean
 }
@@ -23,7 +22,6 @@ const UI_INITIAL_STATE: UIState = {
     isModalUsersOpen: false,
     isModalFollowsOpen: false,
     isModalOTsOpen: false,
-    isModalInventarioOpen: false,
     isSnackbarSuccess: false,
     isSnackbarError: false,
 }
@@ -67,10 +65,6 @@ export const UIProvider: FC<Props> = ({ children }) => {
         dispatch({ type: '[UI] Toggle Modal OTs' })
     }
 
-    const toggleModalInventario = () => {
-        dispatch({ type: '[UI] Toggle Modal Inventario' })
-    }
-
     const toggleSnackBarSuccess = () => {
         dispatch({ type: '[UI] Toggle Snackbar Success' })
     }
@@ -91,7 +85,6 @@ export const UIProvider: FC<Props> = ({ children }) => {
                 toggleModalUsers,
                 toggleModalFollows,
                 toggleModalOTs,
-                toggleModalInventario,
                 toggleSnackBarSuccess,
                 toggleSnackBarError,
             }}

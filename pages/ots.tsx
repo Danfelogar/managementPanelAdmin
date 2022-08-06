@@ -213,8 +213,8 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
     return (
         <AdminLayout
             icon={<ConfirmationNumberOutlined color="secondary" />}
-            subTitle={'Gestión de Usuarios'}
-            title={'Usurarios'}
+            subTitle={'Gestión de OTs'}
+            title={'OTS'}
             toggleTheme={toggleTheme}
         >
             <Grid container className="fadeIn">

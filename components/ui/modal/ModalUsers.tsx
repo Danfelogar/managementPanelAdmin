@@ -59,9 +59,11 @@ export const ModalUsers = () => {
                         <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">Rol</InputLabel>
                             <Select id="demo-simple-select" label="Rol" labelId="demo-simple-select-label" value={''}>
-                                <MenuItem value={10}>Ten</MenuItem>
-                                <MenuItem value={20}>Twenty</MenuItem>
-                                <MenuItem value={30}>Thirty</MenuItem>
+                                <MenuItem value="super_admin">Super Admin</MenuItem>
+                                <MenuItem value="admin_bodega">Admin Bodega</MenuItem>
+                                <MenuItem value="admin_mtto">Admin Mantenimiento</MenuItem>
+                                <MenuItem value="bodega">Bodega</MenuItem>
+                                <MenuItem value="mtto">Mantenimiento</MenuItem>
                             </Select>
                         </FormControl>
                     </Grid>
