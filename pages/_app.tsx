@@ -8,6 +8,7 @@ import { CssBaseline, ThemeProvider } from '@mui/material'
 import { UIProvider } from '../context'
 import '../styles/globals.css'
 import { darkTheme, lightTheme } from '../theme'
+import { AuthProvider } from '../context/auth/AuthProvider'
 
 function MyApp({ Component, pageProps }: AppProps) {
     const [currentTheme, setCurrentTheme] = useState(lightTheme)
@@ -33,12 +34,14 @@ function MyApp({ Component, pageProps }: AppProps) {
 
     return (
         <SessionProvider>
-            <UIProvider>
-                <ThemeProvider theme={currentTheme}>
-                    <CssBaseline />
-                    <Component {...pageProps} toggleTheme={toggleTheme} />
-                </ThemeProvider>
-            </UIProvider>
+            <AuthProvider>
+                <UIProvider>
+                    <ThemeProvider theme={currentTheme}>
+                        <CssBaseline />
+                        <Component {...pageProps} toggleTheme={toggleTheme} />
+                    </ThemeProvider>
+                </UIProvider>
+            </AuthProvider>
         </SessionProvider>
     )
 }

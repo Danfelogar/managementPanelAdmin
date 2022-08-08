@@ -116,13 +116,24 @@ export const ModalFollows = () => {
                         </Box>
                     </Grid>
                     <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
-                        <TextField fullWidth multiline id="outlined-multiline-flexible" label="Comentario" maxRows={7} />
+                        <TextField
+                            fullWidth
+                            multiline
+                            id="outlined-multiline-flexible"
+                            label="Comentario"
+                            maxRows={7}
+                        />
                     </Grid>
                     <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
                         <TextField fullWidth id="outlined-basic" label="Estado de la maquina" variant="outlined" />
                     </Grid>
                     <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
-                        <TextField fullWidth id="outlined-basic" label="Nombre completo del observador" variant="outlined" />
+                        <TextField
+                            fullWidth
+                            id="outlined-basic"
+                            label="Nombre completo del observador"
+                            variant="outlined"
+                        />
                     </Grid>
                     <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
                         <TextField fullWidth id="outlined-basic" label="Tiempo de Funcionamiento" variant="outlined" />
@@ -148,7 +159,12 @@ export const ModalFollows = () => {
                 </Grid>
                 <Grid container sx={{ p: 2 }}>
                     <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                        <Button color="secondary" startIcon={<SaveIcon />} variant="outlined" onClick={handleUpdateFollow}>
+                        <Button
+                            color="secondary"
+                            startIcon={<SaveIcon />}
+                            variant="outlined"
+                            onClick={handleUpdateFollow}
+                        >
                             Guardar cambios
                         </Button>
                     </Box>

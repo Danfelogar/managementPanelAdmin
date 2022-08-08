@@ -142,7 +142,12 @@ const SingeInventoryPage: NextPage<ITheme> = ({ toggleTheme }) => {
                     <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
                         <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">Estado</InputLabel>
-                            <Select id="demo-simple-select" label="Estado" labelId="demo-simple-select-label" value={''}>
+                            <Select
+                                id="demo-simple-select"
+                                label="Estado"
+                                labelId="demo-simple-select-label"
+                                value={''}
+                            >
                                 <MenuItem value={'malo'}>Malo</MenuItem>
                                 <MenuItem value={'regular'}>Regular</MenuItem>
                                 <MenuItem value={'bueno'}>Bueno</MenuItem>
@@ -197,7 +202,12 @@ const SingeInventoryPage: NextPage<ITheme> = ({ toggleTheme }) => {
                     <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
                         <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">Estado</InputLabel>
-                            <Select id="demo-simple-select" label="Estado" labelId="demo-simple-select-label" value={''}>
+                            <Select
+                                id="demo-simple-select"
+                                label="Estado"
+                                labelId="demo-simple-select-label"
+                                value={''}
+                            >
                                 <MenuItem value={'malo'}>Malo</MenuItem>
                                 <MenuItem value={'regular'}>Regular</MenuItem>
                                 <MenuItem value={'bueno'}>Bueno</MenuItem>

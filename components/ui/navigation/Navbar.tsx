@@ -29,7 +29,14 @@ export const Navbar: FC<Props> = ({ toggleTheme }) => {
                 <NextLink passHref href="/">
                     <Link alignItems="center" display="flex">
                         <CardMedia sx={{ width: '100px', paddingTop: '0.1px' }}>
-                            <Image priority alt="logoMtto" height={135} layout="responsive" src={logoMtto} width={310} />
+                            <Image
+                                priority
+                                alt="logoMtto"
+                                height={135}
+                                layout="responsive"
+                                src={logoMtto}
+                                width={310}
+                            />
                         </CardMedia>
                     </Link>
                 </NextLink>

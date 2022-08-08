@@ -48,11 +48,19 @@ const LoginPage: NextPage<ITheme> = ({ toggleTheme }) => {
                             <Toolbar>
                                 <Typography component="div" sx={{ flexGrow: 1 }} variant="h6" />
                                 {theme === 'dark' ? (
-                                    <IconButton color="inherit" sx={{ ml: 1 }} onClick={() => handleChangeTheme('light')}>
+                                    <IconButton
+                                        color="inherit"
+                                        sx={{ ml: 1 }}
+                                        onClick={() => handleChangeTheme('light')}
+                                    >
                                         <Brightness7Icon />
                                     </IconButton>
                                 ) : (
-                                    <IconButton color="inherit" sx={{ ml: 1 }} onClick={() => handleChangeTheme('dark')}>
+                                    <IconButton
+                                        color="inherit"
+                                        sx={{ ml: 1 }}
+                                        onClick={() => handleChangeTheme('dark')}
+                                    >
                                         <Brightness4Icon />
                                     </IconButton>
                                 )}
@@ -69,7 +77,12 @@ const LoginPage: NextPage<ITheme> = ({ toggleTheme }) => {
                                     <Image priority alt="logoMtto" layout="responsive" src={logoMtto} />
                                 </CardMedia>
                                 <CardContent>
-                                    <Typography align="center" color="secondary" sx={{ fontWeight: 'bold' }} variant="h6">
+                                    <Typography
+                                        align="center"
+                                        color="secondary"
+                                        sx={{ fontWeight: 'bold' }}
+                                        variant="h6"
+                                    >
                                         Hola, bienvenido a el panel admin de mtto
                                     </Typography>
                                     <Typography
@@ -84,10 +97,21 @@ const LoginPage: NextPage<ITheme> = ({ toggleTheme }) => {
                                 <Divider flexItem orientation="horizontal" variant="middle" />
                                 <FormProvider {...formsMethods}>
                                     <CardContent sx={{ display: 'flex', marginTop: '20px' }}>
-                                        <InputText fullWidth control={control} label="Email" name="email" type="email" />
+                                        <InputText
+                                            fullWidth
+                                            control={control}
+                                            label="Email"
+                                            name="email"
+                                            type="email"
+                                        />
                                     </CardContent>
                                     <CardContent sx={{ display: 'flex', flexDirection: 'column' }}>
-                                        <InputPassword fullWidth control={control} label="Contraseña" name="contrasena" />
+                                        <InputPassword
+                                            fullWidth
+                                            control={control}
+                                            label="Contraseña"
+                                            name="contrasena"
+                                        />
 
                                         <Button
                                             fullWidth
@@ -109,8 +133,8 @@ const LoginPage: NextPage<ITheme> = ({ toggleTheme }) => {
                                         sx={{ fontWeight: 'bold', mt: 1, fontSize: '0.8rem' }}
                                         variant="subtitle2"
                                     >
-                                        Si no se acuerda de sus credenciales le recomendamos que se comunique con un superior para
-                                        informar la situación
+                                        Si no se acuerda de sus credenciales le recomendamos que se comunique con un
+                                        superior para informar la situación
                                     </Typography>
                                 </CardContent>
                             </CardContentAuth>
@@ -125,7 +149,8 @@ const LoginPage: NextPage<ITheme> = ({ toggleTheme }) => {
 //con esto buscamos bloquear la pag de login en caso tal tengamos credenciales
 export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
     const session = await getSession({ req })
-    //console.log(session,session);
+
+    //console.log({ session })
     //con el query rescatamos el ultimo path donde estuvimos navegando parar retornarlo en caso tal nuestro logueo sea exitoso
     const { p = '/' } = query
 

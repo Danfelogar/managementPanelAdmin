@@ -3,7 +3,8 @@ import { useContext, useState } from 'react'
 import { UIContext } from '../../context'
 
 export const useOTs = () => {
-    const { toggleSnackBarError, toggleSnackBarSuccess, toggleModalOTs, toggleModalWarringDeleted } = useContext(UIContext)
+    const { toggleSnackBarError, toggleSnackBarSuccess, toggleModalOTs, toggleModalWarringDeleted } =
+        useContext(UIContext)
     const [msmTextDelete, setMsmTextDelete] = useState('')
 
     const handleUpdateOT = () => {

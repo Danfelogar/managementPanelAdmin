@@ -131,7 +131,14 @@ const UsersPage: NextPage<ITheme> = ({ toggleTheme }) => {
             <Grid container className="fadeIn">
                 <Grid
                     item
-                    sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mb: 1, mt: 1 }}
+                    sx={{
+                        flexGrow: 1,
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        alignItems: 'center',
+                        mb: 1,
+                        mt: 1,
+                    }}
                     xs={12}
                 >
                     <Button color="secondary" startIcon={<CreateIcon />} variant="outlined">

@@ -9,13 +9,13 @@ import { jwtServ } from '../../../utils'
 type Data =
     | { message: string }
     | {
-        token: string
-        user: {
-            email: string
-            rol: string
-            nombre: string
-        }
-    }
+          token: string
+          user: {
+              email: string
+              rol: string
+              nombre: string
+          }
+      }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
     switch (req.method) {

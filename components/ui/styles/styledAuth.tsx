@@ -2,12 +2,14 @@ import { Box, Card, CardContent, Container } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
 export const WrapperAuth = styled(Box)(() => ({
-    width: '100%',
-    height: '100vh',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     backgroundColor: '#e3f2fd',
+
+    '@media(min-height: 901px)': {
+        height: '100vh',
+    },
 }))
 
 export const WrapperAuthHeader = styled(Box)(() => ({
@@ -22,7 +24,7 @@ export const WrapperAuthBody = styled(Box)(() => ({
     flexGrow: 1,
     width: '100%',
     maxWidth: '740px',
-    paddingTop: '60px',
+    padding: '60px 0',
     display: 'flex',
     justifyContent: 'center',
 }))
@@ -37,6 +39,7 @@ export const WrapperCardAuth = styled(Card)(() => ({
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
+    // height: '90vh',
     borderRadius: '10px',
     justifyContent: 'center',
     alignItems: 'center',
@@ -48,4 +51,10 @@ export const CardContentAuth = styled(CardContent)(() => ({
     height: '90%',
     display: 'flex',
     flexDirection: 'column',
+    '@media(max-height: 947px)': {
+        height: '70vh',
+    },
+    '@media(max-height: 901px)': {
+        height: '100%',
+    },
 }))

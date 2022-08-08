@@ -110,7 +110,9 @@ export const ModalOTs = () => {
                                 disableMaskedInput
                                 inputFormat="DD/MM/YYYY"
                                 label="Fecha de expedición"
-                                renderInput={(params: TextFieldProps) => <TextField {...params} sx={{ width: '100%' }} />}
+                                renderInput={(params: TextFieldProps) => (
+                                    <TextField {...params} sx={{ width: '100%' }} />
+                                )}
                                 value={value}
                                 onChange={handleChange}
                             />
@@ -120,7 +122,9 @@ export const ModalOTs = () => {
                                 disableMaskedInput
                                 inputFormat="DD/MM/YYYY"
                                 label="Fecha de expedición"
-                                renderInput={(params: TextFieldProps) => <TextField {...params} sx={{ width: '100%' }} />}
+                                renderInput={(params: TextFieldProps) => (
+                                    <TextField {...params} sx={{ width: '100%' }} />
+                                )}
                                 value={value}
                                 onChange={handleChange}
                             />
@@ -133,7 +137,9 @@ export const ModalOTs = () => {
                                 disableMaskedInput
                                 inputFormat="DD/MM/YYYY"
                                 label="Fecha de cierre"
-                                renderInput={(params: TextFieldProps) => <TextField {...params} sx={{ width: '100%' }} />}
+                                renderInput={(params: TextFieldProps) => (
+                                    <TextField {...params} sx={{ width: '100%' }} />
+                                )}
                                 value={value}
                                 onChange={handleChange}
                             />
@@ -143,7 +149,9 @@ export const ModalOTs = () => {
                                 disableMaskedInput
                                 inputFormat="DD/MM/YYYY"
                                 label="Fecha de cierre"
-                                renderInput={(params: TextFieldProps) => <TextField {...params} sx={{ width: '100%' }} />}
+                                renderInput={(params: TextFieldProps) => (
+                                    <TextField {...params} sx={{ width: '100%' }} />
+                                )}
                                 value={value}
                                 onChange={handleChange}
                             />
@@ -211,15 +219,32 @@ export const ModalOTs = () => {
                             </Box>
                         </Grid>
                         <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
-                            <TextField fullWidth multiline id="outlined-multiline-flexible" label="Tareas" maxRows={7} />
+                            <TextField
+                                fullWidth
+                                multiline
+                                id="outlined-multiline-flexible"
+                                label="Tareas"
+                                maxRows={7}
+                            />
                         </Grid>
                         <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
-                            <TextField fullWidth multiline id="outlined-multiline-flexible" label="Comentario" maxRows={7} />
+                            <TextField
+                                fullWidth
+                                multiline
+                                id="outlined-multiline-flexible"
+                                label="Comentario"
+                                maxRows={7}
+                            />
                         </Grid>
                     </Grid>
                     <Grid container sx={{ p: 2 }}>
                         <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                            <Button color="secondary" startIcon={<SaveIcon />} variant="outlined" onClick={handleUpdateOT}>
+                            <Button
+                                color="secondary"
+                                startIcon={<SaveIcon />}
+                                variant="outlined"
+                                onClick={handleUpdateOT}
+                            >
                                 Guardar cambios
                             </Button>
                         </Box>

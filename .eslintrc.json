@@ -42,7 +42,7 @@
     "prettier/prettier": [
       "error",
       {
-        "printWidth": 130,
+        "printWidth": 120,
         "trailingComma": "all",
         "tabWidth": 4,
         "semi": false,

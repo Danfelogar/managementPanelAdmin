@@ -38,7 +38,11 @@ export const AdminLayout: FC<Props> = ({ children, title, subTitle, icon, toggle
                 }}
             >
                 <Box display="flex" flexDirection="column">
-                    <Typography component="h1" sx={{ fontWeight: '700', display: 'flex', alignItems: 'center' }} variant="h6">
+                    <Typography
+                        component="h1"
+                        sx={{ fontWeight: '700', display: 'flex', alignItems: 'center' }}
+                        variant="h6"
+                    >
                         {icon}&nbsp;{title}
                     </Typography>
                     <Typography align="justify" sx={{ mb: 1 }} variant="body2">

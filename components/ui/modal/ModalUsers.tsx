@@ -70,7 +70,12 @@ export const ModalUsers = () => {
                 </Grid>
                 <Grid container sx={{ p: 2 }}>
                     <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                        <Button color="secondary" startIcon={<SaveIcon />} variant="outlined" onClick={handleUpdateUser}>
+                        <Button
+                            color="secondary"
+                            startIcon={<SaveIcon />}
+                            variant="outlined"
+                            onClick={handleUpdateUser}
+                        >
                             Guardar cambios
                         </Button>
                     </Box>
