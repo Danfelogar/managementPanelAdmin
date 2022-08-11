@@ -1,3 +1,6 @@
+import Image from 'next/image'
+import { MouseEvent, useContext, useState } from 'react'
+import { useRouter } from 'next/router'
 import {
     AccountCircleOutlined,
     AdminPanelSettings,
@@ -8,18 +11,38 @@ import {
 import InventoryOutlinedIcon from '@mui/icons-material/InventoryOutlined'
 import EngineeringIcon from '@mui/icons-material/Engineering'
 import GitHubIcon from '@mui/icons-material/GitHub'
-import { CardMedia, Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, ListSubheader } from '@mui/material'
-import { Box } from '@mui/system'
-import Image from 'next/image'
-import { useContext } from 'react'
-import { useRouter } from 'next/router'
+import {
+    CardMedia,
+    Drawer,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    Divider,
+    ListSubheader,
+    Popover,
+    Typography,
+    Box,
+} from '@mui/material'
 
+import { AuthContext, UIContext } from '../../../context'
 import logoMtto from '../../../public/mtto.png'
-import { UIContext } from '../../../context/ui/UIContext'
 
 export const SideMenu = () => {
+    const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
     const { toggleSideMenu, isMenuOpen } = useContext(UIContext)
-    const { push, asPath } = useRouter()
+    const { logout, isLoggedIn, user } = useContext(AuthContext)
+    const { push } = useRouter()
+    const open = Boolean(anchorEl)
+    const id = open ? 'simple-popover' : undefined
+
+    const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget)
+    }
+
+    const handleClose = () => {
+        setAnchorEl(null)
+    }
 
     const navigateTo = (url: string) => {
         toggleSideMenu()
@@ -41,71 +64,107 @@ export const SideMenu = () => {
                         </CardMedia>
                     </ListItem>
                     <Divider variant="middle" />
-                    {/* {isLoggedIn && (
-                        <> */}
-                    <ListItem button>
-                        <ListItemIcon>
-                            <AccountCircleOutlined />
-                        </ListItemIcon>
-                        <ListItemText primary={'Perfil'} />
-                    </ListItem>
+                    {isLoggedIn && (
+                        <ListItem button aria-describedby={id} onClick={(e: any) => handleClick(e)}>
+                            <ListItemIcon>
+                                <AccountCircleOutlined />
+                            </ListItemIcon>
+                            <ListItemText primary={'Perfil'} />
+                        </ListItem>
+                    )}
+                    <Popover
+                        anchorEl={anchorEl}
+                        anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        id={id}
+                        open={open}
+                        sx={{ ml: 1 }}
+                        onClose={handleClose}
+                    >
+                        <Box sx={{ display: 'flex', flexDirection: 'row', p: 1 }}>
+                            <Typography color="text.primary" component="p" sx={{ fontWeight: 'bold' }} variant="body1">
+                                Nombre:&nbsp;
+                            </Typography>
+                            <Typography color="text.secondary" component="p" sx={{ fontWeight: '400' }} variant="body2">
+                                {user?.nombre}
+                            </Typography>
+                        </Box>
+                        <Divider variant="middle" />
+                        <Box sx={{ display: 'flex', flexDirection: 'row', p: 1 }}>
+                            <Typography color="text.primary" component="p" sx={{ fontWeight: 'bold' }} variant="body1">
+                                Email:&nbsp;
+                            </Typography>
+                            <Typography color="text.secondary" component="p" sx={{ fontWeight: '400' }} variant="body2">
+                                {user?.email}
+                            </Typography>
+                        </Box>
+                        <Divider variant="middle" />
+                        <Box sx={{ display: 'flex', flexDirection: 'row', p: 1 }}>
+                            <Typography color="text.primary" component="p" sx={{ fontWeight: 'bold' }} variant="body1">
+                                Rol:&nbsp;
+                            </Typography>
+                            <Typography color="text.secondary" component="p" sx={{ fontWeight: '400' }} variant="body2">
+                                {user?.rol}
+                            </Typography>
+                        </Box>
+                    </Popover>
+                    {isLoggedIn && (
+                        <ListItem button onClick={() => navigateTo('/')}>
+                            <ListItemIcon>
+                                <DashboardOutlined />
+                            </ListItemIcon>
+                            <ListItemText primary={'Dashboard'} />
+                        </ListItem>
+                    )}
 
-                    <ListItem button onClick={() => navigateTo('/')}>
-                        <ListItemIcon>
-                            <DashboardOutlined />
-                        </ListItemIcon>
-                        <ListItemText primary={'Dashboard'} />
-                    </ListItem>
-                    {/* </>
-                    )} */}
-
-                    <ListItem button onClick={() => navigateTo('/inventory')}>
-                        <ListItemIcon>
-                            <InventoryOutlinedIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={'Inventario'} />
-                    </ListItem>
-
-                    <ListItem button onClick={() => navigateTo('/ots')}>
-                        <ListItemIcon>
-                            <ConfirmationNumberOutlined />
-                        </ListItemIcon>
-                        <ListItemText primary={'OTs'} />
-                    </ListItem>
-
-                    <ListItem button onClick={() => navigateTo('/follows')}>
-                        <ListItemIcon>
-                            <EngineeringIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={'Seguimiento'} />
-                    </ListItem>
+                    {['super_admin', 'admin_bodega', 'bodega', 'admin_mtto', 'mtto'].includes(user?.rol!) && (
+                        <ListItem button onClick={() => navigateTo('/inventory')}>
+                            <ListItemIcon>
+                                <InventoryOutlinedIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={'Inventario'} />
+                        </ListItem>
+                    )}
+                    {['super_admin', 'admin_bodega', 'admin_mtto', 'mtto'].includes(user?.rol!) && (
+                        <ListItem button onClick={() => navigateTo('/ots')}>
+                            <ListItemIcon>
+                                <ConfirmationNumberOutlined />
+                            </ListItemIcon>
+                            <ListItemText primary={'OTs'} />
+                        </ListItem>
+                    )}
+                    {['super_admin', 'admin_mtto', 'mtto'].includes(user?.rol!) && (
+                        <ListItem button onClick={() => navigateTo('/follows')}>
+                            <ListItemIcon>
+                                <EngineeringIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={'Seguimiento'} />
+                        </ListItem>
+                    )}
 
                     {/* {isLoggedIn ? ( */}
-                    <ListItem button onClick={() => navigateTo('/users')}>
-                        <ListItemIcon>
-                            <AdminPanelSettings />
-                        </ListItemIcon>
-                        <ListItemText primary={'Usuarios'} />
-                    </ListItem>
+                    {user?.rol! === 'super_admin' && (
+                        <ListItem button onClick={() => navigateTo('/users')}>
+                            <ListItemIcon>
+                                <AdminPanelSettings />
+                            </ListItemIcon>
+                            <ListItemText primary={'Usuarios'} />
+                        </ListItem>
+                    )}
                     {/* ) : ( */}
                     {/* //atento que si enviamos este query parameter "?q=...." podemos mandarlo en un middleware para poder surftear automaticamente la ultima pagina que visitamos cuando hagamos el login exitoso
 
                         //esto se hace con la finalidad de tener guardado cual fue la ultima page navegada */}
-                    <ListItem
-                        button
-                        //onClick={() => navigateTo(`/auth/login?p=${asPath}`)}
-                    >
-                        <ListItemIcon>
-                            <LoginOutlined />
-                        </ListItemIcon>
-                        <ListItemText primary={'Cerrar Sección'} />
-                    </ListItem>
-                    {/* )} */}
-
-                    {/* Admin */}
-
-                    {/* {user?.role == 'admin' && (
-                        <> */}
+                    {isLoggedIn && (
+                        <ListItem button onClick={() => logout()}>
+                            <ListItemIcon>
+                                <LoginOutlined />
+                            </ListItemIcon>
+                            <ListItemText primary={'Cerrar Sección'} />
+                        </ListItem>
+                    )}
                     <Box flexShrink={2} sx={{ flex: '1 1 auto' }} />
                     <Divider />
                     <ListSubheader>Sección de contacto</ListSubheader>
@@ -116,8 +175,6 @@ export const SideMenu = () => {
                         </ListItemIcon>
                         <ListItemText primary={'Created by Danfelogar'} />
                     </ListItem>
-                    {/* </>
-                    )} */}
                 </List>
             </Box>
         </Drawer>

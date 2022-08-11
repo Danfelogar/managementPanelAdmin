@@ -1,6 +1,6 @@
 // import { useState, useEffect, useContext } from 'react';
 // import useSWR from 'swr'
-import { NextPage } from 'next'
+import { GetServerSideProps, NextPage } from 'next'
 import { useContext } from 'react'
 import { Button, Grid, MenuItem, Select } from '@mui/material'
 import { Box, Container } from '@mui/system'
@@ -15,10 +15,13 @@ import IconButton from '@mui/material/IconButton'
 // import { AdminLayout } from '../../components/layouts'
 // import { IUser } from '../../interfaces'
 
+import { getSession } from 'next-auth/react'
+
 import { ITheme } from '../interface'
 import { AdminLayout, ModalUsers, ModalWarringDeleted, SnackbarError, SnackbarSuccess } from '../components'
 import { UIContext } from '../context'
 import { useUsers } from '../hooks'
+import { managementApi } from '../services'
 
 const UsersPage: NextPage<ITheme> = ({ toggleTheme }) => {
     const { toggleModalUsers, toggleSnackBarError, toggleSnackBarSuccess, isSnackbarError, isSnackbarSuccess } =
@@ -26,7 +29,13 @@ const UsersPage: NextPage<ITheme> = ({ toggleTheme }) => {
     const { msmTextDelete, handleDeletedUser, warringDeletedUser } = useUsers()
     // const { data, error} = useSWR<IUser[]>('/api/admin/users')
     // const [users, setUsers] = useState<IUser[]>([])
+    const testing = async () => {
+        const { data } = await managementApi.get('/admin/users?page=2&limit=5')
 
+        console.log({ data })
+    }
+
+    testing()
     // useEffect(() => {
     //     if( data ){
     //         setUsers(data);
@@ -176,6 +185,33 @@ const UsersPage: NextPage<ITheme> = ({ toggleTheme }) => {
             />
         </AdminLayout>
     )
+}
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+    const session: any = await getSession({ req })
+
+    // console.log({ session, req })
+    if (!session) {
+        return {
+            redirect: {
+                destination: '/auth/login?p=/users',
+                permanent: false,
+            },
+        }
+    }
+
+    if (session?.user?.rol! !== 'super_admin') {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        }
+    }
+
+    return {
+        props: {},
+    }
 }
 
 export default UsersPage

@@ -25,9 +25,9 @@ export const AuthProvider: FC<Props> = ({ children }) => {
     const [state, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE)
 
     useEffect(() => {
+        // console.log({ status, user: data?.user })
         if (status === 'authenticated') {
             //TODO para poder guardar nuestra session en nuestro provider
-            console.log({ user: data?.user })
             dispatch({ type: '[Auth] - Login', payload: data?.user as IUser })
         }
     }, [status, data])

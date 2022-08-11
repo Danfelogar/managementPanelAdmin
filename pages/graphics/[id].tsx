@@ -4,8 +4,11 @@ import { EngineeringOutlined } from '@mui/icons-material'
 import { AdminLayout, CustomBar } from '../../components'
 import { ITheme } from '../../interface'
 import { WrapperGraphicsBar } from '../../components/ui/styles/styledGraphicsBar'
+import { useGraphics } from '../../hooks'
 
 const BarGraphicPage: NextPage<ITheme> = ({ toggleTheme }) => {
+    const { status } = useGraphics()
+
     return (
         <AdminLayout
             icon={<EngineeringOutlined color="secondary" />}

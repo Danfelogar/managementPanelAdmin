@@ -1,4 +1,4 @@
-import { NextPage } from 'next'
+import { GetServerSideProps, NextPage } from 'next'
 import EditIcon from '@mui/icons-material/Edit'
 import SaveAsOutlinedIcon from '@mui/icons-material/SaveAsOutlined'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
@@ -24,6 +24,7 @@ import {
 } from '@mui/material'
 import { Box } from '@mui/system'
 import { useState } from 'react'
+import { getSession } from 'next-auth/react'
 
 import { AdminLayout } from '../../components'
 import { ITheme } from '../../interface'
@@ -316,6 +317,24 @@ const SingeInventoryPage: NextPage<ITheme> = ({ toggleTheme }) => {
             </Grid>
         </AdminLayout>
     )
+}
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+    const session = await getSession({ req })
+
+    // console.log({ session })
+    if (!session) {
+        return {
+            redirect: {
+                destination: `/auth/login?p=${req.url}`,
+                permanent: false,
+            },
+        }
+    }
+
+    return {
+        props: {},
+    }
 }
 
 export default SingeInventoryPage

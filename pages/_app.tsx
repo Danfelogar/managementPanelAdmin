@@ -10,7 +10,7 @@ import '../styles/globals.css'
 import { darkTheme, lightTheme } from '../theme'
 import { AuthProvider } from '../context/auth/AuthProvider'
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
     const [currentTheme, setCurrentTheme] = useState(lightTheme)
 
     useEffect(() => {
@@ -33,7 +33,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     }
 
     return (
-        <SessionProvider>
+        <SessionProvider session={session}>
             <AuthProvider>
                 <UIProvider>
                     <ThemeProvider theme={currentTheme}>

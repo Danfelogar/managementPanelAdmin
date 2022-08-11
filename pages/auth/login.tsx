@@ -25,7 +25,7 @@ import { ITheme } from '../../interface'
 
 const LoginPage: NextPage<ITheme> = ({ toggleTheme }) => {
     const { theme, changeTheme } = useContext(UIContext)
-    const { onLoginUser, formsMethods } = useLogin()
+    const { onLoginUser, formsMethods, isLoading } = useLogin()
 
     const { control, handleSubmit: onSubmit } = useForm<FormData>({
         defaultValues: {
@@ -116,6 +116,7 @@ const LoginPage: NextPage<ITheme> = ({ toggleTheme }) => {
                                         <Button
                                             fullWidth
                                             color="secondary"
+                                            disabled={isLoading}
                                             size="large"
                                             sx={{ mt: 3 }}
                                             variant="contained"
@@ -150,6 +151,7 @@ const LoginPage: NextPage<ITheme> = ({ toggleTheme }) => {
 export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
     const session = await getSession({ req })
 
+    console.log({ query, session })
     //console.log({ session })
     //con el query rescatamos el ultimo path donde estuvimos navegando parar retornarlo en caso tal nuestro logueo sea exitoso
     const { p = '/' } = query

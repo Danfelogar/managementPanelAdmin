@@ -1,10 +1,11 @@
-import { NextPage } from 'next'
+import { GetServerSideProps, NextPage } from 'next'
 import { DataGrid, GridToolbar, GridColDef, GridValueGetterParams, GridRenderCellParams } from '@mui/x-data-grid'
 import { Box, CardMedia, Container, Grid, IconButton } from '@mui/material'
 import { EngineeringOutlined } from '@mui/icons-material'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { useContext } from 'react'
+import { getSession } from 'next-auth/react'
 
 import { AdminLayout } from '../components/layouts/AdminLayout'
 import { ITheme } from '../interface/theme'
@@ -177,6 +178,24 @@ const FollowsPage: NextPage<ITheme> = ({ toggleTheme }) => {
             />
         </AdminLayout>
     )
+}
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+    const session = await getSession({ req })
+
+    // console.log({ session })
+    if (!session) {
+        return {
+            redirect: {
+                destination: '/auth/login?p=/follows',
+                permanent: false,
+            },
+        }
+    }
+
+    return {
+        props: {},
+    }
 }
 
 export default FollowsPage

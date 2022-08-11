@@ -1,3 +1,4 @@
+import { GetServerSideProps } from 'next'
 import {
     BackspaceOutlined,
     ConfirmationNumberOutlined,
@@ -11,6 +12,7 @@ import {
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest'
 import { Grid } from '@mui/material'
 import { NextPage } from 'next'
+import { getSession } from 'next-auth/react'
 
 import { AdminLayout, SummaryTile } from '../components'
 import { ITheme } from '../interface'
@@ -76,6 +78,24 @@ const HomePage: NextPage<ITheme> = ({ toggleTheme }) => {
             </Grid>
         </AdminLayout>
     )
+}
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+    const session = await getSession({ req })
+
+    // console.log({ session })
+    if (!session) {
+        return {
+            redirect: {
+                destination: '/auth/login?p=/',
+                permanent: false,
+            },
+        }
+    }
+
+    return {
+        props: {},
+    }
 }
 
 export default HomePage

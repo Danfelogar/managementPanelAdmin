@@ -4,8 +4,9 @@ import CreateIcon from '@mui/icons-material/Create'
 import { DataGrid, GridColDef, GridRenderCellParams, GridToolbar, GridValueGetterParams } from '@mui/x-data-grid'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { NextPage } from 'next'
+import { GetServerSideProps, NextPage } from 'next'
 import { ConfirmationNumberOutlined } from '@mui/icons-material'
+import { getSession } from 'next-auth/react'
 
 import { ITheme } from '../interface'
 import { UIContext } from '../context'
@@ -267,6 +268,24 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
             />
         </AdminLayout>
     )
+}
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+    const session = await getSession({ req })
+
+    // console.log({ session })
+    if (!session) {
+        return {
+            redirect: {
+                destination: '/auth/login?p=/ots',
+                permanent: false,
+            },
+        }
+    }
+
+    return {
+        props: {},
+    }
 }
 
 export default OtsPage

@@ -1,11 +1,12 @@
 import { CardMedia, Chip, Grid, IconButton, Box, Container, Link } from '@mui/material'
-import { NextPage } from 'next'
+import { GetServerSideProps, NextPage } from 'next'
 import { useContext } from 'react'
 import { DataGrid, GridColDef, GridRenderCellParams, GridToolbar, GridValueGetterParams } from '@mui/x-data-grid'
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import NextLink from 'next/link'
+import { getSession } from 'next-auth/react'
 
 import { AdminLayout, ModalWarringDeleted, SnackbarError, SnackbarSuccess } from '../../components'
 import { ITheme } from '../../interface'
@@ -316,6 +317,24 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
             />
         </AdminLayout>
     )
+}
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+    const session = await getSession({ req })
+
+    // console.log({ session })
+    if (!session) {
+        return {
+            redirect: {
+                destination: '/auth/login?p=/inventory',
+                permanent: false,
+            },
+        }
+    }
+
+    return {
+        props: {},
+    }
 }
 
 export default InventariosPage
