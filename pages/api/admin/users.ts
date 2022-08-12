@@ -38,6 +38,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
 const getUsers = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     const page: number = parseInt(req.query.page as any) || 1
     const limit: number = parseInt(req.query.limit as any) || 10
+    const { nombre = '' } = req.query
+
+    let condition = {}
 
     await db.connect()
 
@@ -49,15 +52,19 @@ const getUsers = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     if (page > last_page) {
         return res.status(400).json({ message: 'you exceeded the maximum pages' })
     }
+    console.log({ nombre })
+    if (nombre !== '') {
+        condition = { nombre }
+    }
 
     if (Math.sign(last_page - page) === 1) next_page = true
     if ((Math.sign(page - last_page) === -1 || Math.sign(page - last_page) === 0) && page !== 1) previous_page = true
-    const users = await User.find()
+    const users = await User.find(condition)
         .select('-constrasena')
         .sort({ createdAt: -1 })
-        .lean()
         .skip((page - 1) * limit)
         .limit(limit)
+        .lean()
 
     await db.disconnect()
 
@@ -123,6 +130,7 @@ const createUser = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
         return res.status(500).json({ message: 'review server logs' })
     }
 }
+
 const updateUser = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     // nombre = '', email = '', contrasena = '', rol = ''
     const { _id = '' } = req.body as IUser

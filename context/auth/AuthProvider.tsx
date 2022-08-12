@@ -1,6 +1,5 @@
 import { useSession, signOut } from 'next-auth/react'
 import { FC, ReactNode, useEffect, useReducer } from 'react'
-import { useRouter } from 'next/router'
 
 import { IUser } from '../../interface'
 
