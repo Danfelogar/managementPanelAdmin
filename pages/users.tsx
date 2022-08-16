@@ -1,66 +1,33 @@
-// import { useState, useEffect, useContext } from 'react';
-// import useSWR from 'swr'
 import { GetServerSideProps, NextPage } from 'next'
 import { useContext } from 'react'
-import { Button, Grid, MenuItem, Select } from '@mui/material'
-import { Box, Container } from '@mui/system'
+import { Button, Grid, Box } from '@mui/material'
 import { DataGrid, GridColDef, GridToolbar, GridValueGetterParams } from '@mui/x-data-grid'
 import { PeopleOutline } from '@mui/icons-material'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import CreateIcon from '@mui/icons-material/Create'
 import IconButton from '@mui/material/IconButton'
-
-// import { tesloApi } from '../../api'
-// import { AdminLayout } from '../../components/layouts'
-// import { IUser } from '../../interfaces'
-
 import { getSession } from 'next-auth/react'
+import { FormProvider } from 'react-hook-form'
 
 import { ITheme } from '../interface'
-import { AdminLayout, ModalUsers, ModalWarringDeleted, SnackbarError, SnackbarSuccess } from '../components'
-import { UIContext } from '../context'
+import { AdminLayout, Loading, ModalUsers, ModalWarringDeleted, SnackbarError, SnackbarSuccess } from '../components'
+import { UIContext, UsersContext } from '../context'
 import { useUsers } from '../hooks'
-import { managementApi } from '../services'
 
 const UsersPage: NextPage<ITheme> = ({ toggleTheme }) => {
-    const { toggleModalUsers, toggleSnackBarError, toggleSnackBarSuccess, isSnackbarError, isSnackbarSuccess } =
+    const { toggleSnackBarError, toggleSnackBarSuccess, isSnackbarError, isSnackbarSuccess, isModalUsersOpen } =
         useContext(UIContext)
-    const { msmTextDelete, handleDeletedUser, warringDeletedUser } = useUsers()
-    // const { data, error} = useSWR<IUser[]>('/api/admin/users')
-    // const [users, setUsers] = useState<IUser[]>([])
-    const testing = async () => {
-        const { data } = await managementApi.get('/admin/users?page=2&limit=5')
 
-        console.log({ data })
-    }
-
-    testing()
-    // useEffect(() => {
-    //     if( data ){
-    //         setUsers(data);
-    //     }
-    // }, [data])
-
-    // if (!data && !error) return <></>
-
-    // const onRoleUpdate = async (userId: String, newRole: string) => {
-    //     const previusUsers = users.map((user) => ({ ...user }))
-    //     const updatedUsers = users.map((user) => ({
-    //         ...user,
-    //         role: userId === user._id ? newRole : user.role,
-    //     }))
-
-    //     setUsers(updatedUsers)
-    //     try {
-    //         await tesloApi.put('/admin/users', { userId: userId, role: newRole })
-    //     } catch (error) {
-    //         setUsers(previusUsers)
-    //         console.log({ error })
-    //         alert('Failed to update user role')
-    //     }
-    // }
-
+    const { msmTextDelete, msmTextUpdate, isLoading, dataUsers, isUpdateUser } = useContext(UsersContext)
+    const {
+        formMethodsCreate,
+        formMethodsUpdate,
+        changeModalCreate,
+        changeModalUpdate,
+        handleDeletedUser,
+        warringDeletedUser,
+    } = useUsers()
     const columns: GridColDef[] = [
         { field: 'email', headerName: 'Email', width: 250 },
         { field: 'nombre', headerName: 'Nombre Completo', width: 300 },
@@ -78,10 +45,10 @@ const UsersPage: NextPage<ITheme> = ({ toggleTheme }) => {
                             p: 0,
                         }}
                     >
-                        <IconButton color="secondary" onClick={toggleModalUsers}>
+                        <IconButton color="secondary" onClick={() => changeModalUpdate(row)}>
                             <EditIcon />
                         </IconButton>
-                        <IconButton color="error" onClick={() => warringDeletedUser(row.email)}>
+                        <IconButton color="error" onClick={() => warringDeletedUser(row.email, row._id)}>
                             <DeleteIcon />
                         </IconButton>
                     </Box>
@@ -90,45 +57,9 @@ const UsersPage: NextPage<ITheme> = ({ toggleTheme }) => {
         },
     ]
 
-    const users = [
-        {
-            _id: 1,
-            nombre: 'Daniel Felipe Polo Garcia',
-            email: 'superadmin@superadmin.com',
-            rol: 'super_admin',
-        },
-        {
-            _id: 11,
-            nombre: 'Lupita Olmos',
-            email: 'adminbodega@adminbodega.com',
-            rol: 'admin_bodega',
-        },
-        {
-            _id: 111,
-            nombre: 'Beatriz Salto',
-            email: 'bodega@bodega.com',
-            rol: 'bodega',
-        },
-        {
-            _id: 1111,
-            nombre: 'Carlos Andrés Roa Escorcia',
-            email: 'adminmtto@adminmtto.com',
-            rol: 'admin_mtto',
-        },
-        {
-            _id: 11111,
-            nombre: 'Vasco Castano',
-            email: 'mtto@mtto.com',
-            rol: 'mtto',
-        },
-    ]
-
-    const rows = users.map((user) => ({
-        id: user._id,
-        email: user.email,
-        nombre: user.nombre,
-        rol: user.rol,
-    }))
+    if (isLoading) {
+        return <Loading size={'70px'} title={'Cargando Usuarios, por favor espere...'} toggleTheme={toggleTheme} />
+    }
 
     return (
         <AdminLayout
@@ -150,7 +81,7 @@ const UsersPage: NextPage<ITheme> = ({ toggleTheme }) => {
                     }}
                     xs={12}
                 >
-                    <Button color="secondary" startIcon={<CreateIcon />} variant="outlined">
+                    <Button color="secondary" startIcon={<CreateIcon />} variant="outlined" onClick={changeModalCreate}>
                         Crear nuevo usuario
                     </Button>
                 </Grid>
@@ -160,13 +91,24 @@ const UsersPage: NextPage<ITheme> = ({ toggleTheme }) => {
                         components={{
                             Toolbar: GridToolbar,
                         }}
+                        getRowId={(row) => row._id}
                         pageSize={10}
-                        rows={rows}
+                        rows={dataUsers}
                         rowsPerPageOptions={[10]}
                     />
                 </Grid>
             </Grid>
-            <ModalUsers />
+            {/* condicional para evitar que se queden guardados los datos de los inputs */}
+            {isModalUsersOpen && isUpdateUser && (
+                <FormProvider {...formMethodsUpdate}>
+                    <ModalUsers />
+                </FormProvider>
+            )}
+            {isModalUsersOpen && !isUpdateUser && (
+                <FormProvider {...formMethodsCreate}>
+                    <ModalUsers />
+                </FormProvider>
+            )}
             <ModalWarringDeleted
                 actionDeleted={handleDeletedUser}
                 genericTextDeleted={`Estas apunto de borrar al usuario "${msmTextDelete}"
@@ -176,12 +118,16 @@ const UsersPage: NextPage<ITheme> = ({ toggleTheme }) => {
             <SnackbarError
                 handleChangeSnackbar={toggleSnackBarError}
                 isOpen={isSnackbarError}
-                msmText={`Se ha borrando exitosamente el usuario ${msmTextDelete}`}
+                msmText={`Se ha borrando exitosamente el usuario: ${msmTextDelete}`}
             />
             <SnackbarSuccess
                 handleChangeSnackbar={toggleSnackBarSuccess}
                 isOpen={isSnackbarSuccess}
-                msmText={`se ha actualizado exitosamente el usuario`}
+                msmText={
+                    msmTextUpdate !== ''
+                        ? `se ha actualizado exitosamente el usuario: ${msmTextUpdate}`
+                        : 'se ha creado exitosamente el usuario'
+                }
             />
         </AdminLayout>
     )

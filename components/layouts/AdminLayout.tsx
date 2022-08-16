@@ -1,9 +1,8 @@
-import { FC, ReactNode, useContext } from 'react'
+import { FC, ReactNode } from 'react'
 import Head from 'next/head'
 import { Box, Typography } from '@mui/material'
 
-import { Navbar } from '../ui'
-import { SideMenu } from '../ui/navigation/SideMenu'
+import { Navbar, SideMenu } from '../ui'
 
 interface Props {
     children: ReactNode

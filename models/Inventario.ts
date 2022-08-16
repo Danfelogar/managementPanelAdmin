@@ -29,36 +29,36 @@ const inventarioSchema = new Schema(
         fechaDeActualizacion: { type: String, required: true },
 
         //maquina condicional
-        id_maquina: { type: String, unique: true },
-        capacidadNominal: { type: String },
-        serie: { type: String },
-        marca: { type: String },
-        voltaje: { type: Number },
-        corriente: { type: Number },
-        observacionGeneral: { type: String },
-        ind: [
-            {
-                frecuencia_de_reparacion: { type: Number },
-                frecuencia_de_falla: { type: Number },
-                porcentaje_de_disponibilidad: { type: Number },
-            },
-        ],
+        id_maquina: { type: Number, unique: false, required: false },
+        capacidadNominal: { type: String, required: false },
+        serie: { type: String, required: false },
+        marca: { type: String, required: false },
+        voltaje: { type: Number, required: false },
+        corriente: { type: Number, required: false },
+        observacionGeneral: { type: String, required: false },
+        // ind: [
+        //     {
+        //         frecuencia_de_reparacion: { type: Number },
+        //         frecuencia_de_falla: { type: Number },
+        //         porcentaje_de_disponibilidad: { type: Number },
+        //     },
+        // ],
         locacion: {
             type: String,
             enum: {
                 values: ['produccion', 'taller', 'bodega', 'oficina_administrativa'],
                 message: '{VALUE} no es una locacion permitida',
                 default: 'bodega',
-                required: true,
+                required: false,
             },
         },
         subLocacion: { type: Number },
 
         //repuesto condicional
-        id_repuesto: { type: String, unique: true },
-        existencia: { type: Number },
-        coordenadas_gps: { type: String },
-        maquina_id_relacion: [{ type: String, unique: true }],
+        id_repuesto: { type: Number, unique: false, required: false },
+        existencia: { type: Number, required: false },
+        coordenadas_gps: { type: String, required: false },
+        maquina_id_relacion: [{ type: String, required: false, unique: false }],
     },
     {
         timestamps: true,

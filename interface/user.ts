@@ -8,3 +8,13 @@ export interface IUser {
     createdAt: string
     updatedAt: string
 }
+
+export interface IUserRes {
+    users: IUser[]
+    page: number
+    limit: number
+    last_page: number
+    previous_page: null | boolean
+    next_page: null | boolean
+    total: number
+}

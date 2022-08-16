@@ -21,7 +21,7 @@ export const InputPassword: FC<Props> = ({ fullWidth = false, label, name, contr
             shouldUnregister
             control={control}
             name={name}
-            render={({ field: { onChange, value }, formState: { errors } }) => {
+            render={({ field: { onChange, value = '' }, formState: { errors } }) => {
                 return (
                     <FormControl sx={{ width: '100%' }} variant="outlined">
                         <InputLabel htmlFor="outlined-adornment-password">{label}</InputLabel>

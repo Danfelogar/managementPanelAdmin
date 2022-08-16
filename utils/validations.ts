@@ -11,3 +11,10 @@ export const isValidEmail = (email: string): boolean => {
 export const isEmail = (email: string): string | undefined => {
     return isValidEmail(email) ? undefined : 'El correo no parece ser válido'
 }
+
+export const checkIfValidlatitudeAndlongitude = (str: string) => {
+    // Regular expression to check if string is a latitude and longitude
+    const regexExp = /^((\-?|\+?)?\d+(\.\d+)?),\s*((\-?|\+?)?\d+(\.\d+)?)$/gi
+
+    return regexExp.test(str)
+}

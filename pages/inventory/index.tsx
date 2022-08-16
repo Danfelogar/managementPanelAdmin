@@ -113,7 +113,7 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
             width: 110,
         },
         {
-            field: 'observacionesGeneral',
+            field: 'observacionGeneral',
             headerName: 'Observaciones General',
             width: 250,
             renderCell: ({ row }: GridRenderCellParams) => {
@@ -125,7 +125,7 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
                             whiteSpace: 'normal !important',
                         }}
                     >
-                        {row.observacionesGeneral ? row.observacionesGeneral.substring(0, 160) + '...' : null}
+                        {row.observacionGeneral ? row.observacionGeneral.substring(0, 160) + '...' : null}
                     </Box>
                 )
             },
@@ -224,7 +224,7 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
             marca: 'yamaha',
             voltaje: 120,
             corriente: 80,
-            observacionesGeneral: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
+            observacionGeneral: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
             // ind: {
             //     frecuencia_de_reparacion: 100,
             //     frecuencia_de_falla: 120,
@@ -266,7 +266,7 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
         marca: inventario?.marca || null,
         voltaje: inventario?.voltaje || null,
         corriente: inventario?.corriente || null,
-        observacionesGeneral: inventario?.observacionesGeneral || null,
+        observacionGeneral: inventario?.observacionGeneral || null,
         // ind: inventario?.ind || null,
         locacion: inventario?.locacion || null,
         subLocacion: inventario?.subLocacion || null,

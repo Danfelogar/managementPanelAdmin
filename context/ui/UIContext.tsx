@@ -11,7 +11,7 @@ interface ContextProps {
     isSnackbarSuccess: boolean
     isSnackbarError: boolean
 
-    //funtions
+    //functions
     changeTheme: (theme: 'light' | 'dark') => void
     toggleSideMenu: () => void
     toggleModalWarringDeleted: () => void

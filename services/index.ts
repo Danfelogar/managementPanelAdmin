@@ -1,1 +1,1 @@
-export { default as managementApi } from './managementApi'
+export { default as managementApi } from './ManagementApi'

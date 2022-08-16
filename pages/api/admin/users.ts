@@ -7,18 +7,7 @@ import { IUser } from '../../../interface'
 import { User } from '../../../models'
 import { validations } from '../../../utils'
 
-type Data =
-    | { message: string }
-    | IUser
-    | {
-          users: IUser[]
-          page: number
-          limit: number
-          last_page: number
-          previous_page: null | boolean
-          next_page: null | boolean
-          total: number
-      }
+type Data = { message: string } | IUser | IUser[]
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
     switch (req.method) {
@@ -36,47 +25,43 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
 }
 
 const getUsers = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
-    const page: number = parseInt(req.query.page as any) || 1
-    const limit: number = parseInt(req.query.limit as any) || 10
-    const { nombre = '' } = req.query
+    // const page: number = parseInt(req.query.page as any) || 1
+    // const limit: number = parseInt(req.query.limit as any) || 10
+    const { searchParams = '' } = req.query
 
-    let condition = {}
+    const regex = new RegExp(searchParams.toString() as string, 'i')
 
     await db.connect()
 
-    const total = await User.count()
-    const last_page = Math.ceil(total / limit)
-    let previous_page = null
-    let next_page = null
+    // const total = await User.find({ $or: [{ nombre: regex }, { rol: regex }] }).count()
+    // const last_page = Math.ceil(total / limit)
+    // let previous_page = null
+    // let next_page = null
 
-    if (page > last_page) {
-        return res.status(400).json({ message: 'you exceeded the maximum pages' })
-    }
-    console.log({ nombre })
-    if (nombre !== '') {
-        condition = { nombre }
-    }
+    // if (page > last_page) {
+    //     return res.status(400).json({ message: 'you exceeded the maximum pages' })
+    // }
 
-    if (Math.sign(last_page - page) === 1) next_page = true
-    if ((Math.sign(page - last_page) === -1 || Math.sign(page - last_page) === 0) && page !== 1) previous_page = true
-    const users = await User.find(condition)
-        .select('-constrasena')
+    // if (Math.sign(last_page - page) === 1) next_page = true
+    // if ((Math.sign(page - last_page) === -1 || Math.sign(page - last_page) === 0) && page !== 1) previous_page = true
+    const users = await User.find({ $or: [{ nombre: regex }, { rol: regex }] })
+        .select('-contrasena')
         .sort({ createdAt: -1 })
-        .skip((page - 1) * limit)
-        .limit(limit)
+        // .skip((page - 1) * limit)
+        // .limit(limit)
         .lean()
 
     await db.disconnect()
 
-    return res.status(200).send({
+    return res.status(200).send(
         users,
-        page,
-        limit,
-        last_page,
-        previous_page,
-        next_page,
-        total,
-    })
+        // page,
+        // limit,
+        // last_page,
+        // previous_page,
+        // next_page,
+        // total,
+    )
 }
 
 const createUser = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
@@ -87,8 +72,8 @@ const createUser = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
         rol = '',
     } = req.body as { email: string; contrasena: string; nombre: string; rol: string }
 
-    if (contrasena.length < 6) {
-        return res.status(400).json({ message: 'The password must be greater than 6 characters' })
+    if (contrasena.length < 5) {
+        return res.status(400).json({ message: 'The password must be greater than 5 characters' })
     }
 
     if (nombre.length < 2) {
@@ -139,8 +124,8 @@ const updateUser = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
         return res.status(400).json({ message: '_id is required' })
     }
 
-    if (req.body.contrasena && req.body?.contrasena!.length < 6) {
-        return res.status(400).json({ message: 'The password must be greater than 6 characters for update' })
+    if (req.body.contrasena && req.body?.contrasena!.length < 5) {
+        return res.status(400).json({ message: 'The password must be greater than 5 characters for update' })
     }
 
     if (req.body.contrasena) {
@@ -199,5 +184,5 @@ const deleteUser = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
         return res.status(400).json({ message: 'User not found' })
     }
 
-    return res.json({ message: 'user deleted successfully' })
+    return res.status(200).json({ message: 'user deleted successfully' })
 }

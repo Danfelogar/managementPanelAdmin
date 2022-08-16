@@ -2,7 +2,7 @@ export interface IInventario {
     _id: string
     tipoInventario: 'maquina' | 'repuesto'
     nombre: string
-    imgQR: string
+    imgQR?: string
     estado: 'bueno' | 'malo' | 'regular'
     imagenes: string[]
     fechaDeEntrada: string
@@ -10,7 +10,7 @@ export interface IInventario {
 
     //si es tipo maquina
 
-    id_maquina?: string
+    id_maquina?: number
     capacidadNominal?: string //ALPHAnumerico
     serie?: string
     marca?: string
@@ -24,7 +24,7 @@ export interface IInventario {
 
     //si es tipo repueso
 
-    id_repuesto?: string
+    id_repuesto?: number
     existencia?: number
     coordenadas_gps?: string
 

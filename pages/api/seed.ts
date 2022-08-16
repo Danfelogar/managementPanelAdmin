@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 import { db, seedDatabase } from '../../database'
-import { User, Inventario, OT, Seguimiento } from '../../models'
+import { User, Inventario, OT, Seguimiento, CounterTable } from '../../models'
 
 type Data = {
     message: string
@@ -18,8 +18,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     await User.insertMany(seedDatabase.initialData.usuarios)
 
     //TODO: implementar las siguientes purgas de datos con su respectiva inserción en la database
-    // await Inventario.deleteMany()
-    // await Inventario.insertMany( seedDatabase.initialData.inventarios )
+    await Inventario.deleteMany()
+    await Inventario.insertMany(seedDatabase.initialData.inventarios)
+
+    await CounterTable.deleteMany()
+    await CounterTable.insertMany(seedDatabase.initialData.counterTable)
 
     // await OT.deleteMany()
     // await OT.insertMany( seedDatabase.initialData.ots )
@@ -29,5 +32,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
     await db.disconnect()
 
-    res.status(200).json({ message: 'Usuarios cargados exitosamente' })
+    res.status(200).json({ message: 'Usuarios e Inventarios cargados exitosamente' })
 }

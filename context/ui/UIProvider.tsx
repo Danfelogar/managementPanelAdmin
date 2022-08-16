@@ -78,7 +78,7 @@ export const UIProvider: FC<Props> = ({ children }) => {
             value={{
                 ...state,
 
-                //funtions
+                //functions
                 changeTheme,
                 toggleSideMenu,
                 toggleModalWarringDeleted,

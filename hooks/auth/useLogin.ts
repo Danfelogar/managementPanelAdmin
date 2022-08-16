@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 
-import { validateLogin } from '../../utils/validations/validateLogin'
+import { yupValidations } from '../../utils'
 
 export interface FormData {
     email: string
@@ -16,7 +16,7 @@ export const useLogin = () => {
     const [isLoading, setIsLoading] = useState(false)
 
     const formsMethods = useForm<FormData>({
-        resolver: yupResolver(validateLogin),
+        resolver: yupResolver(yupValidations.validateLogin),
     })
 
     const handleOnChangeShowPassword = () => {
