@@ -79,7 +79,7 @@ const createInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
         return res.status(400).json({ message: 'The inventory type is not valid' })
     }
 
-    if (nombre.length < 2) {
+    if (nombre.length < 3) {
         return res.status(400).json({ message: 'The name must be greater than 2 characters' })
     }
 
@@ -95,7 +95,7 @@ const createInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
         return res.status(400).json({ message: 'Update date is not valid' })
     }
 
-    if (imagenes.length < 1 || imagenes.length > 4) {
+    if (imagenes.length < 1 || imagenes.length > 3) {
         return res.status(404).json({ message: 'At least 1 image and a maximum of 3 images are required' })
     }
 
@@ -104,20 +104,20 @@ const createInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
             return res.status(400).json({ message: 'The nominal capacity must have more than 2 characters' })
         }
 
-        if (req.body.serie && req.body?.serie!.length < 2) {
-            return res.status(400).json({ message: 'The serial must have more than 2 characters' })
+        if (req.body.serie && (req.body?.serie!.length < 2 || typeof req.body?.serie! !== 'string')) {
+            return res.status(400).json({ message: 'The serial must have more than 2 characters and be a string' })
         }
 
-        if (req.body.marca && req.body?.marca!.length < 2) {
-            return res.status(400).json({ message: 'The brand must have more than 2 characters' })
+        if (req.body.marca && (req.body?.marca!.length < 2 || typeof req.body?.marca! !== 'string')) {
+            return res.status(400).json({ message: 'The brand must have more than 2 characters and  be a string' })
         }
 
-        if (req.body.voltaje && isNaN(req.body?.voltaje!) && req.body?.voltaje!.length < 2) {
-            return res.status(400).json({ message: 'The voltage must have more than 2 characters and be a number' })
+        if (req.body.voltaje && (isNaN(req.body?.voltaje!) || Math.sign(req.body?.voltaje!) === -1)) {
+            return res.status(400).json({ message: 'The voltage has to be a number and cannot be negative.' })
         }
 
-        if (req.body.corriente && isNaN(req.body?.corriente!) && req.body?.corriente!.length < 2) {
-            return res.status(400).json({ message: 'The stream must have more than 2 characters and be a number' })
+        if (req.body.corriente && (isNaN(req.body?.corriente!) || Math.sign(req.body?.corriente!) === -1)) {
+            return res.status(400).json({ message: 'The stream has to be a number and cannot be negative.' })
         }
 
         if (req.body.observacionGeneral && req.body?.observacionGeneral!.length < 2) {
@@ -187,8 +187,7 @@ const createInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
                 message: 'The coordinates entered are not valid, you can check that they do not have any spaces',
             })
         }
-        console.log(req.body?.maquina_id_relacion!.length)
-        if (req.body.maquina_id_relacion && req.body?.maquina_id_relacion!.length < 0) {
+        if (req.body.maquina_id_relacion && req.body?.maquina_id_relacion!.length === 0) {
             return res.status(404).json({ message: 'At least one machine is required to relate the part' })
         }
         await db.connect()
@@ -229,8 +228,147 @@ const createInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
     }
 }
 
-const updateInventory = (req: NextApiRequest, res: NextApiResponse<Data>) => {
-    throw new Error('Function not implemented.')
+const updateInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+    const { _id = '' } = req.body as IInventario
+
+    if (_id === '') {
+        return res.status(400).json({ message: '_id is required' })
+    }
+
+    await db.connect()
+    const type = await Inventario.findById(_id).select('tipoInventario').lean()
+
+    if (!['maquina', 'repuesto'].includes(type?.tipoInventario!)) {
+        await db.disconnect()
+
+        return res.status(404).json({ message: 'Inventory type not found' })
+    }
+    await db.disconnect()
+    if (req.body.imgQR && (typeof req.body?.imgQR! !== 'string' || req.body?.imgQR!.length < 7)) {
+        return res.status(400).json({ message: 'The imgQR must be a string of 8 or more characters' })
+    }
+
+    if (req.body.nombre && req.body?.nombre!.length < 3) {
+        return res.status(400).json({ message: 'The name must be greater than 2 characters' })
+    }
+
+    if (req.body.estado && !['bueno', 'malo', 'regular'].includes(req.body.estado)) {
+        return res.status(400).json({ message: 'The state type is not valid' })
+    }
+
+    if (req.body.fechaDeEntrada && !moment(req.body?.fechaDeEntrada!, 'DD/MM/YYYY', true).isValid()) {
+        return res.status(400).json({ message: 'The entry date is not valid' })
+    }
+
+    if (req.body.fechaDeActualizacion && !moment(req.body?.fechaDeActualizacion!, 'DD/MM/YYYY', true).isValid()) {
+        return res.status(400).json({ message: 'Update date is not valid' })
+    }
+
+    if (
+        (req.body.imagenes && req.body?.imagenes!.length < 1) ||
+        (req.body.imagenes && req.body?.imagenes!.length > 3)
+    ) {
+        return res.status(404).json({ message: 'At least 1 image and a maximum of 3 images are required' })
+    }
+
+    if (type?.tipoInventario! === 'maquina') {
+        if (req.body.capacidadNominal && req.body?.capacidadNominal!.length < 2) {
+            return res.status(400).json({ message: 'The nominal capacity must have more than 2 characters' })
+        }
+
+        if (req.body.serie && (req.body?.serie!.length < 2 || typeof req.body?.serie! !== 'string')) {
+            return res.status(400).json({ message: 'The serial must have more than 2 characters and be a string' })
+        }
+
+        if (req.body.marca && (req.body?.marca!.length < 2 || typeof req.body?.marca! !== 'string')) {
+            return res.status(400).json({ message: 'The brand must have more than 2 characters and  be a string' })
+        }
+
+        if (req.body.voltaje && (isNaN(req.body?.voltaje!) || Math.sign(req.body?.voltaje!) === -1)) {
+            return res.status(400).json({ message: 'The voltage has to be a number and cannot be negative.' })
+        }
+
+        if (req.body.corriente && (isNaN(req.body?.corriente!) || Math.sign(req.body?.corriente!) === -1)) {
+            return res.status(400).json({ message: 'The stream has to be a number and cannot be negative.' })
+        }
+
+        if (req.body.observacionGeneral && req.body?.observacionGeneral!.length < 2) {
+            return res
+                .status(400)
+                .json({ message: 'General comments must have more than 2 characters and be a number' })
+        }
+
+        if (
+            req.body.locacion &&
+            !['produccion', 'taller', 'bodega', 'oficina_administrativa'].includes(req.body?.locacion!)
+        ) {
+            return res.status(400).json({ message: 'The location is not valid' })
+        }
+        console.log(isNaN(req.body?.subLocacion!))
+        if (req.body.subLocacion && isNaN(req.body?.subLocacion!)) {
+            return res.status(400).json({ message: 'Sublocation is not a number' })
+        }
+
+        try {
+            await db.connect()
+            const inventory = await Inventario.findById(_id)
+
+            if (!inventory) {
+                await db.disconnect()
+
+                return res.status(404).json({ message: 'Inventory not found' })
+            }
+            await inventory.update(req.body)
+
+            await db.disconnect()
+
+            return res.status(201).json({ message: 'Inventory updated successfully' })
+        } catch (err) {
+            console.log('error catch ===>', err)
+            await db.disconnect()
+
+            return res.status(500).json({ message: 'review server logs' })
+        }
+    }
+
+    if (type?.tipoInventario! === 'repuesto') {
+        if (
+            (req.body.existencia && isNaN(req.body?.existencia!)) ||
+            (req.body.existencia && Math.sign(req.body?.existencia!) === -1)
+        ) {
+            return res.status(400).json({ message: 'Stock is not a number or negative number' })
+        }
+
+        if (req.body.coordenadas_gps && !validations.checkIfValidlatitudeAndlongitude(req.body?.coordenadas_gps!)) {
+            return res.status(400).json({
+                message: 'The coordinates entered are not valid, you can check that they do not have any spaces',
+            })
+        }
+        if (req.body.maquina_id_relacion && req.body?.maquina_id_relacion!.length === 0) {
+            return res.status(404).json({ message: 'At least one machine is required to relate the part' })
+        }
+
+        try {
+            await db.connect()
+            const inventory = await Inventario.findById(_id)
+
+            if (!inventory) {
+                await db.disconnect()
+
+                return res.status(404).json({ message: 'Inventory not found' })
+            }
+            await inventory.update(req.body)
+
+            await db.disconnect()
+
+            return res.status(201).json({ message: 'Inventory updated successfully' })
+        } catch (err) {
+            console.log('error catch ===>', err)
+            await db.disconnect()
+
+            return res.status(500).json({ message: 'review server logs' })
+        }
+    }
 }
 
 const deleteInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) => {

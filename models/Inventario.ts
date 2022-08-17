@@ -14,7 +14,7 @@ const inventarioSchema = new Schema(
             },
         },
         nombre: { type: String, required: true },
-        imgQR: { type: String, required: true },
+        imgQR: { type: String, required: false },
         estado: {
             type: String,
             enum: {
