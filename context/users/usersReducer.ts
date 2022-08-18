@@ -40,7 +40,7 @@ export const usersReducer = (state: UsersState, action: UsersActionsType): Users
         case '[USERS] Change msm text for update user':
             return {
                 ...state,
-                msmTextDelete: action.payload,
+                msmTextUpdate: action.payload,
             }
         default:
             return state

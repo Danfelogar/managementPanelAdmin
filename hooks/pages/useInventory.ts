@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
 
-import { UIContext } from '../../context'
-import { IInd } from '../../interface'
+import { InventoriesContext, UIContext } from '../../context'
+import { IInd, IInventario } from '../../interface'
 
 const dataTest = [
     {
@@ -67,10 +67,19 @@ const dataTest = [
     },
 ]
 
-export const useInventario = () => {
+export const useInventory = () => {
     const { toggleSnackBarError, toggleSnackBarSuccess, toggleModalWarringDeleted } = useContext(UIContext)
-
-    const [msmTextDelete, setMsmTextDelete] = useState('')
+    const {
+        isUpdateInventory,
+        changeMsmTextDelete,
+        changeMsmTextUpdate,
+        changeIsLoading,
+        changeIsUpdateInventory,
+        handleCreateInventory,
+        handleUpdateInventory,
+        handleDeleteInventory,
+    } = useContext(InventoriesContext)
+    const [idForDelete, setIdForDelete] = useState('')
     const [dataBar, setDataBar] = useState<IInd[] | []>([])
 
     const { push } = useRouter()
@@ -83,27 +92,50 @@ export const useInventario = () => {
         setDataBar(dataTest)
     }, [])
 
+    const handleCreateOrUpdateInventory = (data: IInventario) => {
+        if (isUpdateInventory) {
+            changeMsmTextUpdate(data._id)
+            //TODO: hacer funcionalidad correspondiente al clg
+            changeIsLoading()
+            handleUpdateInventory(data)
+            changeIsLoading()
+            console.log('actualizando:', data)
+        } else {
+            changeMsmTextUpdate('')
+            //TODO: hacer funcionalidad correspondiente al clg
+            changeIsLoading()
+            handleCreateInventory(data)
+            changeIsLoading()
+            // console.log('creando', data)
+        }
+        toggleSnackBarSuccess()
+    }
+
     const handleUpdateInventario = () => {
         toggleSnackBarSuccess()
     }
 
-    const warningDeletedInventario = (id: string) => {
-        setMsmTextDelete(id)
+    const warningDeletedInventario = (nombre: string, _id: string) => {
+        setIdForDelete(_id)
+        changeMsmTextDelete(nombre)
         toggleModalWarringDeleted()
     }
 
     const handleDeletedInventario = () => {
+        changeIsLoading()
+        handleDeleteInventory(idForDelete)
+        changeIsLoading()
         toggleModalWarringDeleted()
         toggleSnackBarError()
     }
 
     return {
         //states
-        msmTextDelete,
         dataBar,
         //methods
         //functions
         navigateToUpate,
+        handleCreateOrUpdateInventory,
         handleUpdateInventario,
         handleDeletedInventario,
         warningDeletedInventario,

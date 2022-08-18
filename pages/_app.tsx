@@ -5,7 +5,7 @@ import { SessionProvider } from 'next-auth/react'
 import Cookies from 'js-cookie'
 import { CssBaseline, ThemeProvider } from '@mui/material'
 
-import { AuthProvider, UIProvider, UsersProvider } from '../context'
+import { AuthProvider, InventoriesProvider, UIProvider, UsersProvider } from '../context'
 import '../styles/globals.css'
 import { darkTheme, lightTheme } from '../theme'
 
@@ -36,10 +36,12 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
             <AuthProvider>
                 <UIProvider>
                     <UsersProvider>
-                        <ThemeProvider theme={currentTheme}>
-                            <CssBaseline />
-                            <Component {...pageProps} toggleTheme={toggleTheme} />
-                        </ThemeProvider>
+                        <InventoriesProvider>
+                            <ThemeProvider theme={currentTheme}>
+                                <CssBaseline />
+                                <Component {...pageProps} toggleTheme={toggleTheme} />
+                            </ThemeProvider>
+                        </InventoriesProvider>
                     </UsersProvider>
                 </UIProvider>
             </AuthProvider>

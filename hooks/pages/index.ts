@@ -1,5 +1,5 @@
 export * from './useUsers'
 export * from './useFollows'
 export * from './useOTs'
-export * from './useInventario'
+export * from './useInventory'
 export * from './useGraphics'

@@ -8,14 +8,15 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import NextLink from 'next/link'
 import { getSession } from 'next-auth/react'
 
-import { AdminLayout, ModalWarringDeleted, SnackbarError, SnackbarSuccess } from '../../components'
+import { AdminLayout, Loading, ModalWarringDeleted, SnackbarError, SnackbarSuccess } from '../../components'
 import { ITheme } from '../../interface'
-import { UIContext } from '../../context'
-import { useInventario } from '../../hooks'
+import { InventoriesContext, UIContext } from '../../context'
+import { useInventory } from '../../hooks'
 
 const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
     const { toggleSnackBarError, toggleSnackBarSuccess, isSnackbarError, isSnackbarSuccess } = useContext(UIContext)
-    const { msmTextDelete, handleDeletedInventario, warningDeletedInventario, navigateToUpate } = useInventario()
+    const { msmTextDelete, msmTextUpdate, isLoading, dataInventories } = useContext(InventoriesContext)
+    const { handleDeletedInventario, warningDeletedInventario, navigateToUpate } = useInventory()
 
     const columns: GridColDef[] = [
         {
@@ -66,7 +67,7 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
             renderCell: ({ row }: GridValueGetterParams) => {
                 return (
                     <Box sx={{ displey: 'flex', flexGrow: 1 }}>
-                        <CardMedia alt={row.id} component="img" image={`${row.imagenes}`} />
+                        <CardMedia alt={row.id} component="img" image={`${row.imagenes[0]}`} />
                     </Box>
                 )
             },
@@ -197,7 +198,7 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
                             <IconButton color="secondary" onClick={() => navigateToUpate(`/inventory/${row.id}`)}>
                                 <EditIcon />
                             </IconButton>
-                            <IconButton color="error" onClick={() => warningDeletedInventario(row.id)}>
+                            <IconButton color="error" onClick={() => warningDeletedInventario(row.nombre, row._id)}>
                                 <DeleteIcon />
                             </IconButton>
                         </Box>
@@ -207,75 +208,9 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
         },
     ]
 
-    const inventarios = [
-        {
-            _id: 1,
-            tipoInventario: 'maquina',
-            nombre: 'ADDV-123-LT',
-            imgQR: 'https://res.cloudinary.com/danfelogar/image/upload/v1657438131/cjm0lxsfxh3ollrfukhh.webp',
-            estado: 'bueno',
-            imagenes: 'https://res.cloudinary.com/danfelogar/image/upload/v1657438131/cjm0lxsfxh3ollrfukhh.webp',
-            fechaDeEntrada: '12/12/2012',
-            fechaDeActualizacion: '10/10/2010',
-
-            id_maquina: 'maq1',
-            capacidadNominal: '12ASN212',
-            serie: 'serie 1',
-            marca: 'yamaha',
-            voltaje: 120,
-            corriente: 80,
-            observacionGeneral: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
-            // ind: {
-            //     frecuencia_de_reparacion: 100,
-            //     frecuencia_de_falla: 120,
-            //     porcentaje_de_disponibilidad: 130,
-            // },
-            locacion: 'produccion',
-            subLocacion: 3,
-        },
-        {
-            _id: 2,
-            tipoInventario: 'repuesto',
-            nombre: 'ABBV-4567-BN',
-            imgQR: 'https://res.cloudinary.com/danfelogar/image/upload/v1657438131/cjm0lxsfxh3ollrfukhh.webp',
-            estado: 'regular',
-            imagenes: 'https://res.cloudinary.com/danfelogar/image/upload/v1657438131/cjm0lxsfxh3ollrfukhh.webp',
-            fechaDeEntrada: '12/03/2011',
-            fechaDeActualizacion: '01/08/2019',
-
-            id_repuesto: 'RE-1',
-            existencia: 1,
-            coordenadas_gps: '10.981266, -74.808007',
-            maquina_id_relacion: 'maq1',
-        },
-    ]
-
-    const rows = inventarios.map((inventario) => ({
-        id: inventario._id,
-        tipoInventario: inventario.tipoInventario,
-        nombre: inventario.nombre,
-        imgQR: inventario.imgQR,
-        estado: inventario.estado,
-        imagenes: inventario.imagenes,
-        fechaDeEntrada: inventario.fechaDeEntrada,
-        fechaDeActualizacion: inventario.fechaDeActualizacion,
-        //maquina
-        id_maquina: inventario?.id_maquina || null,
-        capacidadNominal: inventario?.capacidadNominal || null,
-        serie: inventario?.serie || null,
-        marca: inventario?.marca || null,
-        voltaje: inventario?.voltaje || null,
-        corriente: inventario?.corriente || null,
-        observacionGeneral: inventario?.observacionGeneral || null,
-        // ind: inventario?.ind || null,
-        locacion: inventario?.locacion || null,
-        subLocacion: inventario?.subLocacion || null,
-        //repuesto
-        id_repuesto: inventario?.id_repuesto || null,
-        existencia: inventario?.existencia || null,
-        coordenadas_gps: inventario?.coordenadas_gps || null,
-        maquina_id_relacion: inventario?.maquina_id_relacion || null,
-    }))
+    if (isLoading) {
+        return <Loading size={'70px'} title={'Cargando Inventarios, por favor espere...'} toggleTheme={toggleTheme} />
+    }
 
     return (
         <AdminLayout
@@ -293,8 +228,9 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
                         }}
                         getEstimatedRowHeight={() => 80}
                         getRowHeight={() => 120}
+                        getRowId={(row) => row._id}
                         pageSize={10}
-                        rows={rows}
+                        rows={dataInventories}
                         rowsPerPageOptions={[10]}
                     />
                 </Grid>
@@ -313,7 +249,11 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
             <SnackbarSuccess
                 handleChangeSnackbar={toggleSnackBarSuccess}
                 isOpen={isSnackbarSuccess}
-                msmText={`se ha actualizado exitosamente el Inventario`}
+                msmText={
+                    msmTextUpdate !== ''
+                        ? `se ha actualizado exitosamente el inventario: ${msmTextUpdate}`
+                        : 'se ha creado exitosamente el inventario'
+                }
             />
         </AdminLayout>
     )
