@@ -103,12 +103,6 @@ export const UsersProvider: FC<Props> = ({ children }) => {
         dispatch({ type: '[USERS] Change msm text for update user', payload: _id })
     }
 
-    useEffect(() => {
-        changeIsLoading()
-        getUsersData()
-        changeIsLoading()
-    }, [])
-
     return (
         <UsersContext.Provider
             value={{

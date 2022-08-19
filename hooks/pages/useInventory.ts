@@ -1,8 +1,11 @@
+import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 
 import { InventoriesContext, UIContext } from '../../context'
 import { IInd, IInventario } from '../../interface'
+import { yupValidations } from '../../utils'
 
 const dataTest = [
     {
@@ -71,6 +74,7 @@ export const useInventory = () => {
     const { toggleSnackBarError, toggleSnackBarSuccess, toggleModalWarringDeleted } = useContext(UIContext)
     const {
         isUpdateInventory,
+        getInventoriesData,
         changeMsmTextDelete,
         changeMsmTextUpdate,
         changeIsLoading,
@@ -84,7 +88,21 @@ export const useInventory = () => {
 
     const { push } = useRouter()
 
-    const navigateToUpate = (url: string) => {
+    useEffect(() => {
+        changeIsLoading()
+        getInventoriesData()
+        changeIsLoading()
+    }, [])
+
+    const formMethodsCreate = useForm<IInventario>({
+        resolver: yupResolver(yupValidations.validateLogin),
+    })
+
+    const formMethodsUpdate = useForm<IInventario>({
+        resolver: yupResolver(yupValidations.validationUpdateInventory),
+    })
+
+    const navigateToUpdate = (url: string) => {
         push(url)
     }
 
@@ -134,7 +152,7 @@ export const useInventory = () => {
         dataBar,
         //methods
         //functions
-        navigateToUpate,
+        navigateToUpdate,
         handleCreateOrUpdateInventory,
         handleUpdateInventario,
         handleDeletedInventario,

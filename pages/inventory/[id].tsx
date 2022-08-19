@@ -27,17 +27,25 @@ import { useState } from 'react'
 import { getSession } from 'next-auth/react'
 
 import { AdminLayout } from '../../components'
-import { ITheme } from '../../interface'
+import { IInventario, ITheme } from '../../interface'
+import { Inventario } from '../../models'
+import { dbInventories } from '../../database'
 
 const testImg = [1, 2]
 
-const SingeInventoryPage: NextPage<ITheme> = ({ toggleTheme }) => {
+interface Props extends ITheme {
+    inventory: IInventario
+}
+
+const SingeInventoryPage: NextPage<Props> = ({ toggleTheme, inventory }) => {
     const [value, setValue] = useState<Date | null>(new Date('2014-08-18T21:11:54'))
 
     const handleChange = (newValue: Date | null) => {
         console.log({ newValue })
         setValue(newValue)
     }
+
+    console.log({ inventory })
 
     return (
         <AdminLayout
@@ -320,10 +328,10 @@ const SingeInventoryPage: NextPage<ITheme> = ({ toggleTheme }) => {
     )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
     const session = await getSession({ req })
 
-    // console.log({ session })
+    // console.log('catch ===>', query)
     if (!session) {
         return {
             redirect: {
@@ -333,8 +341,38 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
         }
     }
 
+    const { id = '' } = query
+
+    console.log('id ===>', id)
+
+    let inventory: IInventario | null
+
+    if (id === 'new') {
+        //crear inventario
+        //al crearme un nuevo objeto crea con sus valores por defecto y crea los arreglos sin necesidad de colocar valores erroneos
+        const tempInventory = JSON.parse(JSON.stringify(new Inventario()))
+
+        console.log('catch ===>', tempInventory)
+        delete tempInventory._id
+        // tempInventory.imagenes = ['img1.jpg', 'img2.jpg']
+        inventory = tempInventory
+    } else {
+        inventory = await dbInventories.getProductById(id.toString())
+    }
+    console.log('inventory ===>', inventory)
+    if (!inventory) {
+        return {
+            redirect: {
+                destination: '/admin/inventory',
+                permanent: false,
+            },
+        }
+    }
+
     return {
-        props: {},
+        props: {
+            inventory,
+        },
     }
 }
 

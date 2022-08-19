@@ -12,6 +12,7 @@ export const useUsers = () => {
     const {
         userForUpdate,
         isUpdateUser,
+        getUsersData,
         changeMsmTextDelete,
         changeMsmTextUpdate,
         changeIsUpdateUser,
@@ -22,6 +23,12 @@ export const useUsers = () => {
         handleDeleteUser,
     } = useContext(UsersContext)
     const [idForDelete, setIdForDelete] = useState('')
+
+    useEffect(() => {
+        changeIsLoading()
+        getUsersData()
+        changeIsLoading()
+    }, [])
 
     const formMethodsCreate = useForm<IUser>({
         resolver: yupResolver(yupValidations.validationCreateUser),

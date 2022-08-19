@@ -101,12 +101,6 @@ export const InventoriesProvider: FC<Props> = ({ children }) => {
         dispatch({ type: '[INVENTORIES] Change msm text for update inventories', payload: _id })
     }
 
-    useEffect(() => {
-        changeIsLoading()
-        getInventoriesData()
-        changeIsLoading()
-    }, [])
-
     return (
         <InventoriesContext.Provider
             value={{

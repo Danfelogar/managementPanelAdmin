@@ -100,8 +100,8 @@ const createInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
     }
 
     if (tipoInventario === 'maquina') {
-        if (req.body.capacidadNominal && req.body?.capacidadNominal!.length < 2) {
-            return res.status(400).json({ message: 'The nominal capacity must have more than 2 characters' })
+        if (req.body.capacidadNominal && req.body?.capacidadNominal!.length < 1) {
+            return res.status(400).json({ message: 'The nominal capacity must have more than 1 characters' })
         }
 
         if (req.body.serie && (req.body?.serie!.length < 2 || typeof req.body?.serie! !== 'string')) {
@@ -121,9 +121,7 @@ const createInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
         }
 
         if (req.body.observacionGeneral && req.body?.observacionGeneral!.length < 2) {
-            return res
-                .status(400)
-                .json({ message: 'General comments must have more than 2 characters and be a number' })
+            return res.status(400).json({ message: 'General comments must have more than 2 characters' })
         }
 
         if (

@@ -1,7 +1,8 @@
-import { CardMedia, Chip, Grid, IconButton, Box, Container, Link } from '@mui/material'
+import { CardMedia, Chip, Grid, IconButton, Box, Container, Link, Typography, Button } from '@mui/material'
 import { GetServerSideProps, NextPage } from 'next'
 import { useContext } from 'react'
 import { DataGrid, GridColDef, GridRenderCellParams, GridToolbar, GridValueGetterParams } from '@mui/x-data-grid'
+import CreateIcon from '@mui/icons-material/Create'
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -16,13 +17,26 @@ import { useInventory } from '../../hooks'
 const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
     const { toggleSnackBarError, toggleSnackBarSuccess, isSnackbarError, isSnackbarSuccess } = useContext(UIContext)
     const { msmTextDelete, msmTextUpdate, isLoading, dataInventories } = useContext(InventoriesContext)
-    const { handleDeletedInventario, warningDeletedInventario, navigateToUpate } = useInventory()
+    const { handleDeletedInventario, warningDeletedInventario, navigateToUpdate } = useInventory()
 
     const columns: GridColDef[] = [
         {
             field: 'id',
             headerName: 'Identificación',
-            width: 110,
+            width: 228,
+            renderCell: ({ row }: GridRenderCellParams) => {
+                return (
+                    <Box
+                        sx={{
+                            overflow: 'hidden',
+                            maxWidth: '100%',
+                            whiteSpace: 'normal !important',
+                        }}
+                    >
+                        {row._id}
+                    </Box>
+                )
+            },
         },
         {
             field: 'tipoInventario',
@@ -177,6 +191,36 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
             field: 'maquina_id_relacion',
             headerName: 'Maquina de Relación',
             width: 150,
+            renderCell: ({ row }: GridRenderCellParams) => {
+                return (
+                    <Box
+                        sx={{
+                            overflow: 'hidden',
+                            maxWidth: '100%',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            flexDirection: 'row',
+                        }}
+                    >
+                        {row.maquina_id_relacion &&
+                            row.maquina_id_relacion.map((item: string, idx: number) => {
+                                return (
+                                    <>
+                                        {idx === 0 ? (
+                                            <Typography key={idx} align="justify" variant="body2">
+                                                {item}&nbsp;
+                                            </Typography>
+                                        ) : (
+                                            <Typography key={idx} align="justify" variant="body2">
+                                                - {item}&nbsp;
+                                            </Typography>
+                                        )}
+                                    </>
+                                )
+                            })}
+                    </Box>
+                )
+            },
         },
         {
             field: 'actions',
@@ -195,7 +239,7 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
                                 height: '100%',
                             }}
                         >
-                            <IconButton color="secondary" onClick={() => navigateToUpate(`/inventory/${row.id}`)}>
+                            <IconButton color="secondary" onClick={() => navigateToUpdate(`/inventory/${row._id}`)}>
                                 <EditIcon />
                             </IconButton>
                             <IconButton color="error" onClick={() => warningDeletedInventario(row.nombre, row._id)}>
@@ -220,6 +264,27 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
             toggleTheme={toggleTheme}
         >
             <Grid container className="fadeIn">
+                <Grid
+                    item
+                    sx={{
+                        flexGrow: 1,
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        alignItems: 'center',
+                        mb: 1,
+                        mt: 1,
+                    }}
+                    xs={12}
+                >
+                    <Button
+                        color="secondary"
+                        startIcon={<CreateIcon />}
+                        variant="outlined"
+                        onClick={() => navigateToUpdate(`/inventory/new`)}
+                    >
+                        Crear nuevo inventario
+                    </Button>
+                </Grid>
                 <Grid item sx={{ height: 730, width: '100%' }} xs={12}>
                     <DataGrid
                         columns={columns}

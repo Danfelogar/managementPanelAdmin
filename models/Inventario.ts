@@ -12,9 +12,10 @@ const inventarioSchema = new Schema(
                 default: 'repuesto',
                 required: true,
             },
+            default: null,
         },
-        nombre: { type: String, required: true },
-        imgQR: { type: String, required: false },
+        nombre: { type: String, required: true, default: '' },
+        imgQR: { type: String, required: false, default: '' },
         estado: {
             type: String,
             enum: {
@@ -23,19 +24,20 @@ const inventarioSchema = new Schema(
                 default: 'regular',
                 required: true,
             },
+            default: null,
         },
         imagenes: [{ type: String, required: true }],
-        fechaDeEntrada: { type: String, required: true },
-        fechaDeActualizacion: { type: String, required: true },
+        fechaDeEntrada: { type: String, required: true, default: null },
+        fechaDeActualizacion: { type: String, required: true, default: null },
 
         //maquina condicional
-        id_maquina: { type: Number, unique: false, required: false },
-        capacidadNominal: { type: String, required: false },
-        serie: { type: String, required: false },
-        marca: { type: String, required: false },
-        voltaje: { type: Number, required: false },
-        corriente: { type: Number, required: false },
-        observacionGeneral: { type: String, required: false },
+        id_maquina: { type: Number, unique: false, required: false, default: 0 },
+        capacidadNominal: { type: String, required: false, default: '' },
+        serie: { type: String, required: false, default: '' },
+        marca: { type: String, required: false, default: '' },
+        voltaje: { type: Number, required: false, default: 0 },
+        corriente: { type: Number, required: false, default: 0 },
+        observacionGeneral: { type: String, required: false, default: '' },
         // ind: [
         //     {
         //         frecuencia_de_reparacion: { type: Number },
@@ -51,13 +53,14 @@ const inventarioSchema = new Schema(
                 default: 'bodega',
                 required: false,
             },
+            default: null,
         },
-        subLocacion: { type: Number },
+        subLocacion: { type: Number, default: 0 },
 
         //repuesto condicional
-        id_repuesto: { type: Number, unique: false, required: false },
-        existencia: { type: Number, required: false },
-        coordenadas_gps: { type: String, required: false },
+        id_repuesto: { type: Number, unique: false, required: false, default: 0 },
+        existencia: { type: Number, required: false, default: 0 },
+        coordenadas_gps: { type: String, required: false, default: '' },
         maquina_id_relacion: [{ type: String, required: false, unique: false }],
     },
     {
