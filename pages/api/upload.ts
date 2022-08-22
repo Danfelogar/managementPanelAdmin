@@ -42,7 +42,6 @@ const parseFile = async (req: NextApiRequest): Promise<string> => {
             // console.log({err, fields, files})
 
             if (err) return reject(err)
-
             const filePath = await saveFile(files.file as formidable.File)
 
             resolve(filePath)

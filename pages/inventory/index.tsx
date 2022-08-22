@@ -5,19 +5,20 @@ import { DataGrid, GridColDef, GridRenderCellParams, GridToolbar, GridValueGette
 import CreateIcon from '@mui/icons-material/Create'
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest'
 import EditIcon from '@mui/icons-material/Edit'
+import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline'
 import DeleteIcon from '@mui/icons-material/Delete'
 import NextLink from 'next/link'
 import { getSession } from 'next-auth/react'
+import moment from 'moment'
 
 import { AdminLayout, Loading, ModalWarringDeleted, SnackbarError, SnackbarSuccess } from '../../components'
 import { ITheme } from '../../interface'
 import { InventoriesContext, UIContext } from '../../context'
 import { useInventory } from '../../hooks'
-
 const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
     const { toggleSnackBarError, toggleSnackBarSuccess, isSnackbarError, isSnackbarSuccess } = useContext(UIContext)
     const { msmTextDelete, msmTextUpdate, isLoading, dataInventories } = useContext(InventoriesContext)
-    const { handleDeletedInventario, warningDeletedInventario, navigateToUpdate } = useInventory()
+    const { handleDeletedInventario, warningDeletedInventario, navigateToUpdate, downloadFile } = useInventory()
 
     const columns: GridColDef[] = [
         {
@@ -54,8 +55,18 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
             width: 230,
             renderCell: ({ row }: GridValueGetterParams) => {
                 return (
-                    <Box sx={{ displey: 'flex', flexGrow: 1 }}>
+                    <Box sx={{ displey: 'flex', flexGrow: 1, position: 'relative' }}>
                         <CardMedia alt={row.id} component="img" image={`${row.imgQR}`} />
+                        {row.imgQR && (
+                            <IconButton
+                                aria-label="add to shopping cart"
+                                color="primary"
+                                sx={{ position: 'absolute', top: '0', left: '0' }}
+                                onClick={() => downloadFile(row.imgQR)}
+                            >
+                                <DownloadForOfflineIcon />
+                            </IconButton>
+                        )}
                     </Box>
                 )
             },
@@ -90,17 +101,56 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
             field: 'fechaDeEntrada',
             headerName: 'Fecha De Entrada',
             width: 160,
+            renderCell: ({ row }: GridRenderCellParams) => {
+                return (
+                    <Box
+                        sx={{
+                            overflow: 'hidden',
+                            maxWidth: '100%',
+                            whiteSpace: 'normal !important',
+                        }}
+                    >
+                        {moment(row.fechaDeEntrada).format('DD/MM/YYYY')}
+                    </Box>
+                )
+            },
         },
         {
             field: 'fechaDeActualizacion',
             headerName: 'Fecha De Actualización',
             width: 170,
+            renderCell: ({ row }: GridRenderCellParams) => {
+                return (
+                    <Box
+                        sx={{
+                            overflow: 'hidden',
+                            maxWidth: '100%',
+                            whiteSpace: 'normal !important',
+                        }}
+                    >
+                        {moment(row.fechaDeActualizacion).format('DD/MM/YYYY')}
+                    </Box>
+                )
+            },
         },
         //maquina
         {
             field: 'id_maquina',
             headerName: 'Identificador de maquina',
             width: 180,
+            renderCell: ({ row }: GridRenderCellParams) => {
+                return (
+                    <Box
+                        sx={{
+                            overflow: 'hidden',
+                            maxWidth: '100%',
+                            whiteSpace: 'normal !important',
+                        }}
+                    >
+                        {row.id_maquina && `Maq_${row.id_maquina}`}
+                    </Box>
+                )
+            },
         },
         {
             field: 'capacidadNominal',
@@ -176,6 +226,19 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
             field: 'id_repuesto',
             headerName: 'Identificador de repuesto',
             width: 180,
+            renderCell: ({ row }: GridRenderCellParams) => {
+                return (
+                    <Box
+                        sx={{
+                            overflow: 'hidden',
+                            maxWidth: '100%',
+                            whiteSpace: 'normal !important',
+                        }}
+                    >
+                        {row.id_repuesto && `Rep_${row.id_repuesto}`}
+                    </Box>
+                )
+            },
         },
         {
             field: 'existencia',
@@ -208,11 +271,11 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
                                     <>
                                         {idx === 0 ? (
                                             <Typography key={idx} align="justify" variant="body2">
-                                                {item}&nbsp;
+                                                Maq_{item}&nbsp;
                                             </Typography>
                                         ) : (
                                             <Typography key={idx} align="justify" variant="body2">
-                                                - {item}&nbsp;
+                                                - Maq_{item}&nbsp;
                                             </Typography>
                                         )}
                                     </>

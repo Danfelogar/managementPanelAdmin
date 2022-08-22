@@ -151,7 +151,7 @@ const LoginPage: NextPage<ITheme> = ({ toggleTheme }) => {
 export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
     const session = await getSession({ req })
 
-    console.log({ query, session })
+    //console.log({ query, session })
     //console.log({ session })
     //con el query rescatamos el ultimo path donde estuvimos navegando parar retornarlo en caso tal nuestro logueo sea exitoso
     const { p = '/' } = query

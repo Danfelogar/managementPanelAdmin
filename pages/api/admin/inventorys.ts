@@ -7,7 +7,7 @@ import { IInventario } from '../../../interface'
 import { CounterTable, Inventario } from '../../../models'
 import { validations } from '../../../utils'
 
-type Data = { message: string } | IInventario[] | IInventario
+type Data = { message: string } | IInventario[] | IInventario | Partial<IInventario[]>
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
     switch (req.method) {
@@ -87,13 +87,13 @@ const createInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
         return res.status(400).json({ message: 'The state type is not valid' })
     }
 
-    if (!moment(fechaDeEntrada, 'DD/MM/YYYY', true).isValid()) {
-        return res.status(400).json({ message: 'The entry date is not valid' })
-    }
+    // if (!moment(fechaDeEntrada, 'DD/MM/YYYY', true).isValid()) {
+    //     moment(fechaDeEntrada).format('DD/MM/YYYY')
+    // }
 
-    if (!moment(fechaDeActualizacion, 'DD/MM/YYYY', true).isValid()) {
-        return res.status(400).json({ message: 'Update date is not valid' })
-    }
+    // if (!moment(fechaDeActualizacion, 'DD/MM/YYYY', true).isValid()) {
+    //     moment(fechaDeActualizacion).format('DD/MM/YYYY')
+    // }
 
     if (imagenes.length < 1 || imagenes.length > 3) {
         return res.status(404).json({ message: 'At least 1 image and a maximum of 3 images are required' })
@@ -254,13 +254,14 @@ const updateInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
         return res.status(400).json({ message: 'The state type is not valid' })
     }
 
-    if (req.body.fechaDeEntrada && !moment(req.body?.fechaDeEntrada!, 'DD/MM/YYYY', true).isValid()) {
-        return res.status(400).json({ message: 'The entry date is not valid' })
-    }
+    // if (req.body.fechaDeEntrada && !moment(req.body?.fechaDeEntrada!, 'DD/MM/YYYY', true).isValid()) {
+    //     return res.status(400).json({ message: 'The entry date is not valid' })
+    // }
+    // if (req.body.fechaDeActualizacion && !moment(req.body?.fechaDeActualizacion!, 'DD/MM/YYYY', true).isValid()) {
+    //     console.log(req.body.fechaDeActualizacion)
 
-    if (req.body.fechaDeActualizacion && !moment(req.body?.fechaDeActualizacion!, 'DD/MM/YYYY', true).isValid()) {
-        return res.status(400).json({ message: 'Update date is not valid' })
-    }
+    //     return res.status(400).json({ message: 'Update date is not valid' })
+    // }
 
     if (
         (req.body.imagenes && req.body?.imagenes!.length < 1) ||
@@ -302,7 +303,7 @@ const updateInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
         ) {
             return res.status(400).json({ message: 'The location is not valid' })
         }
-        console.log(isNaN(req.body?.subLocacion!))
+        //console.log(isNaN(req.body?.subLocacion!))
         if (req.body.subLocacion && isNaN(req.body?.subLocacion!)) {
             return res.status(400).json({ message: 'Sublocation is not a number' })
         }

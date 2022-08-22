@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import { saveAs } from 'file-saver'
 import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -6,7 +7,6 @@ import { useForm } from 'react-hook-form'
 import { InventoriesContext, UIContext } from '../../context'
 import { IInd, IInventario } from '../../interface'
 import { yupValidations } from '../../utils'
-
 const dataTest = [
     {
         frecuencia_de_reparacion: 100,
@@ -70,7 +70,7 @@ const dataTest = [
     },
 ]
 
-export const useInventory = () => {
+export const useInventory = (sendDataInv?: IInventario) => {
     const { toggleSnackBarError, toggleSnackBarSuccess, toggleModalWarringDeleted } = useContext(UIContext)
     const {
         isUpdateInventory,
@@ -95,7 +95,7 @@ export const useInventory = () => {
     }, [])
 
     const formMethodsCreate = useForm<IInventario>({
-        resolver: yupResolver(yupValidations.validateLogin),
+        resolver: yupResolver(yupValidations.validationCreateInventory),
     })
 
     const formMethodsUpdate = useForm<IInventario>({
@@ -103,6 +103,11 @@ export const useInventory = () => {
     })
 
     const navigateToUpdate = (url: string) => {
+        if (url === '/inventory/new') {
+            changeIsUpdateInventory(false)
+        } else {
+            changeIsUpdateInventory(true)
+        }
         push(url)
     }
 
@@ -110,22 +115,41 @@ export const useInventory = () => {
         setDataBar(dataTest)
     }, [])
 
+    useEffect(() => {
+        // console.log({ sendDataInv })
+        if (sendDataInv?._id!) {
+            formMethodsCreate.reset()
+            formMethodsUpdate.reset({ ...sendDataInv })
+            changeIsUpdateInventory(true)
+        } else {
+            changeIsUpdateInventory(false)
+        }
+
+        return () => {
+            formMethodsUpdate.reset()
+            // formMethodsCreate.reset({ ...sendDataInv })
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [sendDataInv])
+
     const handleCreateOrUpdateInventory = (data: IInventario) => {
+        // console.log({ sendDataInv })
         if (isUpdateInventory) {
             changeMsmTextUpdate(data._id)
             //TODO: hacer funcionalidad correspondiente al clg
             changeIsLoading()
             handleUpdateInventory(data)
             changeIsLoading()
-            console.log('actualizando:', data)
+            // console.log('actualizando:', data)
         } else {
             changeMsmTextUpdate('')
             //TODO: hacer funcionalidad correspondiente al clg
             changeIsLoading()
             handleCreateInventory(data)
             changeIsLoading()
-            // console.log('creando', data)
+            //console.log('creando', data)
         }
+        navigateToUpdate('/inventory')
         toggleSnackBarSuccess()
     }
 
@@ -147,15 +171,22 @@ export const useInventory = () => {
         toggleSnackBarError()
     }
 
+    const downloadFile = (urlString: string) => {
+        saveAs(urlString)
+    }
+
     return {
         //states
         dataBar,
         //methods
+        formMethodsCreate,
+        formMethodsUpdate,
         //functions
         navigateToUpdate,
         handleCreateOrUpdateInventory,
         handleUpdateInventario,
         handleDeletedInventario,
         warningDeletedInventario,
+        downloadFile,
     }
 }

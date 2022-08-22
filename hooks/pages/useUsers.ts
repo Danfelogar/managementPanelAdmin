@@ -68,7 +68,7 @@ export const useUsers = () => {
             changeIsLoading()
             handleUpdateUser(data)
             changeIsLoading()
-            console.log('actualizando:', data)
+            //console.log('actualizando:', data)
         } else {
             changeMsmTextUpdate('')
             //TODO: hacer funcionalidad correspondiente al clg
