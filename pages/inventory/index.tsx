@@ -55,8 +55,13 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
             width: 230,
             renderCell: ({ row }: GridValueGetterParams) => {
                 return (
-                    <Box sx={{ displey: 'flex', flexGrow: 1, position: 'relative' }}>
-                        <CardMedia alt={row.id} component="img" image={`${row.imgQR}`} />
+                    <Box sx={{ display: 'flex', width: '100%', height: '100%', position: 'relative' }}>
+                        <CardMedia
+                            alt={row.id}
+                            component="img"
+                            image={`${row.imgQR}`}
+                            sx={{ width: '100%', height: '100%', objectFit: 'fill' }}
+                        />
                         {row.imgQR && (
                             <IconButton
                                 aria-label="add to shopping cart"

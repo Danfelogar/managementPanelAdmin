@@ -57,7 +57,7 @@ export const SingleInventory: FC<Props> = ({ toggleTheme, inventory }) => {
     return (
         <AdminLayout
             icon={<EditIcon color="secondary" />}
-            subTitle={'Edicion de Inventario: test'}
+            subTitle={inventory._id ? `Edicion de Inventario: ${inventory._id}` : 'Creación de nuevo inventario'}
             title={'Inventario'}
             toggleTheme={toggleTheme}
         >
@@ -66,7 +66,6 @@ export const SingleInventory: FC<Props> = ({ toggleTheme, inventory }) => {
                     color="primary"
                     loading={isLoading}
                     startIcon={<SaveAsOutlinedIcon />}
-                    // disabled={isSaving}
                     sx={{ width: '150px' }}
                     variant="contained"
                     onClick={onSubmit(handleCreateOrUpdateInventory)}
