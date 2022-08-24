@@ -64,7 +64,7 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
             width: 160,
         },
         {
-            field: 'tiempoDeEjecución',
+            field: 'tiempoDeEjecucion',
             headerName: 'Tiempo de Ejecución',
             width: 160,
         },
@@ -161,7 +161,7 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
             estado_de_OT: 'pendiente',
             numero_de_orden_de_compra: '123b213hjk123-dc',
             fecha_expedicion: '20-02-2020',
-            tiempoDeEjecución: 12000,
+            tiempoDeEjecucion: 12000,
             fecha_cierre: '12-12-2022',
             imgDeLaMaquina: 'https://res.cloudinary.com/danfelogar/image/upload/v1657438131/cjm0lxsfxh3ollrfukhh.webp',
             tareas: `
@@ -182,7 +182,7 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
             estado_de_OT: 'en progreso',
             numero_de_orden_de_compra: '12-asd23-123-dc',
             fecha_expedicion: '03-02-2020',
-            tiempoDeEjecución: 100,
+            tiempoDeEjecucion: 100,
             fecha_cierre: '28-01-2022',
             imgDeLaMaquina: 'https://res.cloudinary.com/danfelogar/image/upload/v1657438131/cjm0lxsfxh3ollrfukhh.webp',
             tareas: `
@@ -204,7 +204,7 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
         estado_de_OT: ot.estado_de_OT,
         numero_de_orden_de_compra: ot.numero_de_orden_de_compra,
         fecha_expedicion: ot.fecha_expedicion,
-        tiempoDeEjecución: ot.tiempoDeEjecución,
+        tiempoDeEjecucion: ot.tiempoDeEjecucion,
         fecha_cierre: ot.fecha_cierre,
         imgDeLaMaquina: ot.imgDeLaMaquina,
         tareas: ot.tareas,

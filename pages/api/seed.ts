@@ -24,13 +24,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     await CounterTable.deleteMany()
     await CounterTable.insertMany(seedDatabase.initialData.counterTable)
 
-    // await OT.deleteMany()
-    // await OT.insertMany( seedDatabase.initialData.ots )
+    await OT.deleteMany()
+    await OT.insertMany(seedDatabase.initialData.ots)
 
     // await Seguimiento.deleteMany()
     // await Seguimiento.insertMany( seedDatabase.initialData.seguimientos )
 
     await db.disconnect()
 
-    res.status(200).json({ message: 'Usuarios e Inventarios cargados exitosamente' })
+    res.status(200).json({ message: 'Usuarios, OTs e Inventarios cargados exitosamente' })
 }

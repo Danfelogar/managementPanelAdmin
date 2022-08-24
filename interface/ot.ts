@@ -1,7 +1,7 @@
 export interface IOT {
     _id: string
 
-    ot_id: string
+    ot_id: number
     slug: string
 
     repuesto?: string
@@ -12,7 +12,7 @@ export interface IOT {
     numero_de_orden_de_compra?: string
 
     fecha_expedicion: string
-    tiempoDeEjecución?: string
+    tiempoDeEjecucion?: number
     fecha_cierre?: string
 
     imgDeLaMaquina: string
@@ -20,7 +20,7 @@ export interface IOT {
     tareas?: string
     comentario?: string
 
-    maquina: string
+    maquina: number
 
     createdAt: string
     updatedAt: string

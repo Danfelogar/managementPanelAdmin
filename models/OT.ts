@@ -24,7 +24,7 @@ const otSchema = new Schema(
         numero_de_orden_de_compra: { type: String },
 
         fecha_expedicion: { type: String, required: true },
-        tiempoDeEjecución: { type: String },
+        tiempoDeEjecucion: { type: String },
         fecha_cierre: { type: String },
 
         imgDeLaMaquina: { type: String },
