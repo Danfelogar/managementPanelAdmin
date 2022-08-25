@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect, useReducer } from 'react'
+import { FC, ReactNode, useReducer } from 'react'
 
 import { IUser } from '../../interface'
 import { managementApi } from '../../services'

@@ -7,22 +7,46 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import { GetServerSideProps, NextPage } from 'next'
 import { ConfirmationNumberOutlined } from '@mui/icons-material'
 import { getSession } from 'next-auth/react'
+import { FormProvider } from 'react-hook-form'
+import moment from 'moment'
 
 import { ITheme } from '../interface'
-import { UIContext } from '../context'
-import { AdminLayout, ModalOTs, ModalWarringDeleted, SnackbarError, SnackbarSuccess } from '../components'
+import { UIContext, OTsContext } from '../context'
+import { AdminLayout, Loading, ModalOTs, ModalWarringDeleted, SnackbarError, SnackbarSuccess } from '../components'
 import { useOTs } from '../hooks'
 
 const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
-    const { toggleSnackBarError, toggleSnackBarSuccess, toggleModalOTs, isSnackbarError, isSnackbarSuccess } =
+    const { toggleSnackBarError, toggleSnackBarSuccess, isSnackbarError, isSnackbarSuccess, isModalOTsOpen } =
         useContext(UIContext)
-    const { msmTextDelete, handleDeletedOT, warningDeletedOT } = useOTs()
+
+    const { isLoading, dataOTs, msmTextDelete, msmTextUpdate, isUpdateOT } = useContext(OTsContext)
+    const {
+        formMethodsCreate,
+        formMethodsUpdate,
+        changeModalCreate,
+        changeModalUpdate,
+        handleDeletedOT,
+        warningDeletedOT,
+    } = useOTs()
 
     const columns: GridColDef[] = [
         {
-            field: 'id',
+            field: 'slug',
             headerName: 'Numero de la Orden',
             width: 150,
+            renderCell: ({ row }: GridRenderCellParams) => {
+                return (
+                    <Box
+                        sx={{
+                            overflow: 'hidden',
+                            maxWidth: '100%',
+                            whiteSpace: 'normal !important',
+                        }}
+                    >
+                        {row.slug}
+                    </Box>
+                )
+            },
         },
         {
             field: 'maquina',
@@ -62,6 +86,19 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
             field: 'fecha_expedicion',
             headerName: 'Fecha de expedición',
             width: 160,
+            renderCell: ({ row }: GridRenderCellParams) => {
+                return (
+                    <Box
+                        sx={{
+                            overflow: 'hidden',
+                            maxWidth: '100%',
+                            whiteSpace: 'normal !important',
+                        }}
+                    >
+                        {moment(row.fecha_expedicion).format('DD/MM/YYYY')}
+                    </Box>
+                )
+            },
         },
         {
             field: 'tiempoDeEjecucion',
@@ -72,6 +109,19 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
             field: 'fecha_cierre',
             headerName: 'Fecha de cierre',
             width: 130,
+            renderCell: ({ row }: GridRenderCellParams) => {
+                return (
+                    <Box
+                        sx={{
+                            overflow: 'hidden',
+                            maxWidth: '100%',
+                            whiteSpace: 'normal !important',
+                        }}
+                    >
+                        {moment(row.fecha_cierre).format('DD/MM/YYYY')}
+                    </Box>
+                )
+            },
         },
         {
             field: 'imgDeMaquina',
@@ -98,7 +148,7 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
                             whiteSpace: 'normal !important',
                         }}
                     >
-                        {row.tareas.substring(0, 160) + '...'}
+                        {row.tareas ? row.tareas.substring(0, 160) + '...' : null}
                     </Box>
                 )
             },
@@ -116,7 +166,7 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
                             whiteSpace: 'normal !important',
                         }}
                     >
-                        {row.comentario.substring(0, 160) + '...'}
+                        {row.comentario ? row.comentario.substring(0, 160) + '...' : null}
                     </Box>
                 )
             },
@@ -138,10 +188,10 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
                                 height: '100%',
                             }}
                         >
-                            <IconButton color="secondary" onClick={toggleModalOTs}>
+                            <IconButton color="secondary" onClick={() => changeModalUpdate(row)}>
                                 <EditIcon />
                             </IconButton>
-                            <IconButton color="error" onClick={() => warningDeletedOT(row.id)}>
+                            <IconButton color="error" onClick={() => warningDeletedOT(row.ot_id, row._id)}>
                                 <DeleteIcon />
                             </IconButton>
                         </Box>
@@ -151,65 +201,9 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
         },
     ]
 
-    const ots = [
-        {
-            _id: 1,
-            ot_id: 'OT1',
-            maquina: 'maq1',
-            repuesto: 'repuesto 1',
-            tecnico_ing: 'hennry',
-            estado_de_OT: 'pendiente',
-            numero_de_orden_de_compra: '123b213hjk123-dc',
-            fecha_expedicion: '20-02-2020',
-            tiempoDeEjecucion: 12000,
-            fecha_cierre: '12-12-2022',
-            imgDeLaMaquina: 'https://res.cloudinary.com/danfelogar/image/upload/v1657438131/cjm0lxsfxh3ollrfukhh.webp',
-            tareas: `
-            * actividad: reparar maquina,
-            * cantidad de actividad: 20h,
-            * actividad: revisar fugas de la  maquina,
-            * cantidad de actividad: 1h,
-            `,
-            comentario:
-                'Es un hecho establecido hace demasiado tiempo que un lector se distraerá con el contenido del texto de un sitio mientras que mira su diseño. El punto de usar Lorem Ipsum es que tiene una distribución más o menos normal de las letras, de contrario de usar textos como por ejemplo "Contenido aquí, contenido aquí". Estos textos hacen parecerlo un español que se puede leer. Muchos paquetes de autoedición y editores de páginas web usan el Lorem Ipsum como su texto por defecto.',
-        },
-        {
-            _id: 2,
-            ot_id: 'OT2',
-            maquina: 'maq2',
-            repuesto: 'repuesto 2',
-            tecnico_ing: 'hennry',
-            estado_de_OT: 'en progreso',
-            numero_de_orden_de_compra: '12-asd23-123-dc',
-            fecha_expedicion: '03-02-2020',
-            tiempoDeEjecucion: 100,
-            fecha_cierre: '28-01-2022',
-            imgDeLaMaquina: 'https://res.cloudinary.com/danfelogar/image/upload/v1657438131/cjm0lxsfxh3ollrfukhh.webp',
-            tareas: `
-            * actividad: reparar maquina,
-            * cantidad de actividad: 14h,
-            * * actividad: revisar fugas de la  maquina,
-            * cantidad de actividad: 6h,
-            `,
-            comentario:
-                'Es un hecho establecido hace demasiado tiempo que un lector se distraerá con el contenido del texto de un sitio mientras que mira su diseño. El punto de usar Lorem Ipsum es que tiene una distribución más o menos normal de las letras, al contrario de usar textos como por ejemplo "Contenido aquí, contenido aquí". Estos textos hacen parecerlo un español que se puede leer. Muchos paquetes de autoedición y editores de páginas web usan el Lorem Ipsum como su texto por defecto.',
-        },
-    ]
-
-    const rows = ots.map((ot) => ({
-        id: ot.ot_id,
-        maquina: ot.maquina,
-        repuesto: ot.repuesto,
-        tecnico_ing: ot.tecnico_ing,
-        estado_de_OT: ot.estado_de_OT,
-        numero_de_orden_de_compra: ot.numero_de_orden_de_compra,
-        fecha_expedicion: ot.fecha_expedicion,
-        tiempoDeEjecucion: ot.tiempoDeEjecucion,
-        fecha_cierre: ot.fecha_cierre,
-        imgDeLaMaquina: ot.imgDeLaMaquina,
-        tareas: ot.tareas,
-        comentario: ot.comentario,
-    }))
+    if (isLoading) {
+        return <Loading size={'70px'} title={'Cargando OTs, por favor espere...'} toggleTheme={toggleTheme} />
+    }
 
     return (
         <AdminLayout
@@ -231,7 +225,7 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
                     }}
                     xs={12}
                 >
-                    <Button color="secondary" startIcon={<CreateIcon />} variant="outlined">
+                    <Button color="secondary" startIcon={<CreateIcon />} variant="outlined" onClick={changeModalCreate}>
                         Crear nueva OT
                     </Button>
                 </Grid>
@@ -243,13 +237,24 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
                         }}
                         getEstimatedRowHeight={() => 80}
                         getRowHeight={() => 130}
+                        getRowId={(row) => row._id}
                         pageSize={10}
-                        rows={rows}
+                        rows={dataOTs}
                         rowsPerPageOptions={[10]}
                     />
                 </Grid>
             </Grid>
-            <ModalOTs />
+            {/* condicional para evitar que se queden guardados los datos de los inputs */}
+            {isModalOTsOpen && isUpdateOT && (
+                <FormProvider {...formMethodsUpdate}>
+                    <ModalOTs />
+                </FormProvider>
+            )}
+            {isModalOTsOpen && !isUpdateOT && (
+                <FormProvider {...formMethodsCreate}>
+                    <ModalOTs />
+                </FormProvider>
+            )}
             <ModalWarringDeleted
                 actionDeleted={handleDeletedOT}
                 genericTextDeleted={`Estas apunto de borrar la "${msmTextDelete}"
@@ -264,7 +269,11 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
             <SnackbarSuccess
                 handleChangeSnackbar={toggleSnackBarSuccess}
                 isOpen={isSnackbarSuccess}
-                msmText={`se ha actualizado exitosamente la OT`}
+                msmText={
+                    msmTextUpdate !== ''
+                        ? `se ha actualizado exitosamente la OT: ${msmTextUpdate}`
+                        : `se ha creado exitosamente la OT`
+                }
             />
         </AdminLayout>
     )

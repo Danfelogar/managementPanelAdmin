@@ -49,7 +49,7 @@ const FollowsPage: NextPage<ITheme> = ({ toggleTheme }) => {
                             whiteSpace: 'normal !important',
                         }}
                     >
-                        {row.comentario.substring(0, 160) + '...'}
+                        {row.comentario ? row.comentario.substring(0, 160) + '...' : null}
                     </Box>
                 )
             },
