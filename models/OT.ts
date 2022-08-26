@@ -7,7 +7,7 @@ const otSchema = new Schema(
         ot_id: { type: String, required: true, unique: true },
         slug: { type: String, required: true, unique: true },
 
-        maquina: { type: String, required: true },
+        maquina: { type: Number, required: true },
         repuesto: { type: String },
         tecnico_ing: { type: String, required: true },
 

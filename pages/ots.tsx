@@ -1,4 +1,4 @@
-import { Box, Button, CardMedia, Chip, Container, Grid, IconButton } from '@mui/material'
+import { Box, Button, CardMedia, Chip, Container, Grid, IconButton, Typography } from '@mui/material'
 import { useContext } from 'react'
 import CreateIcon from '@mui/icons-material/Create'
 import { DataGrid, GridColDef, GridRenderCellParams, GridToolbar, GridValueGetterParams } from '@mui/x-data-grid'
@@ -52,6 +52,23 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
             field: 'maquina',
             headerName: 'Maquina a realizar mantenimiento',
             width: 240,
+            renderCell: ({ row }: GridRenderCellParams) => {
+                return (
+                    <Box
+                        sx={{
+                            overflow: 'hidden',
+                            maxWidth: '100%',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            flexDirection: 'row',
+                        }}
+                    >
+                        <Typography align="justify" variant="body2">
+                            Maq_{row.maquina}
+                        </Typography>
+                    </Box>
+                )
+            },
         },
         {
             field: 'repuesto',
@@ -104,6 +121,23 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
             field: 'tiempoDeEjecucion',
             headerName: 'Tiempo de Ejecución',
             width: 160,
+            renderCell: ({ row }: GridRenderCellParams) => {
+                return (
+                    <Box
+                        sx={{
+                            overflow: 'hidden',
+                            maxWidth: '100%',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            flexDirection: 'row',
+                        }}
+                    >
+                        <Typography align="justify" variant="body2">
+                            {row.tiempoDeEjecucion} Horas
+                        </Typography>
+                    </Box>
+                )
+            },
         },
         {
             field: 'fecha_cierre',

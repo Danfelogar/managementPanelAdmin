@@ -4,12 +4,14 @@ import { useForm } from 'react-hook-form'
 
 import { OTsContext, UIContext } from '../../context'
 import { IOT } from '../../interface'
+import { managementApi } from '../../services'
 import { yupValidations } from '../../utils'
 
 export const useOTs = () => {
     const { toggleSnackBarError, toggleSnackBarSuccess, toggleModalOTs, toggleModalWarringDeleted } =
         useContext(UIContext)
     const {
+        dataOTs,
         oTForUpdate,
         isUpdateOT,
         getOTsData,
@@ -23,6 +25,50 @@ export const useOTs = () => {
         handleDeleteOT,
     } = useContext(OTsContext)
     const [idForDelete, setIdForDelete] = useState('')
+    const [idxIdRelationMaq, setIdxIdRelationMaq] = useState<Array<{ _id: string; id_maquina: number }>>([])
+    const [idxIdRelationRep, setIdxIdRelationRep] = useState<
+        Array<{
+            _id: string
+            nombre: string
+            existencia: number
+        }>
+    >([])
+    const [idxUsersMttos, setIdxUsersMttos] = useState<Array<{ nombre: string; rol: string }>>([])
+    const handlerIndexOfIdMaq = async () => {
+        await managementApi
+            .get('/admin/inventorysMaq')
+            .then(({ data }) => {
+                setIdxIdRelationMaq(data)
+            })
+            .catch((err) => console.log(err))
+    }
+
+    const handlerIndexOfIdRep = async () => {
+        await managementApi
+            .get('/admin/inventorysRep')
+            .then(({ data }) => {
+                setIdxIdRelationRep(data)
+            })
+            .catch((err) => console.log(err))
+    }
+
+    const handlerIndexOfUsersMttos = async () => {
+        await managementApi
+            .get('/admin/usersMttos')
+            .then(({ data }) => {
+                setIdxUsersMttos(data)
+            })
+            .catch((err) => console.log(err))
+    }
+
+    //console.log({ inventory })
+    useEffect(() => {
+        if (dataOTs) {
+            handlerIndexOfIdMaq()
+            handlerIndexOfIdRep()
+            handlerIndexOfUsersMttos()
+        }
+    }, [dataOTs])
 
     useEffect(() => {
         changeIsLoading()
@@ -32,11 +78,11 @@ export const useOTs = () => {
     }, [])
 
     const formMethodsCreate = useForm<IOT>({
-        resolver: yupResolver(yupValidations.validationCreateUser),
+        resolver: yupResolver(yupValidations.validationCreateOT),
     })
 
     const formMethodsUpdate = useForm<IOT>({
-        resolver: yupResolver(yupValidations.validationUpdateUser),
+        resolver: yupResolver(yupValidations.validationUpdateOT),
     })
 
     const changeModalCreate = () => {
@@ -69,7 +115,7 @@ export const useOTs = () => {
             changeIsLoading()
             handleUpdateOT(data)
             changeIsLoading()
-            //console.log('actualizando:', data)
+            console.log('actualizando:', data)
         } else {
             changeMsmTextUpdate('')
             //TODO: hacer funcionalidad correspondiente al clg
@@ -98,6 +144,9 @@ export const useOTs = () => {
 
     return {
         //states
+        idxIdRelationMaq,
+        idxIdRelationRep,
+        idxUsersMttos,
         //methods
         formMethodsCreate,
         formMethodsUpdate,
