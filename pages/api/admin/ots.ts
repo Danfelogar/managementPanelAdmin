@@ -219,7 +219,7 @@ const updateOT = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
         const slug = req.body.slug
         const otTesting = await OT.findOne({ slug })
 
-        if (otTesting) {
+        if (otTesting?.slug && otTesting._id.toString() !== _id) {
             return res.status(400).json({ message: 'Slug already exists' })
         }
     }

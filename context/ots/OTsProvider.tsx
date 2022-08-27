@@ -38,6 +38,7 @@ export const OTsProvider: FC<Props> = ({ children }) => {
             })
             .then(({ data }) => {
                 dispatch({ type: '[OTS] Get ots data', payload: data })
+                console.log({ data })
 
                 return data
             })
@@ -55,7 +56,9 @@ export const OTsProvider: FC<Props> = ({ children }) => {
         await managementApi
             .post('/admin/ots', { ...data })
             .then(() => {
-                getOTsData()
+                setTimeout(() => {
+                    getOTsData()
+                }, 50)
             })
             .catch((err) => {
                 console.log(err.message)

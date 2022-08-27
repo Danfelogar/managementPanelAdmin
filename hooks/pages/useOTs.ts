@@ -63,12 +63,10 @@ export const useOTs = () => {
 
     //console.log({ inventory })
     useEffect(() => {
-        if (dataOTs) {
-            handlerIndexOfIdMaq()
-            handlerIndexOfIdRep()
-            handlerIndexOfUsersMttos()
-        }
-    }, [dataOTs])
+        handlerIndexOfIdMaq()
+        handlerIndexOfIdRep()
+        handlerIndexOfUsersMttos()
+    }, [])
 
     useEffect(() => {
         changeIsLoading()
@@ -115,12 +113,13 @@ export const useOTs = () => {
             changeIsLoading()
             handleUpdateOT(data)
             changeIsLoading()
-            console.log('actualizando:', data)
+            //console.log('actualizando:', data)
         } else {
             changeMsmTextUpdate('')
             //TODO: hacer funcionalidad correspondiente al clg
             changeIsLoading()
             handleCreateOT(data)
+            getOTsData()
             changeIsLoading()
             // console.log('creando', data)
         }
