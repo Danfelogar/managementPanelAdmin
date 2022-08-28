@@ -1,35 +1,22 @@
-import { useContext, useRef } from 'react'
-import {
-    Modal,
-    Backdrop,
-    Box,
-    Typography,
-    IconButton,
-    Grid,
-    TextField,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
-    Button,
-    FormLabel,
-    Chip,
-    Card,
-    CardMedia,
-    CardActions,
-} from '@mui/material'
+import { useContext } from 'react'
+import { Modal, Backdrop, Box, Typography, IconButton, Grid, MenuItem } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import SaveIcon from '@mui/icons-material/Save'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
+import { useFormContext } from 'react-hook-form'
+import { LoadingButton } from '@mui/lab'
 
 import { WrapperModalHeaderFollow, WrapperModalFollow } from '../styles'
-import { UIContext } from '../../../context'
+import { FollowsContext, UIContext } from '../../../context'
 import { useFollows } from '../../../hooks'
+import { ISeguimiento } from '../../../interface'
+import { InputSelector, InputSingleImg, InputText, InputTextMult } from '../inputs'
 
 export const ModalFollows = () => {
     const { toggleModalFollows, isModalFollowsOpen } = useContext(UIContext)
-    const { handleUpdateFollow } = useFollows()
-    const fileInputRef = useRef<HTMLInputElement>(null)
+    const { isLoading, isUpdateFollow, followForUpdate } = useContext(FollowsContext)
+    const { idxIdRelationMaq, handleCreateOrUpdateFollow } = useFollows()
+    const { control, handleSubmit: onSubmit } = useFormContext<ISeguimiento>()
 
     return (
         <Modal
@@ -46,7 +33,11 @@ export const ModalFollows = () => {
         >
             <Box sx={WrapperModalFollow}>
                 <WrapperModalHeaderFollow sx={{ borderBottom: 1, borderColor: 'primary.main' }}>
-                    <Typography variant="h5">Editar Seguimiento</Typography>
+                    <Typography variant="h5">
+                        {isUpdateFollow
+                            ? `Editando Seguimiento: ${followForUpdate?.id_seguimiento}`
+                            : `Creando Seguimiento`}
+                    </Typography>
                     <Box sx={{ flexGrow: 1 }} />
                     <IconButton color="error" sx={{ border: 1, ml: 1 }} onClick={toggleModalFollows}>
                         <CloseIcon />
@@ -54,119 +45,66 @@ export const ModalFollows = () => {
                 </WrapperModalHeaderFollow>
                 <Grid container>
                     <Grid item md={5.5} sx={{ m: 2, display: 'flex', flexDirection: 'row' }} xs={11}>
-                        <Box display="flex" flexDirection="column" sx={{ width: '50%', pr: 2 }}>
-                            <FormLabel sx={{ mb: 1 }}>Image</FormLabel>
-                            <Button
-                                fullWidth
-                                color="secondary"
-                                component="label"
-                                startIcon={<CloudUploadIcon />}
-                                sx={{ mb: 3 }}
-                                variant="contained"
-                            >
-                                Upload
-                                <input hidden multiple accept="image/*" type="file" />
-                            </Button>
-                            {/* <Button
-                                fullWidth
-                                color="secondary"
-                                startIcon={<CloudUploadIcon />}
-                                sx={{ mb: 3 }}
-                                //si el input existe con la ref le daremos click
-                                onClick={() => fileInputRef.current?.click()}
-                            >
-                                Actualizar imagen
-                            </Button>
-                            <input
-                                ref={fileInputRef}
-                                multiple
-                                accept="image/png, image/gif, image/jpeg"
-                                style={{ display: 'none' }}
-                                type="file"
-                                //cuando cambie vamos a empezar el procedimiento de la carga de las imgs
-                                // onChange={ onFilesSelected }
-                            /> */}
-                            <Chip
-                                color="error"
-                                label="At least 2 images are required"
-                                sx={{ display: 'flex' }}
-                                variant="outlined"
-                            />
-                        </Box>
-
-                        <Box display="flex" flexDirection="column" sx={{ width: '50%', pl: 2 }}>
-                            <Card sx={{ width: '100%', height: '100%' }}>
-                                <CardMedia
-                                    alt="img demo"
-                                    className="fadeIn"
-                                    //determinamos si tenemos un url y si viene con https:// mostramos la img de cloudinary y si no la que tenemos en nuestros archivos locacles
-                                    component="img"
-                                    image="https://res.cloudinary.com/danfelogar/image/upload/v1657438131/cjm0lxsfxh3ollrfukhh.webp"
-                                />
-                                <CardActions>
-                                    <Button
-                                        // onClick={() => onDeleteImage(img)}
-                                        fullWidth
-                                        color="error"
-                                    >
-                                        Delete
-                                    </Button>
-                                </CardActions>
-                            </Card>
-                        </Box>
+                        <InputSingleImg control={control} label="Image de verificación" name="imgDeVerificacion" />
                     </Grid>
                     <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
-                        <TextField
+                        <InputTextMult fullWidth control={control} label="Comentario" maxRows={7} name="comentario" />
+                    </Grid>
+                    <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
+                        <InputSelector control={control} label="Estado de la maquina" name="estadoDeLaMaquina">
+                            <MenuItem value={'bueno'}>Bueno</MenuItem>
+                            <MenuItem value={'regular'}>Regular</MenuItem>
+                            <MenuItem value={'malo'}>Malo</MenuItem>
+                        </InputSelector>
+                    </Grid>
+                    <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
+                        <InputText
                             fullWidth
-                            multiline
-                            id="outlined-multiline-flexible"
-                            label="Comentario"
-                            maxRows={7}
-                        />
-                    </Grid>
-                    <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
-                        <TextField fullWidth id="outlined-basic" label="Estado de la maquina" variant="outlined" />
-                    </Grid>
-                    <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
-                        <TextField
-                            fullWidth
-                            id="outlined-basic"
+                            control={control}
                             label="Nombre completo del observador"
-                            variant="outlined"
+                            name="nombreDeObservador"
+                            type="text"
                         />
                     </Grid>
                     <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
-                        <TextField fullWidth id="outlined-basic" label="Tiempo de Funcionamiento" variant="outlined" />
+                        <InputText
+                            fullWidth
+                            control={control}
+                            label="Tiempo de Funcionamiento"
+                            name="tiempoDeFuncionamiento"
+                            type="number"
+                        />
                     </Grid>
                     <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
-                        <TextField fullWidth id="outlined-basic" label="Tiempo de Reaparición" variant="outlined" />
+                        <InputText
+                            fullWidth
+                            control={control}
+                            label="Tiempo de Reaparición"
+                            name="tiempoDeReparacion"
+                            type="number"
+                        />
                     </Grid>
                     <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
-                        <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">Maquina de Relación</InputLabel>
-                            <Select
-                                id="demo-simple-select"
-                                label="Maquina de Relación"
-                                labelId="demo-simple-select-label"
-                                value={''}
-                            >
-                                <MenuItem value={10}>Ten</MenuItem>
-                                <MenuItem value={20}>Twenty</MenuItem>
-                                <MenuItem value={30}>Thirty</MenuItem>
-                            </Select>
-                        </FormControl>
+                        <InputSelector control={control} label="Maquina de Relación" name="maquina_id_relacion">
+                            {idxIdRelationMaq.map((item) => (
+                                <MenuItem key={item._id} value={item.id_maquina}>
+                                    MAQ_{item.id_maquina}
+                                </MenuItem>
+                            ))}
+                        </InputSelector>
                     </Grid>
                 </Grid>
                 <Grid container sx={{ p: 2 }}>
                     <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                        <Button
+                        <LoadingButton
                             color="secondary"
+                            loading={isLoading}
                             startIcon={<SaveIcon />}
                             variant="outlined"
-                            onClick={handleUpdateFollow}
+                            onClick={onSubmit(handleCreateOrUpdateFollow)}
                         >
                             Guardar cambios
-                        </Button>
+                        </LoadingButton>
                     </Box>
                 </Grid>
             </Box>

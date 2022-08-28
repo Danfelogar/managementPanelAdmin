@@ -1,28 +1,58 @@
 import { GetServerSideProps, NextPage } from 'next'
 import { DataGrid, GridToolbar, GridColDef, GridValueGetterParams, GridRenderCellParams } from '@mui/x-data-grid'
-import { Box, CardMedia, Container, Grid, IconButton } from '@mui/material'
+import { Box, Button, CardMedia, Chip, Container, Grid, IconButton, Typography } from '@mui/material'
+import CreateIcon from '@mui/icons-material/Create'
 import { EngineeringOutlined } from '@mui/icons-material'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { useContext } from 'react'
 import { getSession } from 'next-auth/react'
+import { FormProvider } from 'react-hook-form'
 
 import { AdminLayout } from '../components/layouts/AdminLayout'
 import { ITheme } from '../interface/theme'
-import { ModalFollows, ModalWarringDeleted, SnackbarError, SnackbarSuccess } from '../components'
-import { UIContext } from '../context'
+import { Loading, ModalFollows, ModalWarringDeleted, SnackbarError, SnackbarSuccess } from '../components'
+import { FollowsContext, UIContext } from '../context'
 import { useFollows } from '../hooks'
 
 const FollowsPage: NextPage<ITheme> = ({ toggleTheme }) => {
-    const { toggleModalFollows, toggleSnackBarError, toggleSnackBarSuccess, isSnackbarSuccess, isSnackbarError } =
-        useContext(UIContext)
-    const { msmTextDelete, handleDeletedFollow, warningDeletedFollow } = useFollows()
+    const {
+        toggleModalFollows,
+        toggleSnackBarError,
+        toggleSnackBarSuccess,
+        isSnackbarSuccess,
+        isSnackbarError,
+        isModalFollowsOpen,
+    } = useContext(UIContext)
+
+    const { isLoading, dataFollows, msmTextDelete, msmTextUpdate, isUpdateFollow } = useContext(FollowsContext)
+    const {
+        formMethodsCreate,
+        formMethodsUpdate,
+        changeModalCreate,
+        changeModalUpdate,
+        handleDeletedFollow,
+        warningDeletedFollow,
+    } = useFollows()
 
     const columns: GridColDef[] = [
         {
-            field: 'id',
+            field: 'id_seguimiento',
             headerName: 'Identificación',
             width: 110,
+            renderCell: ({ row }: GridRenderCellParams) => {
+                return (
+                    <Box
+                        sx={{
+                            overflow: 'hidden',
+                            maxWidth: '100%',
+                            whiteSpace: 'normal !important',
+                        }}
+                    >
+                        {row.id_seguimiento}
+                    </Box>
+                )
+            },
         },
         {
             field: 'imgDeVerificacion',
@@ -58,6 +88,15 @@ const FollowsPage: NextPage<ITheme> = ({ toggleTheme }) => {
             field: 'estadoDeLaMaquina',
             headerName: 'Estado De La Maquina',
             width: 200,
+            renderCell: ({ row }: GridValueGetterParams) => {
+                return row.estadoDeLaMaquina === 'malo' ? (
+                    <Chip color="error" label="Malo" variant="outlined" />
+                ) : row.estadoDeLaMaquina === 'regular' ? (
+                    <Chip color="warning" label="Regular" variant="outlined" />
+                ) : (
+                    <Chip color="success" label="Bueno" variant="outlined" />
+                )
+            },
         },
         {
             field: 'nombreDeObservador',
@@ -68,16 +107,67 @@ const FollowsPage: NextPage<ITheme> = ({ toggleTheme }) => {
             field: 'tiempoDeFuncionamiento',
             headerName: 'Tiempo de Funcionamiento',
             width: 200,
+            renderCell: ({ row }: GridRenderCellParams) => {
+                return (
+                    <Box
+                        sx={{
+                            overflow: 'hidden',
+                            maxWidth: '100%',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            flexDirection: 'row',
+                        }}
+                    >
+                        <Typography align="justify" variant="body2">
+                            {row.tiempoDeFuncionamiento} Horas
+                        </Typography>
+                    </Box>
+                )
+            },
         },
         {
             field: 'tiempoDeReparacion',
             headerName: 'Tiempo de Reaparición',
             width: 200,
+            renderCell: ({ row }: GridRenderCellParams) => {
+                return (
+                    <Box
+                        sx={{
+                            overflow: 'hidden',
+                            maxWidth: '100%',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            flexDirection: 'row',
+                        }}
+                    >
+                        <Typography align="justify" variant="body2">
+                            {row.tiempoDeReparacion} Horas
+                        </Typography>
+                    </Box>
+                )
+            },
         },
         {
             field: 'maquina_id_relacion',
             headerName: 'Maquina de Relación',
             width: 200,
+            renderCell: ({ row }: GridRenderCellParams) => {
+                return (
+                    <Box
+                        sx={{
+                            overflow: 'hidden',
+                            maxWidth: '100%',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            flexDirection: 'row',
+                        }}
+                    >
+                        <Typography align="justify" variant="body2">
+                            Maq_{row.maquina_id_relacion}
+                        </Typography>
+                    </Box>
+                )
+            },
         },
         {
             field: 'actions',
@@ -96,10 +186,10 @@ const FollowsPage: NextPage<ITheme> = ({ toggleTheme }) => {
                                 height: '100%',
                             }}
                         >
-                            <IconButton color="secondary" onClick={toggleModalFollows}>
+                            <IconButton color="secondary" onClick={() => changeModalUpdate(row)}>
                                 <EditIcon />
                             </IconButton>
-                            <IconButton color="error" onClick={() => warningDeletedFollow(row.id)}>
+                            <IconButton color="error" onClick={() => warningDeletedFollow(row.id_seguimiento, row._id)}>
                                 <DeleteIcon />
                             </IconButton>
                         </Box>
@@ -109,33 +199,9 @@ const FollowsPage: NextPage<ITheme> = ({ toggleTheme }) => {
         },
     ]
 
-    const follows = [
-        {
-            _id: 1,
-            id_seguimiento: 10,
-            imgDeVerificacion:
-                'https://res.cloudinary.com/danfelogar/image/upload/v1657438131/cjm0lxsfxh3ollrfukhh.webp',
-            comentario:
-                'Es un hecho establecido hace demasiado tiempo que un lector se distraerá con el contenido del texto de un sitio mientras que mira su diseño. El punto de usar Lorem Ipsum es que tiene una distribución más o menos normal de las letras, al contrario de usar textos como por ejemplo "Contenido aquí, contenido aquí". Estos textos hacen parecerlo un español que se puede leer. Muchos paquetes de autoedición y editores de páginas web usan el Lorem Ipsum como su texto por defecto, y al hacer una búsqueda de "Lorem Ipsum" va a dar por resultado muchos sitios web que usan este texto si se encuentran en estado de desarrollo. Muchas versiones han evolucionado a través de los años, algunas veces por accidente, otras veces a propósito (por ejemplo insertándole humor y cosas por el estilo).',
-            estadoDeLaMaquina: 'bueno',
-            nombreDeObservador: 'Daniel Felipe Polo Garcia',
-            tiempoDeFuncionamiento: 120,
-            tiempoDeReparacion: 60,
-
-            maquina_id_relacion: 'maq1',
-        },
-    ]
-
-    const rows = follows.map((follow) => ({
-        id: follow.id_seguimiento,
-        imgDeVerificacion: follow.imgDeVerificacion,
-        comentario: follow.comentario,
-        estadoDeLaMaquina: follow.estadoDeLaMaquina,
-        nombreDeObservador: follow.nombreDeObservador,
-        tiempoDeFuncionamiento: follow.tiempoDeFuncionamiento,
-        tiempoDeReparacion: follow.tiempoDeReparacion,
-        maquina_id_relacion: follow.maquina_id_relacion,
-    }))
+    if (isLoading) {
+        return <Loading size={'70px'} title={'Cargando Seguimientos, por favor espere...'} toggleTheme={toggleTheme} />
+    }
 
     return (
         <AdminLayout
@@ -144,6 +210,22 @@ const FollowsPage: NextPage<ITheme> = ({ toggleTheme }) => {
             title={'Seguimiento'}
             toggleTheme={toggleTheme}
         >
+            <Grid
+                item
+                sx={{
+                    flexGrow: 1,
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    alignItems: 'center',
+                    mb: 1,
+                    mt: 1,
+                }}
+                xs={12}
+            >
+                <Button color="secondary" startIcon={<CreateIcon />} variant="outlined" onClick={changeModalCreate}>
+                    Crear nueva OT
+                </Button>
+            </Grid>
             <Grid container className="fadeIn">
                 <Grid item sx={{ height: 730, width: '100%' }} xs={12}>
                     <DataGrid
@@ -153,13 +235,23 @@ const FollowsPage: NextPage<ITheme> = ({ toggleTheme }) => {
                         }}
                         getEstimatedRowHeight={() => 80}
                         getRowHeight={() => 120}
+                        getRowId={(row) => row._id}
                         pageSize={10}
-                        rows={rows}
+                        rows={dataFollows}
                         rowsPerPageOptions={[10]}
                     />
                 </Grid>
             </Grid>
-            <ModalFollows />
+            {isModalFollowsOpen && isUpdateFollow && (
+                <FormProvider {...formMethodsUpdate}>
+                    <ModalFollows />
+                </FormProvider>
+            )}
+            {isModalFollowsOpen && !isUpdateFollow && (
+                <FormProvider {...formMethodsCreate}>
+                    <ModalFollows />
+                </FormProvider>
+            )}
             <ModalWarringDeleted
                 actionDeleted={handleDeletedFollow}
                 genericTextDeleted={`Estas apunto de borrar el Seguimiento "${msmTextDelete}"
@@ -174,7 +266,11 @@ const FollowsPage: NextPage<ITheme> = ({ toggleTheme }) => {
             <SnackbarSuccess
                 handleChangeSnackbar={toggleSnackBarSuccess}
                 isOpen={isSnackbarSuccess}
-                msmText={`se ha actualizado exitosamente el seguimiento`}
+                msmText={
+                    msmTextUpdate !== ''
+                        ? `se ha actualizado exitosamente el seguimiento: ${msmTextUpdate}`
+                        : `se ha creado exitosamente el seguimiento`
+                }
             />
         </AdminLayout>
     )

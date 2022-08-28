@@ -1,17 +1,17 @@
 export interface ISeguimiento {
     _id: string
 
-    id_seguimiento: string
-    imgDeVerificación: string
+    id_seguimiento: number
+    imgDeVerificacion: string
 
     comentario: string
-    estadoDeLaMaquina: string
+    estadoDeLaMaquina: 'bueno' | 'malo' | 'regular'
     nombreDeObservador: string
 
-    tiempoDeFuncionamiento: string
-    tiempoDeReparación: string
+    tiempoDeFuncionamiento: number
+    tiempoDeReparacion: number
 
-    maquina_id_relacion: string | string[]
+    maquina_id_relacion: number
 
     createdAt: string
     updatedAt: string

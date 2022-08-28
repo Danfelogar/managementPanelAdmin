@@ -87,7 +87,7 @@ export const SideMenu = () => {
                             <Typography color="text.primary" component="p" sx={{ fontWeight: 'bold' }} variant="body1">
                                 Nombre:&nbsp;
                             </Typography>
-                            <Typography color="text.secondary" component="p" sx={{ fontWeight: '400' }} variant="body2">
+                            <Typography color="text.secondary" component="p" sx={{ fontWeight: '400' }} variant="body1">
                                 {user?.nombre}
                             </Typography>
                         </Box>
@@ -96,7 +96,7 @@ export const SideMenu = () => {
                             <Typography color="text.primary" component="p" sx={{ fontWeight: 'bold' }} variant="body1">
                                 Email:&nbsp;
                             </Typography>
-                            <Typography color="text.secondary" component="p" sx={{ fontWeight: '400' }} variant="body2">
+                            <Typography color="text.secondary" component="p" sx={{ fontWeight: '400' }} variant="body1">
                                 {user?.email}
                             </Typography>
                         </Box>
@@ -105,7 +105,7 @@ export const SideMenu = () => {
                             <Typography color="text.primary" component="p" sx={{ fontWeight: 'bold' }} variant="body1">
                                 Rol:&nbsp;
                             </Typography>
-                            <Typography color="text.secondary" component="p" sx={{ fontWeight: '400' }} variant="body2">
+                            <Typography color="text.secondary" component="p" sx={{ fontWeight: '400' }} variant="body1">
                                 {user?.rol}
                             </Typography>
                         </Box>

@@ -102,6 +102,7 @@ export const OTsProvider: FC<Props> = ({ children }) => {
     const changeMsmTextDelete = (slug: string) => {
         dispatch({ type: '[OTS] Change msm text for delete ot', payload: slug })
     }
+
     const changeMsmTextUpdate = (_id: string) => {
         dispatch({ type: '[OTS] Change msm text for update ot', payload: _id })
     }
