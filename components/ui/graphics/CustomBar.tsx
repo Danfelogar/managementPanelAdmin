@@ -1,7 +1,7 @@
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
 
-import { useInventario } from '../../../hooks'
+import { useInventory } from '../../../hooks'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
@@ -36,7 +36,7 @@ const labels = [
 ]
 
 export const CustomBar = () => {
-    const { dataBar } = useInventario()
+    const { dataBar } = useInventory()
 
     const data = {
         labels,
