@@ -10,7 +10,7 @@ import { LoadingButton } from '@mui/lab'
 import { useInventory } from '../../hooks'
 import { IInventario } from '../../interface'
 import { AdminLayout } from '../layouts'
-import { InventoriesContext } from '../../context'
+import { AuthContext, InventoriesContext } from '../../context'
 import { managementApi } from '../../services'
 
 import {
@@ -30,6 +30,7 @@ interface Props {
 }
 
 export const SingleInventory: FC<Props> = ({ toggleTheme, inventory }) => {
+    const { user } = useContext(AuthContext)
     const { isLoading } = useContext(InventoriesContext)
     const { handleCreateOrUpdateInventory } = useInventory()
     const { control, handleSubmit: onSubmit } = useFormContext<IInventario>()
@@ -62,16 +63,18 @@ export const SingleInventory: FC<Props> = ({ toggleTheme, inventory }) => {
             toggleTheme={toggleTheme}
         >
             <Box display="flex" justifyContent="end" sx={{ mb: 2 }}>
-                <LoadingButton
-                    color="primary"
-                    loading={isLoading}
-                    startIcon={<SaveAsOutlinedIcon />}
-                    sx={{ width: '150px' }}
-                    variant="contained"
-                    onClick={onSubmit(handleCreateOrUpdateInventory)}
-                >
-                    Guardar
-                </LoadingButton>
+                {!['bodega', 'mtto'].includes(user?.rol!) && (
+                    <LoadingButton
+                        color="primary"
+                        loading={isLoading}
+                        startIcon={<SaveAsOutlinedIcon />}
+                        sx={{ width: '150px' }}
+                        variant="contained"
+                        onClick={onSubmit(handleCreateOrUpdateInventory)}
+                    >
+                        Guardar
+                    </LoadingButton>
+                )}
             </Box>
             <Grid container spacing={2}>
                 {/* importante para que sirvan los datePicker */}

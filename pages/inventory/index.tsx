@@ -13,9 +13,10 @@ import moment from 'moment'
 
 import { AdminLayout, Loading, ModalWarringDeleted, SnackbarError, SnackbarSuccess } from '../../components'
 import { ITheme } from '../../interface'
-import { InventoriesContext, UIContext } from '../../context'
+import { AuthContext, InventoriesContext, UIContext } from '../../context'
 import { useInventory } from '../../hooks'
 const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
+    const { user } = useContext(AuthContext)
     const { toggleSnackBarError, toggleSnackBarSuccess, isSnackbarError, isSnackbarSuccess } = useContext(UIContext)
     const { msmTextDelete, msmTextUpdate, isLoading, dataInventories } = useContext(InventoriesContext)
     const { handleDeletedInventario, warningDeletedInventario, navigateToUpdate, downloadFile } = useInventory()
@@ -310,9 +311,11 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
                             <IconButton color="secondary" onClick={() => navigateToUpdate(`/inventory/${row._id}`)}>
                                 <EditIcon />
                             </IconButton>
-                            <IconButton color="error" onClick={() => warningDeletedInventario(row.nombre, row._id)}>
-                                <DeleteIcon />
-                            </IconButton>
+                            {!['bodega', 'mtto'].includes(user?.rol!) && (
+                                <IconButton color="error" onClick={() => warningDeletedInventario(row.nombre, row._id)}>
+                                    <DeleteIcon />
+                                </IconButton>
+                            )}
                         </Box>
                     </Container>
                 )
@@ -344,14 +347,16 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
                     }}
                     xs={12}
                 >
-                    <Button
-                        color="secondary"
-                        startIcon={<CreateIcon />}
-                        variant="outlined"
-                        onClick={() => navigateToUpdate(`/inventory/new`)}
-                    >
-                        Crear nuevo inventario
-                    </Button>
+                    {!['bodega', 'mtto'].includes(user?.rol!) && (
+                        <Button
+                            color="secondary"
+                            startIcon={<CreateIcon />}
+                            variant="outlined"
+                            onClick={() => navigateToUpdate(`/inventory/new`)}
+                        >
+                            Crear nuevo inventario
+                        </Button>
+                    )}
                 </Grid>
                 <Grid item sx={{ height: 730, width: '100%' }} xs={12}>
                     <DataGrid

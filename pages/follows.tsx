@@ -12,7 +12,7 @@ import { FormProvider } from 'react-hook-form'
 import { AdminLayout } from '../components/layouts/AdminLayout'
 import { ITheme } from '../interface/theme'
 import { Loading, ModalFollows, ModalWarringDeleted, SnackbarError, SnackbarSuccess } from '../components'
-import { FollowsContext, UIContext } from '../context'
+import { AuthContext, FollowsContext, UIContext } from '../context'
 import { useFollows } from '../hooks'
 
 const FollowsPage: NextPage<ITheme> = ({ toggleTheme }) => {
@@ -24,7 +24,7 @@ const FollowsPage: NextPage<ITheme> = ({ toggleTheme }) => {
         isSnackbarError,
         isModalFollowsOpen,
     } = useContext(UIContext)
-
+    const { user } = useContext(AuthContext)
     const { isLoading, dataFollows, msmTextDelete, msmTextUpdate, isUpdateFollow } = useContext(FollowsContext)
     const {
         formMethodsCreate,
@@ -189,9 +189,14 @@ const FollowsPage: NextPage<ITheme> = ({ toggleTheme }) => {
                             <IconButton color="secondary" onClick={() => changeModalUpdate(row)}>
                                 <EditIcon />
                             </IconButton>
-                            <IconButton color="error" onClick={() => warningDeletedFollow(row.id_seguimiento, row._id)}>
-                                <DeleteIcon />
-                            </IconButton>
+                            {!['bodega', 'mtto'].includes(user?.rol!) && (
+                                <IconButton
+                                    color="error"
+                                    onClick={() => warningDeletedFollow(row.id_seguimiento, row._id)}
+                                >
+                                    <DeleteIcon />
+                                </IconButton>
+                            )}
                         </Box>
                     </Container>
                 )
@@ -222,9 +227,11 @@ const FollowsPage: NextPage<ITheme> = ({ toggleTheme }) => {
                 }}
                 xs={12}
             >
-                <Button color="secondary" startIcon={<CreateIcon />} variant="outlined" onClick={changeModalCreate}>
-                    Crear nueva OT
-                </Button>
+                {!['bodega', 'mtto'].includes(user?.rol!) && (
+                    <Button color="secondary" startIcon={<CreateIcon />} variant="outlined" onClick={changeModalCreate}>
+                        Crear nueva OT
+                    </Button>
+                )}
             </Grid>
             <Grid container className="fadeIn">
                 <Grid item sx={{ height: 730, width: '100%' }} xs={12}>

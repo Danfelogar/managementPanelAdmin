@@ -1,2 +1,2 @@
-export * from './snackbarError'
+export * from './SnackbarError'
 export * from './SnackbarSuccess'

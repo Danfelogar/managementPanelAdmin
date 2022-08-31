@@ -7,12 +7,13 @@ import { useFormContext } from 'react-hook-form'
 import { LoadingButton } from '@mui/lab'
 
 import { WrapperModalHeaderFollow, WrapperModalFollow } from '../styles'
-import { FollowsContext, UIContext } from '../../../context'
+import { AuthContext, FollowsContext, UIContext } from '../../../context'
 import { useFollows } from '../../../hooks'
 import { ISeguimiento } from '../../../interface'
 import { InputSelector, InputSingleImg, InputText, InputTextMult } from '../inputs'
 
 export const ModalFollows = () => {
+    const { user } = useContext(AuthContext)
     const { toggleModalFollows, isModalFollowsOpen } = useContext(UIContext)
     const { isLoading, isUpdateFollow, followForUpdate } = useContext(FollowsContext)
     const { idxIdRelationMaq, handleCreateOrUpdateFollow } = useFollows()
@@ -96,15 +97,17 @@ export const ModalFollows = () => {
                 </Grid>
                 <Grid container sx={{ p: 2 }}>
                     <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                        <LoadingButton
-                            color="secondary"
-                            loading={isLoading}
-                            startIcon={<SaveIcon />}
-                            variant="outlined"
-                            onClick={onSubmit(handleCreateOrUpdateFollow)}
-                        >
-                            Guardar cambios
-                        </LoadingButton>
+                        {!['bodega', 'mtto'].includes(user?.rol!) && (
+                            <LoadingButton
+                                color="secondary"
+                                loading={isLoading}
+                                startIcon={<SaveIcon />}
+                                variant="outlined"
+                                onClick={onSubmit(handleCreateOrUpdateFollow)}
+                            >
+                                Guardar cambios
+                            </LoadingButton>
+                        )}
                     </Box>
                 </Grid>
             </Box>

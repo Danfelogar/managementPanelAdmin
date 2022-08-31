@@ -7,13 +7,14 @@ import CloseIcon from '@mui/icons-material/Close'
 import { useFormContext } from 'react-hook-form'
 import { LoadingButton } from '@mui/lab'
 
-import { OTsContext, UIContext } from '../../../context'
+import { AuthContext, OTsContext, UIContext } from '../../../context'
 import { useOTs } from '../../../hooks'
 import { WrapperModalHeaderOT, WrapperModalOT } from '../styles'
 import { IOT } from '../../../interface'
 import { InputDateDesktop, InputDateMobile, InputSelector, InputSingleImg, InputText, InputTextMult } from '../inputs'
 
 export const ModalOTs = () => {
+    const { user } = useContext(AuthContext)
     const { toggleModalOTs, isModalOTsOpen } = useContext(UIContext)
     const { isLoading, isUpdateOT, oTForUpdate } = useContext(OTsContext)
     const { idxIdRelationMaq, idxIdRelationRep, idxUsersMttos, handleCreateOrUpdateOT } = useOTs()
@@ -154,15 +155,17 @@ export const ModalOTs = () => {
                     </Grid>
                     <Grid container sx={{ p: 2 }}>
                         <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                            <LoadingButton
-                                color="secondary"
-                                loading={isLoading}
-                                startIcon={<SaveIcon />}
-                                variant="outlined"
-                                onClick={onSubmit(handleCreateOrUpdateOT)}
-                            >
-                                Guardar cambios
-                            </LoadingButton>
+                            {!['bodega', 'mtto'].includes(user?.rol!) && (
+                                <LoadingButton
+                                    color="secondary"
+                                    loading={isLoading}
+                                    startIcon={<SaveIcon />}
+                                    variant="outlined"
+                                    onClick={onSubmit(handleCreateOrUpdateOT)}
+                                >
+                                    Guardar cambios
+                                </LoadingButton>
+                            )}
                         </Box>
                     </Grid>
                 </LocalizationProvider>

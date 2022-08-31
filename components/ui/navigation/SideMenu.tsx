@@ -127,7 +127,7 @@ export const SideMenu = () => {
                             <ListItemText primary={'Inventario'} />
                         </ListItem>
                     )}
-                    {['super_admin', 'admin_bodega', 'admin_mtto', 'mtto'].includes(user?.rol!) && (
+                    {['super_admin', 'admin_mtto', 'mtto'].includes(user?.rol!) && (
                         <ListItem button onClick={() => navigateTo('/ots')}>
                             <ListItemIcon>
                                 <ConfirmationNumberOutlined />

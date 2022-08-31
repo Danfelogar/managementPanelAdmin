@@ -9,21 +9,24 @@ import { WrapperGraphicsBar } from '../../components/ui/styles/styledGraphicsBar
 import { useGraphics } from '../../hooks'
 import { dbGraphics } from '../../database'
 
-interface AuxGraphics {
+interface PropsGraphics {
     frecuencia_de_reparacion: number
     porcentaje_de_disponibilidad: number
-    createdAt: string
+    createdAt: number
+}
+export interface PropsAuxArrData {
+    frecuencia_de_reparacion: number
+    porcentaje_de_disponibilidad: number
+    frecuencia_de_falla: number
 }
 interface Props extends ITheme {
-    graphics: AuxGraphics[]
+    graphicsData: PropsAuxArrData[]
     id_maquina: string
-    auxArr?: any
 }
 
-const BarGraphicPage: NextPage<Props> = ({ graphics, toggleTheme, id_maquina, auxArr }) => {
-    const { arrGraphics, isLoading } = useGraphics(graphics)
+const BarGraphicPage: NextPage<Props> = ({ toggleTheme, id_maquina, graphicsData }) => {
+    const { isLoading } = useGraphics(graphicsData)
 
-    console.log({ graphics })
     if (isLoading) {
         return <Loading size={'70px'} title={`Cargando Gráficos, por favor espere...`} toggleTheme={toggleTheme} />
     }
@@ -35,9 +38,7 @@ const BarGraphicPage: NextPage<Props> = ({ graphics, toggleTheme, id_maquina, au
             title={`Inventario No.${id_maquina}`}
             toggleTheme={toggleTheme}
         >
-            <WrapperGraphicsBar>
-                <CustomBar />
-            </WrapperGraphicsBar>
+            <WrapperGraphicsBar>{graphicsData && <CustomBar graphicsData={graphicsData} />}</WrapperGraphicsBar>
         </AdminLayout>
     )
 }
@@ -57,21 +58,71 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
             },
         }
     }
-    // let auxArr:
-    //     | {
-    //           frecuencia_de_reparacion: number
-    //           porcentaje_de_disponibilidad: number
-    //           frecuencia_de_falla: number
-    //           createdAt?: string
-    //       }[]
-    //     | [] = []
-    let graphics:
-        | {
-              frecuencia_de_reparacion: number
-              porcentaje_de_disponibilidad: number
-              createdAt: string
-          }[]
-        | [] = []
+
+    console.log('graphicsByMachine:', graphicsByMachine.length)
+    let graphics: PropsGraphics[] | [] = []
+    let auxArrData: PropsAuxArrData[] = [
+        {
+            frecuencia_de_reparacion: 0,
+            porcentaje_de_disponibilidad: 0,
+            frecuencia_de_falla: 0,
+        },
+        {
+            frecuencia_de_reparacion: 0,
+            porcentaje_de_disponibilidad: 0,
+            frecuencia_de_falla: 0,
+        },
+        {
+            frecuencia_de_reparacion: 0,
+            porcentaje_de_disponibilidad: 0,
+            frecuencia_de_falla: 0,
+        },
+        {
+            frecuencia_de_reparacion: 0,
+            porcentaje_de_disponibilidad: 0,
+            frecuencia_de_falla: 0,
+        },
+        {
+            frecuencia_de_reparacion: 0,
+            porcentaje_de_disponibilidad: 0,
+            frecuencia_de_falla: 0,
+        },
+        {
+            frecuencia_de_reparacion: 0,
+            porcentaje_de_disponibilidad: 0,
+            frecuencia_de_falla: 0,
+        },
+        {
+            frecuencia_de_reparacion: 0,
+            porcentaje_de_disponibilidad: 0,
+            frecuencia_de_falla: 0,
+        },
+        {
+            frecuencia_de_reparacion: 0,
+            porcentaje_de_disponibilidad: 0,
+            frecuencia_de_falla: 0,
+        },
+        {
+            frecuencia_de_reparacion: 0,
+            porcentaje_de_disponibilidad: 0,
+            frecuencia_de_falla: 0,
+        },
+        {
+            frecuencia_de_reparacion: 0,
+            porcentaje_de_disponibilidad: 0,
+            frecuencia_de_falla: 0,
+        },
+        {
+            frecuencia_de_reparacion: 0,
+            porcentaje_de_disponibilidad: 0,
+            frecuencia_de_falla: 0,
+        },
+        {
+            frecuencia_de_reparacion: 0,
+            porcentaje_de_disponibilidad: 0,
+            frecuencia_de_falla: 0,
+        },
+    ]
 
     graphics = graphicsByMachine.reduce((acc: any, currentValue: any) => {
         let auxObj = {}
@@ -87,45 +138,29 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
                             (currentValue.tiempoDeFuncionamiento + currentValue.tiempoDeReparacion + 5)) *
                         1000,
                 ) / 1000,
-            createdAt: moment(currentValue.createdAt).utcOffset('+0500').format('DD/MM/YYYY').split('/')[1],
+            createdAt: Number(
+                moment(currentValue.createdAt).utcOffset('+0500').format('DD/MM/YYYY').split('/')[1].replace(/^0+/, ''),
+            ),
         }
 
         return [...acc, auxObj]
     }, [])
+    //console.log('graphics:', graphics)
+    for (let i = 0; i < graphics.length; i++) {
+        const fdr = graphics[i].frecuencia_de_reparacion
+        const pdd = graphics[i].porcentaje_de_disponibilidad
+        const position = graphics[i].createdAt
 
-    graphics = graphics.reduce((acc: any, currentValue: any) => {
-        let auxObj = {}
-        let auxArr = acc
-        const fdr = currentValue.frecuencia_de_reparacion
-        const pdd = currentValue.porcentaje_de_disponibilidad
-
-        auxArr[currentValue.createdAt] ??= []
-        auxArr[currentValue.createdAt] = {
-            frecuencia_de_reparacion: (auxArr[currentValue.createdAt].frecuencia_de_reparacion || 0) + fdr,
-            frecuencia_de_falla: (auxArr[currentValue.createdAt].frecuencia_de_falla || 0) + 1,
-            porcentaje_de_disponibilidad: (auxArr[currentValue.createdAt].porcentaje_de_disponibilidad || 0) + pdd,
+        auxArrData[position - 1] = {
+            frecuencia_de_reparacion: (auxArrData[position - 1].frecuencia_de_reparacion || 0) + fdr,
+            porcentaje_de_disponibilidad: (auxArrData[position - 1].porcentaje_de_disponibilidad || 0) + pdd,
+            frecuencia_de_falla: (auxArrData[position - 1].frecuencia_de_falla || 0) + 1,
         }
-
-        return [...acc, auxObj]
-    }, [])
-
-    // for (let i = 0; i < graphics.length; i++) {
-    //     const fdr = graphics[i].frecuencia_de_reparacion
-    //     const pdd = graphics[i].porcentaje_de_disponibilidad
-
-    //     auxArr[graphics[i].createdAt] ??= []
-    //     auxArr[graphics[i].createdAt] = {
-    //         frecuencia_de_reparacion: (auxArr[graphics[i].createdAt].frecuencia_de_reparacion || 0) + fdr,
-    //         frecuencia_de_falla: (auxArr[graphics[i].createdAt].frecuencia_de_falla || 0) + 1,
-    //         porcentaje_de_disponibilidad: (auxArr[graphics[i].createdAt].porcentaje_de_disponibilidad || 0) + pdd,
-    //     }
-
-    //     // console.log(`iteracion ${i}:`, auxArr)
-    // }
-    // console.log(auxArr)
+    }
+    //console.log('RESULT:', auxArrData)
 
     return {
-        props: { graphics, id_maquina: ctx.query?.id!.toString() },
+        props: { graphicsData: auxArrData, id_maquina: ctx.query?.id!.toString() },
     }
 }
 

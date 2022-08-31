@@ -11,11 +11,12 @@ import { FormProvider } from 'react-hook-form'
 import moment from 'moment'
 
 import { ITheme } from '../interface'
-import { UIContext, OTsContext } from '../context'
+import { UIContext, OTsContext, AuthContext } from '../context'
 import { AdminLayout, Loading, ModalOTs, ModalWarringDeleted, SnackbarError, SnackbarSuccess } from '../components'
 import { useOTs } from '../hooks'
 
 const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
+    const { user } = useContext(AuthContext)
     const { toggleSnackBarError, toggleSnackBarSuccess, isSnackbarError, isSnackbarSuccess, isModalOTsOpen } =
         useContext(UIContext)
 
@@ -225,9 +226,11 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
                             <IconButton color="secondary" onClick={() => changeModalUpdate(row)}>
                                 <EditIcon />
                             </IconButton>
-                            <IconButton color="error" onClick={() => warningDeletedOT(row.ot_id, row._id)}>
-                                <DeleteIcon />
-                            </IconButton>
+                            {!['bodega', 'mtto'].includes(user?.rol!) && (
+                                <IconButton color="error" onClick={() => warningDeletedOT(row.ot_id, row._id)}>
+                                    <DeleteIcon />
+                                </IconButton>
+                            )}
                         </Box>
                     </Container>
                 )
@@ -259,9 +262,16 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
                     }}
                     xs={12}
                 >
-                    <Button color="secondary" startIcon={<CreateIcon />} variant="outlined" onClick={changeModalCreate}>
-                        Crear nueva OT
-                    </Button>
+                    {!['bodega', 'mtto'].includes(user?.rol!) && (
+                        <Button
+                            color="secondary"
+                            startIcon={<CreateIcon />}
+                            variant="outlined"
+                            onClick={changeModalCreate}
+                        >
+                            Crear nueva OT
+                        </Button>
+                    )}
                 </Grid>
                 <Grid item sx={{ height: 650, width: '100%' }} xs={12}>
                     <DataGrid
