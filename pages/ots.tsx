@@ -238,7 +238,7 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
         },
     ]
 
-    if (isLoading) {
+    if (isLoading || dataOTs.length === 0) {
         return <Loading size={'70px'} title={'Cargando OTs, por favor espere...'} toggleTheme={toggleTheme} />
     }
 

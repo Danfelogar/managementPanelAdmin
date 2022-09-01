@@ -73,9 +73,13 @@ const LoginPage: NextPage<ITheme> = ({ toggleTheme }) => {
                     <ContainerBodyAuth>
                         <WrapperCardAuth>
                             <CardContentAuth>
-                                <CardMedia sx={{ width: '100%' }}>
-                                    <Image priority alt="logoMtto" layout="responsive" src={logoMtto} />
-                                </CardMedia>
+                                {/* <Box sx={{ width: '100px', paddingTop: '0.1px' }}> */}
+                                <CardMedia
+                                    alt="logoMtto"
+                                    component="img"
+                                    image={`https://res.cloudinary.com/danfelogar/image/upload/v1662003403/o89ye5acl2h3ejvnry3q.png`}
+                                />
+                                {/* </Box> */}
                                 <CardContent>
                                     <Typography
                                         align="center"

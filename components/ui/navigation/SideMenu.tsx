@@ -59,9 +59,11 @@ export const SideMenu = () => {
             <Box sx={{ width: 250, paddingTop: 5, height: '100%' }}>
                 <List sx={{ display: 'flex', flexFlow: 'column', pb: 2, height: '100%' }}>
                     <ListItem>
-                        <CardMedia sx={{ width: '100%', paddingTop: '0.1px' }}>
-                            <Image priority alt="logoMtto" layout="responsive" src={logoMtto} />
-                        </CardMedia>
+                        <CardMedia
+                            alt="logoMtto"
+                            component="img"
+                            image={`https://res.cloudinary.com/danfelogar/image/upload/v1662003403/o89ye5acl2h3ejvnry3q.png`}
+                        />
                     </ListItem>
                     <Divider variant="middle" />
                     {isLoggedIn && (

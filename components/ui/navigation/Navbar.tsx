@@ -28,16 +28,13 @@ export const Navbar: FC<Props> = ({ toggleTheme }) => {
             <Toolbar>
                 <NextLink passHref href="/">
                     <Link alignItems="center" display="flex">
-                        <CardMedia sx={{ width: '100px', paddingTop: '0.1px' }}>
-                            <Image
-                                priority
+                        <Box sx={{ width: '100px', paddingTop: '0.1px' }}>
+                            <CardMedia
                                 alt="logoMtto"
-                                height={135}
-                                layout="responsive"
-                                src={logoMtto}
-                                width={310}
+                                component="img"
+                                image={`https://res.cloudinary.com/danfelogar/image/upload/v1662003403/o89ye5acl2h3ejvnry3q.png`}
                             />
-                        </CardMedia>
+                        </Box>
                     </Link>
                 </NextLink>
                 <IconButton color="primary" onClick={toggleSideMenu}>

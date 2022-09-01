@@ -57,7 +57,7 @@ const UsersPage: NextPage<ITheme> = ({ toggleTheme }) => {
         },
     ]
 
-    if (isLoading) {
+    if (isLoading || dataUsers.length === 0) {
         return <Loading size={'70px'} title={'Cargando Usuarios, por favor espere...'} toggleTheme={toggleTheme} />
     }
 

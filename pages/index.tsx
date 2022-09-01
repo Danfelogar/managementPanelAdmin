@@ -14,10 +14,26 @@ import { Grid } from '@mui/material'
 import { NextPage } from 'next'
 import { getSession } from 'next-auth/react'
 
-import { AdminLayout, SummaryTile } from '../components'
+import { AdminLayout, Loading, SummaryTile } from '../components'
 import { ITheme } from '../interface'
+import { IDataDashboard, useDashboard } from '../hooks'
 
 const HomePage: NextPage<ITheme> = ({ toggleTheme }) => {
+    const { dataDashboard, refreshIn, isLoading } = useDashboard()
+
+    if (isLoading || !dataDashboard) {
+        return <Loading size={'70px'} title={'Cargando Home, por favor espere...'} toggleTheme={toggleTheme} />
+    }
+    const {
+        numberOts,
+        numberMachines,
+        numberReplacements,
+        numberUsers,
+        numberOutStock,
+        numberLowStocks,
+        numberFollows,
+    } = dataDashboard! as IDataDashboard
+
     return (
         <AdminLayout
             icon={<DashboardOutlined color="secondary" />}
@@ -30,50 +46,50 @@ const HomePage: NextPage<ITheme> = ({ toggleTheme }) => {
                     icon={<ConfirmationNumberOutlined color="primary" sx={{ fontSize: 65 }} />}
                     navigation={'/ots'}
                     subTitle="OTs generadas"
-                    title={10}
+                    title={numberOts}
                 />
                 <SummaryTile
                     icon={<PrecisionManufacturingOutlined color="secondary" sx={{ fontSize: 65 }} />}
                     subTitle="Maquinas"
-                    title={10}
+                    title={numberMachines}
                 />
 
                 <SummaryTile
                     icon={<SettingsSuggestIcon color="success" sx={{ fontSize: 65 }} />}
                     subTitle="Repuestos"
-                    title={10}
+                    title={numberReplacements}
                 />
 
                 <SummaryTile
                     icon={<GroupOutlined color="action" sx={{ fontSize: 65 }} />}
                     navigation={'/users'}
                     subTitle="Usuarios"
-                    title={10}
+                    title={numberUsers}
                 />
 
                 <SummaryTile
                     icon={<BackspaceOutlined color="error" sx={{ fontSize: 65 }} />}
                     subTitle={`Fuera de Stock en repuestos`}
-                    title={10}
+                    title={numberOutStock}
                 />
 
                 <SummaryTile
                     icon={<WarningAmberOutlined color="warning" sx={{ fontSize: 65 }} />}
                     subTitle={`Existencias bajas en repuesto`}
-                    title={10}
+                    title={numberLowStocks}
                 />
 
                 <SummaryTile
                     icon={<EngineeringOutlined color="info" sx={{ fontSize: 65 }} />}
                     navigation={'/follows'}
                     subTitle="Seguimiento"
-                    title={10}
+                    title={numberFollows}
                 />
 
                 <SummaryTile
                     icon={<TimelapseOutlined color="disabled" sx={{ fontSize: 65 }} />}
                     subTitle="Tiempo para la actualización"
-                    title={10}
+                    title={refreshIn}
                 />
             </Grid>
         </AdminLayout>

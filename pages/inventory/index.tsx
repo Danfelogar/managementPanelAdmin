@@ -323,7 +323,7 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
         },
     ]
 
-    if (isLoading) {
+    if (isLoading || dataInventories.length === 0) {
         return <Loading size={'70px'} title={'Cargando Inventarios, por favor espere...'} toggleTheme={toggleTheme} />
     }
 

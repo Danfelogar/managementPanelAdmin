@@ -204,7 +204,7 @@ const FollowsPage: NextPage<ITheme> = ({ toggleTheme }) => {
         },
     ]
 
-    if (isLoading) {
+    if (isLoading || dataFollows.length === 0) {
         return <Loading size={'70px'} title={'Cargando Seguimientos, por favor espere...'} toggleTheme={toggleTheme} />
     }
 
