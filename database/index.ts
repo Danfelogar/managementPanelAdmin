@@ -4,4 +4,5 @@ export * as dbInventories from './dbInventories'
 export * as dbGraphics from './dbGraphics'
 
 //base de datos de prueba
+// export * as seedDatabase from './seed-data'
 export * as seedDatabase from './seed-data'
