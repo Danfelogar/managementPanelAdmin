@@ -33,6 +33,3 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-
-#custom files secrets
-database/seed-data.ts
