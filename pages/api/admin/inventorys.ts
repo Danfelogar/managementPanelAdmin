@@ -199,12 +199,14 @@ const createInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
         try {
             CounterTable.findOneAndUpdate(
                 { idInventarioRep: 'autoIDRep' },
-                { $inc: { seqRep: 1 } },
+                { $inc: { seqRep: 1 as number } },
                 { new: true },
                 async (err, cd) => {
                     // console.log('value incresent:', cd)
                     let seqId: Number = 0
 
+                    console.log({ err })
+                    console.log('Cd====>', cd)
                     if (cd === null) {
                         const newVal = new CounterTable({ idInventarioRep: 'autoIDRep', seqRep: 1 })
 
