@@ -197,9 +197,12 @@ const createInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
         await db.connect()
 
         try {
-            CounterTable.findOneAndUpdate(
+            const test = await CounterTable.find().lean()
+
+            console.log({ test })
+            await CounterTable.findOneAndUpdate(
                 { idInventarioRep: 'autoIDRep' },
-                { $inc: { seqRep: 1 as number } },
+                { $inc: { seqRep: 1 } },
                 { new: true },
                 async (err, cd) => {
                     // console.log('value incresent:', cd)
