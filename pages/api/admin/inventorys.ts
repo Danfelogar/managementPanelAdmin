@@ -208,7 +208,7 @@ const createInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
                     // console.log('value incresent:', cd)
                     let seqId: Number = 0
 
-                    if (cd === null) {
+                    if (!cd) {
                         const newVal = new CounterTable({ idInventarioRep: 'autoIDRep', seqRep: 1 })
 
                         newVal.save()
