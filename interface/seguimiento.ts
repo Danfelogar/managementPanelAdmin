@@ -11,6 +11,9 @@ export interface ISeguimiento {
     tiempoDeFuncionamiento: number
     tiempoDeReparacion: number
 
+    presentaFalla: 'si' | 'no'
+    tiempoDeFalla?: number
+
     maquina_id_relacion: number
 
     createdAt: string

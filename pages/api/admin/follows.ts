@@ -68,6 +68,8 @@ const createFollow = async (req: NextApiRequest, res: NextApiResponse<Data>) => 
         nombreDeObservador = '',
         tiempoDeFuncionamiento,
         tiempoDeReparacion,
+        presentaFalla,
+        tiempoDeFalla = 0,
         maquina_id_relacion,
     } = req.body as ISeguimiento
 
@@ -95,6 +97,16 @@ const createFollow = async (req: NextApiRequest, res: NextApiResponse<Data>) => 
         return res.status(400).json({ message: 'Time for a repair is not a number or negative number' })
     }
 
+    if (!['si', 'no'].includes(presentaFalla)) {
+        return res.status(400).json({ message: 'Submit faults is not valid' })
+    }
+
+    if (presentaFalla === 'si') {
+        if (isNaN(tiempoDeFalla) || Math.sign(tiempoDeFalla) === -1) {
+            return res.status(400).json({ message: 'Failure time is not a number or a negative number' })
+        }
+    }
+
     if (isNaN(maquina_id_relacion) || Math.sign(maquina_id_relacion) === -1) {
         return res.status(400).json({ message: 'Machine id relationship is not a number or negative number' })
     }
@@ -108,7 +120,7 @@ const createFollow = async (req: NextApiRequest, res: NextApiResponse<Data>) => 
             { new: true },
             async (err, cd) => {
                 // console.log('value incresent:', cd)
-                let seqId
+                let seqId: Number = 0
 
                 if (cd === null) {
                     const newVal = new CounterTable({ idSeg: 'autoIDSeg', seqSeg: 1 })
@@ -174,6 +186,16 @@ const updateFollow = async (req: NextApiRequest, res: NextApiResponse<Data>) => 
         (isNaN(req.body?.tiempoDeReparacion!) || Math.sign(req.body?.tiempoDeReparacion!) === -1)
     ) {
         return res.status(400).json({ message: 'Time for a repair is not a number or negative number' })
+    }
+
+    if (!['si', 'no'].includes(req.body?.presentaFalla)) {
+        return res.status(400).json({ message: 'Submit faults is not valid' })
+    }
+
+    if (req.body?.presentaFalla === 'si') {
+        if (isNaN(req.body?.tiempoDeFalla) || Math.sign(req.body?.tiempoDeFalla) === -1) {
+            return res.status(400).json({ message: 'Failure time is not a number or a negative number' })
+        }
     }
 
     if (

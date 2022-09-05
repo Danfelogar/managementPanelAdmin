@@ -65,7 +65,7 @@ const UsersPage: NextPage<ITheme> = ({ toggleTheme }) => {
         <AdminLayout
             icon={<PeopleOutline color="secondary" />}
             subTitle={'Gestión de Usuarios'}
-            title={'Usurarios'}
+            title={'Usuarios'}
             toggleTheme={toggleTheme}
         >
             <Grid container className="fadeIn">

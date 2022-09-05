@@ -1,3 +1,4 @@
+import { AxiosResponse } from 'axios'
 import { FC, ReactNode, useReducer } from 'react'
 
 import { IOT } from '../../interface'
@@ -52,27 +53,31 @@ export const OTsProvider: FC<Props> = ({ children }) => {
             })
     }
 
-    const handleCreateOT = async (data: IOT) => {
-        await managementApi
+    const handleCreateOT = async (data: Partial<IOT>): Promise<AxiosResponse> => {
+        return await managementApi
             .post('/admin/ots', { ...data })
-            .then(() => {
-                setTimeout(() => {
-                    getOTsData()
-                }, 50)
+            .then((x) => {
+                return x
             })
             .catch((err) => {
                 console.log(err.message)
+
+                return err.message
             })
     }
 
-    const handleUpdateOT = async (data: Partial<IOT>) => {
-        await managementApi
+    const handleUpdateOT = async (data: Partial<IOT>): Promise<AxiosResponse> => {
+        return await managementApi
             .put('/admin/ots', { ...data })
-            .then(() => {
+            .then((res) => {
                 getOTsData()
+
+                return res
             })
             .catch((err) => {
                 console.log(err.message)
+
+                return err.message
             })
     }
 

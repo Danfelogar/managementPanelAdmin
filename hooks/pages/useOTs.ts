@@ -11,8 +11,8 @@ export const useOTs = () => {
     const { toggleSnackBarError, toggleSnackBarSuccess, toggleModalOTs, toggleModalWarringDeleted } =
         useContext(UIContext)
     const {
-        dataOTs,
         oTForUpdate,
+        isLoading,
         isUpdateOT,
         getOTsData,
         changeMsmTextDelete,
@@ -107,24 +107,50 @@ export const useOTs = () => {
     }, [oTForUpdate])
 
     const handleCreateOrUpdateOT = (data: IOT) => {
+        changeIsLoading()
+        if (isLoading) return
         if (isUpdateOT) {
             changeMsmTextUpdate(data._id)
             //TODO: hacer funcionalidad correspondiente al clg
-            changeIsLoading()
             handleUpdateOT(data)
-            changeIsLoading()
+                .then((res) => {
+                    console.log({ res })
+                    changeIsLoading()
+                    toggleModalOTs()
+                    toggleSnackBarSuccess()
+                })
+                .catch((res) => {
+                    changeIsLoading()
+                    console.log({ res })
+                    alert(res)
+                })
             //console.log('actualizando:', data)
         } else {
             changeMsmTextUpdate('')
             //TODO: hacer funcionalidad correspondiente al clg
-            changeIsLoading()
             handleCreateOT(data)
-            getOTsData()
-            changeIsLoading()
+                .then((res) => {
+                    console.log({ res })
+                    if (res.status === 201) {
+                        setTimeout(() => {
+                            getOTsData()
+                            changeIsLoading()
+                            toggleModalOTs()
+                            toggleSnackBarSuccess()
+                        }, 170)
+                    } else {
+                        changeIsLoading()
+
+                        return alert(`ups!, creación de OT no valida puede que el  "slug" se este repitiendo`)
+                    }
+                })
+                .catch((res) => {
+                    changeIsLoading()
+                    console.log({ res })
+                    alert(res)
+                })
             // console.log('creando', data)
         }
-        toggleModalOTs()
-        toggleSnackBarSuccess()
     }
 
     const warningDeletedOT = (ot_id: string, _id: string) => {

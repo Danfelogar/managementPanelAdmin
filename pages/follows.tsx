@@ -119,7 +119,7 @@ const FollowsPage: NextPage<ITheme> = ({ toggleTheme }) => {
                         }}
                     >
                         <Typography align="justify" variant="body2">
-                            {row.tiempoDeFuncionamiento} Horas
+                            {row.tiempoDeFuncionamiento} {row.tiempoDeFuncionamiento === 1 ? 'Hora' : 'Horas'}
                         </Typography>
                     </Box>
                 )
@@ -141,7 +141,41 @@ const FollowsPage: NextPage<ITheme> = ({ toggleTheme }) => {
                         }}
                     >
                         <Typography align="justify" variant="body2">
-                            {row.tiempoDeReparacion} Horas
+                            {row.tiempoDeReparacion} {row.tiempoDeReparacion === 1 ? 'Hora' : 'Horas'}
+                        </Typography>
+                    </Box>
+                )
+            },
+        },
+        {
+            field: 'presentaFalla',
+            headerName: 'Presenta Falla ?',
+            width: 200,
+            renderCell: ({ row }: GridValueGetterParams) => {
+                return row.presentaFalla === 'no' ? (
+                    <Chip color="error" label="No" variant="outlined" />
+                ) : (
+                    <Chip color="success" label="Si" variant="outlined" />
+                )
+            },
+        },
+        {
+            field: 'tiempoDeFalla',
+            headerName: 'Tiempo De Falla',
+            width: 200,
+            renderCell: ({ row }: GridRenderCellParams) => {
+                return (
+                    <Box
+                        sx={{
+                            overflow: 'hidden',
+                            maxWidth: '100%',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            flexDirection: 'row',
+                        }}
+                    >
+                        <Typography align="justify" variant="body2">
+                            {row.tiempoDeFalla} {row.tiemposDeFalla === 1 ? 'Hora' : 'Horas'}
                         </Typography>
                     </Box>
                 )
@@ -229,7 +263,7 @@ const FollowsPage: NextPage<ITheme> = ({ toggleTheme }) => {
             >
                 {!['bodega', 'mtto'].includes(user?.rol!) && (
                     <Button color="secondary" startIcon={<CreateIcon />} variant="outlined" onClick={changeModalCreate}>
-                        Crear nueva OT
+                        Crear nuevo Seguimiento
                     </Button>
                 )}
             </Grid>
@@ -291,6 +325,15 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
         return {
             redirect: {
                 destination: '/auth/login?p=/follows',
+                permanent: false,
+            },
+        }
+    }
+
+    if (!['super_admin', 'admin_mtto', 'mtto'].includes(session?.user?.rol)) {
+        return {
+            redirect: {
+                destination: '/',
                 permanent: false,
             },
         }

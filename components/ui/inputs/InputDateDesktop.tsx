@@ -6,9 +6,10 @@ interface Props {
     label: string
     name: string
     control: any
+    disablePast?: boolean
 }
 
-export const InputDateDesktop: FC<Props> = ({ label, name, control }) => {
+export const InputDateDesktop: FC<Props> = ({ label, name, control, disablePast = false }) => {
     return (
         <Controller
             shouldUnregister
@@ -21,7 +22,7 @@ export const InputDateDesktop: FC<Props> = ({ label, name, control }) => {
                     <>
                         <DesktopDatePicker
                             disableMaskedInput
-                            disablePast
+                            disablePast={disablePast}
                             inputFormat="DD/MM/YYYY"
                             label={label}
                             renderInput={(params: TextFieldProps) => <TextField {...params} sx={{ width: '100%' }} />}

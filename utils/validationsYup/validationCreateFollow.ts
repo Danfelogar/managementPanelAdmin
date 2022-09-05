@@ -23,5 +23,19 @@ export const validationCreateFollow = yup.object().shape({
         .number()
         .required('Campo requerido.')
         .positive()
-        .min(1, 'El tiempo de reparación tiene que ser un número y no puede ser negativo'),
+        .min(0, 'El tiempo de reparación tiene que ser un número y no puede ser negativo'),
+
+    presentaFalla: yup
+        .string()
+        .required('Campo requerido.')
+        .oneOf(['si', 'no'], 'Debe de escoger entre estas opciones'),
+
+    tiempoDeFalla: yup.number().when('presentaFalla', {
+        is: 'si',
+        then: yup
+            .number()
+            .required('Campo requerido.')
+            .positive()
+            .min(0, 'El tiempo de falla tiene que ser un número y no puede ser negativo'),
+    }),
 })

@@ -1,14 +1,12 @@
 import { NextPage } from 'next'
 import { GetServerSideProps } from 'next'
 import { AppBar, Box, Button, CardContent, CardMedia, Divider, IconButton, Toolbar, Typography } from '@mui/material'
-import Image from 'next/image'
 import Brightness4Icon from '@mui/icons-material/Brightness4'
 import Brightness7Icon from '@mui/icons-material/Brightness7'
 import { useContext } from 'react'
 import { getSession } from 'next-auth/react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-import logoMtto from '../../public/mtto.png'
 import { FormData, useLogin } from '../../hooks'
 import { UIContext } from '../../context'
 import {

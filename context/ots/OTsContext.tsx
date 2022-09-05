@@ -1,4 +1,5 @@
 import { createContext } from 'react'
+import { AxiosResponse } from 'axios'
 
 import { IOT } from '../../interface'
 interface ContextProps {
@@ -18,8 +19,8 @@ interface ContextProps {
     changeMsmTextDelete: (email: string) => void
     changeMsmTextUpdate: (_id: string) => void
     //TODO:
-    handleCreateOT: (data: IOT) => void
-    handleUpdateOT: (data: Partial<IOT>) => void
+    handleCreateOT: (data: Partial<IOT>) => Promise<AxiosResponse>
+    handleUpdateOT: (data: Partial<IOT>) => Promise<AxiosResponse>
     handleDeleteOT: (_id: string) => void
 }
 

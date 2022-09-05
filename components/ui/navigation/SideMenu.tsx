@@ -164,7 +164,7 @@ export const SideMenu = () => {
                             <ListItemIcon>
                                 <LoginOutlined />
                             </ListItemIcon>
-                            <ListItemText primary={'Cerrar Sección'} />
+                            <ListItemText primary={'cerrar Sesión'} />
                         </ListItem>
                     )}
                     <Box flexShrink={2} sx={{ flex: '1 1 auto' }} />

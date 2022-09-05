@@ -7,6 +7,9 @@ export interface IInventario {
     imagenes: string[]
     fechaDeEntrada: string
     fechaDeActualizacion: string
+    existencia: number
+    locacion: 'produccion' | 'taller' | 'bodega' | 'oficina_administrativa'
+    subLocacion: number
 
     //si es tipo maquina
 
@@ -17,28 +20,25 @@ export interface IInventario {
     voltaje?: number //V
     corriente?: number //A
     observacionGeneral?: string
-    ind?: IInd[]
-
-    locacion?: 'produccion' | 'taller' | 'bodega' | 'oficina_administrativa'
-    subLocacion?: number
+    // ind?: IInd[]
 
     //si es tipo repueso
 
     id_repuesto?: number
-    existencia?: number
+    validacionPorGPS?: 'si' | 'no'
     coordenadas_gps?: string
-
+    validacionPorIMG?: 'si' | 'no'
     maquina_id_relacion?: string | string[]
 
     createdAt: string
     updatedAt: string
 }
 
-export interface IInd {
-    frecuencia_de_reparacion: number
-    frecuencia_de_falla: number
-    porcentaje_de_disponibilidad: number
-}
+// export interface IInd {
+//     frecuencia_de_reparacion: number
+//     frecuencia_de_falla: number
+//     porcentaje_de_disponibilidad: number
+// }
 // ind
 // frecuencia de reparacion = 1/tiempode reparaciaon
 // frecuencia de falla = numero de fallas por mes

@@ -132,7 +132,7 @@ const createOT = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     try {
         CounterTable.findOneAndUpdate({ idOT: 'autoIDOT' }, { $inc: { seqOT: 1 } }, { new: true }, async (err, cd) => {
             // console.log('value incresent:', cd)
-            let seqId
+            let seqId: Number = 0
 
             if (cd === null) {
                 const newVal = new CounterTable({ idOT: 'autoIDOT', seqOT: 1 })

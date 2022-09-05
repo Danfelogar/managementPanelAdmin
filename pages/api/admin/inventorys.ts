@@ -73,6 +73,9 @@ const createInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
         fechaDeEntrada = '',
         fechaDeActualizacion = '',
         imagenes = [],
+        existencia,
+        locacion = '',
+        subLocacion,
     } = req.body as IInventario
 
     if (!['maquina', 'repuesto'].includes(tipoInventario)) {
@@ -97,6 +100,18 @@ const createInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
 
     if (imagenes.length < 1 || imagenes.length > 3) {
         return res.status(404).json({ message: 'At least 1 image and a maximum of 3 images are required' })
+    }
+
+    if (isNaN(existencia) || Math.sign(existencia) === -1) {
+        return res.status(400).json({ message: 'Stock is not a number or negative number' })
+    }
+
+    if (!['produccion', 'taller', 'bodega', 'oficina_administrativa'].includes(locacion)) {
+        return res.status(400).json({ message: 'The location is not valid' })
+    }
+
+    if (isNaN(subLocacion)) {
+        return res.status(400).json({ message: 'Sublocation is not a number' })
     }
 
     if (tipoInventario === 'maquina') {
@@ -124,17 +139,6 @@ const createInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
             return res.status(400).json({ message: 'General comments must have more than 2 characters' })
         }
 
-        if (
-            req.body.locacion &&
-            !['produccion', 'taller', 'bodega', 'oficina_administrativa'].includes(req.body?.locacion!)
-        ) {
-            return res.status(400).json({ message: 'The location is not valid' })
-        }
-
-        if (req.body.subLocacion && isNaN(req.body?.subLocacion!)) {
-            return res.status(400).json({ message: 'Sublocation is not a number' })
-        }
-
         await db.connect()
 
         try {
@@ -144,7 +148,7 @@ const createInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
                 { new: true },
                 async (err, cd) => {
                     // console.log('value incresent:', cd)
-                    let seqId
+                    let seqId: Number = 0
 
                     if (cd === null) {
                         const newVal = new CounterTable({ idInventarioMaq: 'autoIDMaq', seqMaq: 1 })
@@ -173,11 +177,8 @@ const createInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
     }
 
     if (tipoInventario === 'repuesto') {
-        if (
-            (req.body.existencia && isNaN(req.body?.existencia!)) ||
-            (req.body.existencia && Math.sign(req.body?.existencia!) === -1)
-        ) {
-            return res.status(400).json({ message: 'Stock is not a number or negative number' })
+        if (req.body.validacionPorGPS && !['si', 'no'].includes(req.body.validacionPorGPS)) {
+            return res.status(400).json({ message: 'GPS validation is not valid' })
         }
 
         if (req.body.coordenadas_gps && !validations.checkIfValidlatitudeAndlongitude(req.body?.coordenadas_gps!)) {
@@ -185,6 +186,11 @@ const createInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
                 message: 'The coordinates entered are not valid, you can check that they do not have any spaces',
             })
         }
+
+        if (req.body.validacionPorIMG && !['si', 'no'].includes(req.body.validacionPorIMG)) {
+            return res.status(400).json({ message: 'IMG validation is not valid' })
+        }
+
         if (req.body.maquina_id_relacion && req.body?.maquina_id_relacion!.length === 0) {
             return res.status(404).json({ message: 'At least one machine is required to relate the part' })
         }
@@ -197,7 +203,7 @@ const createInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
                 { new: true },
                 async (err, cd) => {
                     // console.log('value incresent:', cd)
-                    let seqId
+                    let seqId: Number = 0
 
                     if (cd === null) {
                         const newVal = new CounterTable({ idInventarioRep: 'autoIDRep', seqRep: 1 })
@@ -270,6 +276,24 @@ const updateInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
         return res.status(404).json({ message: 'At least 1 image and a maximum of 3 images are required' })
     }
 
+    if (
+        (req.body.existencia && isNaN(req.body?.existencia!)) ||
+        (req.body.existencia && Math.sign(req.body?.existencia!) === -1)
+    ) {
+        return res.status(400).json({ message: 'Stock is not a number or negative number' })
+    }
+
+    if (
+        req.body.locacion &&
+        !['produccion', 'taller', 'bodega', 'oficina_administrativa'].includes(req.body?.locacion!)
+    ) {
+        return res.status(400).json({ message: 'The location is not valid' })
+    }
+    //console.log(isNaN(req.body?.subLocacion!))
+    if (req.body.subLocacion && isNaN(req.body?.subLocacion!)) {
+        return res.status(400).json({ message: 'Sublocation is not a number' })
+    }
+
     if (type?.tipoInventario! === 'maquina') {
         if (req.body.capacidadNominal && req.body?.capacidadNominal!.length < 2) {
             return res.status(400).json({ message: 'The nominal capacity must have more than 2 characters' })
@@ -297,17 +321,6 @@ const updateInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
                 .json({ message: 'General comments must have more than 2 characters and be a number' })
         }
 
-        if (
-            req.body.locacion &&
-            !['produccion', 'taller', 'bodega', 'oficina_administrativa'].includes(req.body?.locacion!)
-        ) {
-            return res.status(400).json({ message: 'The location is not valid' })
-        }
-        //console.log(isNaN(req.body?.subLocacion!))
-        if (req.body.subLocacion && isNaN(req.body?.subLocacion!)) {
-            return res.status(400).json({ message: 'Sublocation is not a number' })
-        }
-
         try {
             await db.connect()
             const inventory = await Inventario.findById(_id)
@@ -331,11 +344,8 @@ const updateInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
     }
 
     if (type?.tipoInventario! === 'repuesto') {
-        if (
-            (req.body.existencia && isNaN(req.body?.existencia!)) ||
-            (req.body.existencia && Math.sign(req.body?.existencia!) === -1)
-        ) {
-            return res.status(400).json({ message: 'Stock is not a number or negative number' })
+        if (req.body.validacionPorGPS && !['si', 'no'].includes(req.body.validacionPorGPS)) {
+            return res.status(400).json({ message: 'GPS validation is not valid' })
         }
 
         if (req.body.coordenadas_gps && !validations.checkIfValidlatitudeAndlongitude(req.body?.coordenadas_gps!)) {
@@ -343,6 +353,11 @@ const updateInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
                 message: 'The coordinates entered are not valid, you can check that they do not have any spaces',
             })
         }
+
+        if (req.body.validacionPorIMG && !['si', 'no'].includes(req.body.validacionPorIMG)) {
+            return res.status(400).json({ message: 'IMG validation is not valid' })
+        }
+
         if (req.body.maquina_id_relacion && req.body?.maquina_id_relacion!.length === 0) {
             return res.status(404).json({ message: 'At least one machine is required to relate the part' })
         }

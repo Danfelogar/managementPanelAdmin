@@ -27,6 +27,17 @@ const inventarioSchema = new Schema(
         imagenes: [{ type: String, required: true }],
         fechaDeEntrada: { type: String, required: true },
         fechaDeActualizacion: { type: String, required: true },
+        existencia: { type: Number, required: true },
+        locacion: {
+            type: String,
+            enum: {
+                values: ['produccion', 'taller', 'bodega', 'oficina_administrativa'],
+                message: '{VALUE} no es una locacion permitida',
+                default: 'bodega',
+                required: true,
+            },
+        },
+        subLocacion: { type: Number, required: true },
 
         //maquina condicional
         id_maquina: { type: Number, unique: false, required: false },
@@ -43,21 +54,28 @@ const inventarioSchema = new Schema(
         //         porcentaje_de_disponibilidad: { type: Number },
         //     },
         // ],
-        locacion: {
-            type: String,
-            enum: {
-                values: ['produccion', 'taller', 'bodega', 'oficina_administrativa'],
-                message: '{VALUE} no es una locacion permitida',
-                default: 'bodega',
-                required: false,
-            },
-        },
-        subLocacion: { type: Number },
 
         //repuesto condicional
         id_repuesto: { type: Number, unique: false, required: false },
-        existencia: { type: Number, required: false },
+        validacionPorGPS: {
+            type: String,
+            enum: {
+                values: ['si', 'no'],
+                message: '{VALUE} no es una respuesta valida',
+                default: 'no',
+                required: true,
+            },
+        },
         coordenadas_gps: { type: String, required: false },
+        validacionPorIMG: {
+            type: String,
+            enum: {
+                values: ['si', 'no'],
+                message: '{VALUE} no es una respuesta valida',
+                default: 'no',
+                required: true,
+            },
+        },
         maquina_id_relacion: [{ type: String, required: false, unique: false }],
     },
     {

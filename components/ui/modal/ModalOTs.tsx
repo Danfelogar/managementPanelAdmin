@@ -117,7 +117,12 @@ export const ModalOTs = () => {
                             sx={{ m: 2, display: { xs: 'none', md: 'flex' }, flexDirection: 'column' }}
                             xs={12}
                         >
-                            <InputDateDesktop control={control} label="Fecha de cierre" name="fecha_cierre" />
+                            <InputDateDesktop
+                                disablePast
+                                control={control}
+                                label="Fecha de cierre"
+                                name="fecha_cierre"
+                            />
                         </Grid>
                         <Grid
                             item
@@ -125,7 +130,12 @@ export const ModalOTs = () => {
                             sx={{ m: 2, flexDirection: 'column', display: { xs: 'flex', md: 'none' } }}
                             xs={12}
                         >
-                            <InputDateMobile control={control} label="Fecha de cierre" name="fecha_cierre" />
+                            <InputDateMobile
+                                disablePast
+                                control={control}
+                                label="Fecha de cierre"
+                                name="fecha_cierre"
+                            />
                         </Grid>
 
                         <Grid item md={5.5} sx={{ m: 2 }} xs={12}>

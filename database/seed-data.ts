@@ -15,6 +15,9 @@ interface SeedInventario {
     imagenes: string[]
     fechaDeEntrada: string
     fechaDeActualizacion: string
+    existencia: number
+    locacion: 'produccion' | 'taller' | 'bodega' | 'oficina_administrativa'
+    subLocacion: number
 
     //si es tipo maquina
 
@@ -26,13 +29,11 @@ interface SeedInventario {
     corriente?: number //A
     observacionGeneral?: string
 
-    locacion?: 'produccion' | 'taller' | 'bodega' | 'oficina_administrativa'
-    subLocacion?: number
-
     //si es tipo repueso
 
     id_repuesto?: number
-    existencia?: number
+    validacionPorGPS?: 'si' | 'no'
+    validacionPorIMG?: 'si' | 'no'
     coordenadas_gps?: string
 
     maquina_id_relacion?: string | string[]
@@ -62,6 +63,8 @@ interface SeedSeguimiento {
     nombreDeObservador: string
     tiempoDeFuncionamiento: number
     tiempoDeReparacion: number
+    presentaFalla: 'si' | 'no'
+    tiempoDeFalla?: number
     maquina_id_relacion: number
 
     createdAt?: string
@@ -252,6 +255,9 @@ export const initialData: SeedData = {
             ],
             fechaDeEntrada: 'Mon Aug 22 2022 00:00:00 GMT-0500',
             fechaDeActualizacion: 'Mon Aug 22 2022 00:00:00 GMT-0500',
+            existencia: 1,
+            locacion: 'produccion',
+            subLocacion: 3,
             id_maquina: 1,
             capacidadNominal: '12ASN212',
             serie: 'serie 1',
@@ -259,8 +265,6 @@ export const initialData: SeedData = {
             voltaje: 120,
             corriente: 80,
             observacionGeneral: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
-            locacion: 'produccion',
-            subLocacion: 3,
         },
         {
             tipoInventario: 'maquina',
@@ -273,6 +277,9 @@ export const initialData: SeedData = {
             ],
             fechaDeEntrada: 'Mon Aug 22 2022 00:00:00 GMT-0500',
             fechaDeActualizacion: 'Mon Aug 22 2022 00:00:00 GMT-0500',
+            existencia: 1,
+            locacion: 'taller',
+            subLocacion: 14,
             id_maquina: 2,
             capacidadNominal: '12ASN212',
             serie: 'serie 2',
@@ -280,8 +287,6 @@ export const initialData: SeedData = {
             voltaje: 1000,
             corriente: 90,
             observacionGeneral: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
-            locacion: 'taller',
-            subLocacion: 14,
         },
         {
             tipoInventario: 'maquina',
@@ -294,6 +299,9 @@ export const initialData: SeedData = {
             ],
             fechaDeEntrada: 'Mon Aug 22 2022 00:00:00 GMT-0500',
             fechaDeActualizacion: 'Mon Aug 22 2022 00:00:00 GMT-0500',
+            existencia: 1,
+            locacion: 'oficina_administrativa',
+            subLocacion: 8,
             id_maquina: 3,
             capacidadNominal: '1TDO13',
             serie: 'serie 3',
@@ -301,8 +309,6 @@ export const initialData: SeedData = {
             voltaje: 75,
             corriente: 40,
             observacionGeneral: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
-            locacion: 'oficina_administrativa',
-            subLocacion: 8,
         },
         {
             tipoInventario: 'maquina',
@@ -315,6 +321,9 @@ export const initialData: SeedData = {
             ],
             fechaDeEntrada: 'Mon Aug 22 2022 00:00:00 GMT-0500',
             fechaDeActualizacion: 'Mon Aug 22 2022 00:00:00 GMT-0500',
+            existencia: 1,
+            locacion: 'taller',
+            subLocacion: 10,
             id_maquina: 4,
             capacidadNominal: 'ANY/DDD',
             serie: 'serie 4',
@@ -322,8 +331,6 @@ export const initialData: SeedData = {
             voltaje: 583,
             corriente: 450,
             observacionGeneral: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
-            locacion: 'taller',
-            subLocacion: 10,
         },
         {
             tipoInventario: 'maquina',
@@ -336,6 +343,9 @@ export const initialData: SeedData = {
             ],
             fechaDeEntrada: 'Mon Aug 22 2022 00:00:00 GMT-0500',
             fechaDeActualizacion: 'Mon Aug 22 2022 00:00:00 GMT-0500',
+            existencia: 1,
+            locacion: 'bodega',
+            subLocacion: 11,
             id_maquina: 5,
             capacidadNominal: '2AB-00043',
             serie: 'serie 5',
@@ -343,8 +353,6 @@ export const initialData: SeedData = {
             voltaje: 45,
             corriente: 687,
             observacionGeneral: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
-            locacion: 'bodega',
-            subLocacion: 11,
         },
         {
             tipoInventario: 'maquina',
@@ -357,6 +365,9 @@ export const initialData: SeedData = {
             ],
             fechaDeEntrada: 'Mon Aug 22 2022 00:00:00 GMT-0500',
             fechaDeActualizacion: 'Mon Aug 22 2022 00:00:00 GMT-0500',
+            existencia: 1,
+            locacion: 'bodega',
+            subLocacion: 3,
             id_maquina: 6,
             capacidadNominal: '2AB-0243-43',
             serie: 'serie 6',
@@ -364,8 +375,6 @@ export const initialData: SeedData = {
             voltaje: 66,
             corriente: 7687,
             observacionGeneral: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
-            locacion: 'bodega',
-            subLocacion: 3,
         },
         {
             tipoInventario: 'maquina',
@@ -378,6 +387,9 @@ export const initialData: SeedData = {
             ],
             fechaDeEntrada: 'Mon Aug 22 2022 00:00:00 GMT-0500',
             fechaDeActualizacion: 'Mon Aug 22 2022 00:00:00 GMT-0500',
+            existencia: 1,
+            locacion: 'oficina_administrativa',
+            subLocacion: 5,
             id_maquina: 7,
             capacidadNominal: '214-MARC-1-LANC',
             serie: 'serie 7',
@@ -385,8 +397,6 @@ export const initialData: SeedData = {
             voltaje: 77,
             corriente: 119,
             observacionGeneral: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
-            locacion: 'oficina_administrativa',
-            subLocacion: 5,
         },
         {
             tipoInventario: 'maquina',
@@ -399,6 +409,9 @@ export const initialData: SeedData = {
             ],
             fechaDeEntrada: 'Mon Aug 22 2022 00:00:00 GMT-0500',
             fechaDeActualizacion: 'Mon Aug 22 2022 00:00:00 GMT-0500',
+            existencia: 1,
+            locacion: 'taller',
+            subLocacion: 7,
             id_maquina: 8,
             capacidadNominal: '214-MARC-2-LANC',
             serie: 'serie 8',
@@ -406,8 +419,6 @@ export const initialData: SeedData = {
             voltaje: 54,
             corriente: 19,
             observacionGeneral: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
-            locacion: 'taller',
-            subLocacion: 7,
         },
         {
             tipoInventario: 'repuesto',
@@ -420,9 +431,13 @@ export const initialData: SeedData = {
             ],
             fechaDeEntrada: 'Mon Aug 22 2022 00:00:00 GMT-0500',
             fechaDeActualizacion: 'Mon Aug 22 2022 00:00:00 GMT-0500',
-            id_repuesto: 1,
             existencia: 20,
+            locacion: 'taller',
+            subLocacion: 7,
+            id_repuesto: 1,
+            validacionPorGPS: 'si',
             coordenadas_gps: '10.978126, -74.815058',
+            validacionPorIMG: 'si',
             maquina_id_relacion: ['1', '4', '8'],
         },
         {
@@ -436,9 +451,13 @@ export const initialData: SeedData = {
             ],
             fechaDeEntrada: 'Mon Aug 22 2022 00:00:00 GMT-0500',
             fechaDeActualizacion: 'Mon Aug 22 2022 00:00:00 GMT-0500',
-            id_repuesto: 2,
             existencia: 6,
+            locacion: 'taller',
+            subLocacion: 3,
+            id_repuesto: 2,
+            validacionPorGPS: 'si',
             coordenadas_gps: '10.978126, -74.815058',
+            validacionPorIMG: 'si',
             maquina_id_relacion: ['2', '7'],
         },
         {
@@ -452,9 +471,13 @@ export const initialData: SeedData = {
             ],
             fechaDeEntrada: 'Mon Aug 22 2022 00:00:00 GMT-0500',
             fechaDeActualizacion: 'Mon Aug 22 2022 00:00:00 GMT-0500',
-            id_repuesto: 3,
             existencia: 0,
+            locacion: 'taller',
+            subLocacion: 3,
+            id_repuesto: 3,
+            validacionPorGPS: 'si',
             coordenadas_gps: '10.978126, -74.815058',
+            validacionPorIMG: 'si',
             maquina_id_relacion: ['3', '5', '6'],
         },
         {
@@ -468,9 +491,13 @@ export const initialData: SeedData = {
             ],
             fechaDeEntrada: 'Mon Aug 22 2022 00:00:00 GMT-0500',
             fechaDeActualizacion: 'Mon Aug 22 2022 00:00:00 GMT-0500',
-            id_repuesto: 4,
             existencia: 5,
+            locacion: 'taller',
+            subLocacion: 3,
+            id_repuesto: 4,
+            validacionPorGPS: 'si',
             coordenadas_gps: '10.978126, -74.815058',
+            validacionPorIMG: 'si',
             maquina_id_relacion: ['3', '6', '2'],
         },
         {
@@ -484,9 +511,13 @@ export const initialData: SeedData = {
             ],
             fechaDeEntrada: 'Mon Aug 22 2022 00:00:00 GMT-0500',
             fechaDeActualizacion: 'Mon Aug 22 2022 00:00:00 GMT-0500',
-            id_repuesto: 5,
             existencia: 34,
+            locacion: 'taller',
+            subLocacion: 3,
+            id_repuesto: 5,
+            validacionPorGPS: 'si',
             coordenadas_gps: '10.978126, -74.815058',
+            validacionPorIMG: 'si',
             maquina_id_relacion: ['7'],
         },
     ],
@@ -551,8 +582,9 @@ export const initialData: SeedData = {
             tiempoDeFuncionamiento: 120,
             tiempoDeReparacion: 4,
             maquina_id_relacion: 1,
+            presentaFalla: 'no',
             createdAt: '2022-01-20T01:06:40.332Z',
-            updatedAt: '2022-01-20T01:06:40.332Z',
+            //updatedAt: '2022-01-20T01:06:40.332Z',
         },
         {
             id_seguimiento: 2,
@@ -564,8 +596,10 @@ export const initialData: SeedData = {
             tiempoDeFuncionamiento: 110,
             tiempoDeReparacion: 5,
             maquina_id_relacion: 1,
+            presentaFalla: 'si',
+            tiempoDeFalla: 9,
             createdAt: '2022-01-20T01:06:40.333Z',
-            updatedAt: '2022-01-20T01:06:40.333Z',
+            //updatedAt: '2022-01-20T01:06:40.333Z',
         },
         {
             id_seguimiento: 3,
@@ -577,8 +611,9 @@ export const initialData: SeedData = {
             tiempoDeFuncionamiento: 220,
             tiempoDeReparacion: 3,
             maquina_id_relacion: 1,
+            presentaFalla: 'no',
             createdAt: '2022-02-01T01:06:40.333Z',
-            updatedAt: '2022-02-01T01:06:40.333Z',
+            //updatedAt: '2022-02-01T01:06:40.333Z',
         },
         {
             id_seguimiento: 4,
@@ -590,8 +625,9 @@ export const initialData: SeedData = {
             tiempoDeFuncionamiento: 520,
             tiempoDeReparacion: 5,
             maquina_id_relacion: 1,
+            presentaFalla: 'no',
             createdAt: '2022-03-29T01:06:40.333Z',
-            updatedAt: '2022-03-29T01:06:40.333Z',
+            //updatedAt: '2022-03-29T01:06:40.333Z',
         },
         {
             id_seguimiento: 5,
@@ -603,8 +639,10 @@ export const initialData: SeedData = {
             tiempoDeFuncionamiento: 620,
             tiempoDeReparacion: 7,
             maquina_id_relacion: 1,
+            presentaFalla: 'si',
+            tiempoDeFalla: 5,
             createdAt: '2022-04-29T01:06:40.333Z',
-            updatedAt: '2022-04-29T01:06:40.333Z',
+            //updatedAt: '2022-04-29T01:06:40.333Z',
         },
         {
             id_seguimiento: 6,
@@ -616,8 +654,10 @@ export const initialData: SeedData = {
             tiempoDeFuncionamiento: 300,
             tiempoDeReparacion: 8,
             maquina_id_relacion: 1,
+            presentaFalla: 'si',
+            tiempoDeFalla: 3,
             createdAt: '2022-05-29T01:06:40.333Z',
-            updatedAt: '2022-05-29T01:06:40.333Z',
+            //updatedAt: '2022-05-29T01:06:40.333Z',
         },
         {
             id_seguimiento: 7,
@@ -629,8 +669,10 @@ export const initialData: SeedData = {
             tiempoDeFuncionamiento: 400,
             tiempoDeReparacion: 7,
             maquina_id_relacion: 1,
+            presentaFalla: 'si',
+            tiempoDeFalla: 1,
             createdAt: '2022-06-29T01:06:40.334Z',
-            updatedAt: '2022-06-29T01:06:40.334Z',
+            //updatedAt: '2022-06-29T01:06:40.334Z',
         },
         {
             id_seguimiento: 8,
@@ -642,8 +684,9 @@ export const initialData: SeedData = {
             tiempoDeFuncionamiento: 400,
             tiempoDeReparacion: 3,
             maquina_id_relacion: 1,
+            presentaFalla: 'no',
             createdAt: '2022-07-29T01:06:40.334Z',
-            updatedAt: '2022-07-29T01:06:40.334Z',
+            //updatedAt: '2022-07-29T01:06:40.334Z',
         },
         {
             id_seguimiento: 9,
@@ -655,8 +698,10 @@ export const initialData: SeedData = {
             tiempoDeFuncionamiento: 780,
             tiempoDeReparacion: 10,
             maquina_id_relacion: 1,
+            presentaFalla: 'si',
+            tiempoDeFalla: 6,
             createdAt: '2022-08-29T01:06:40.334Z',
-            updatedAt: '2022-08-29T01:06:40.334Z',
+            //updatedAt: '2022-08-29T01:06:40.334Z',
         },
         {
             id_seguimiento: 10,
@@ -668,8 +713,9 @@ export const initialData: SeedData = {
             tiempoDeFuncionamiento: 320,
             tiempoDeReparacion: 36,
             maquina_id_relacion: 1,
+            presentaFalla: 'no',
             createdAt: '2022-09-29T01:06:40.334Z',
-            updatedAt: '2022-09-29T01:06:40.334Z',
+            //updatedAt: '2022-09-29T01:06:40.334Z',
         },
         {
             id_seguimiento: 11,
@@ -681,8 +727,9 @@ export const initialData: SeedData = {
             tiempoDeFuncionamiento: 210,
             tiempoDeReparacion: 123,
             maquina_id_relacion: 1,
+            presentaFalla: 'no',
             createdAt: '2022-10-29T01:06:40.334Z',
-            updatedAt: '2022-10-29T01:06:40.334Z',
+            //updatedAt: '2022-10-29T01:06:40.334Z',
         },
         {
             id_seguimiento: 12,
@@ -694,8 +741,10 @@ export const initialData: SeedData = {
             tiempoDeFuncionamiento: 240,
             tiempoDeReparacion: 4,
             maquina_id_relacion: 1,
+            presentaFalla: 'si',
+            tiempoDeFalla: 2,
             createdAt: '2022-11-29T01:06:40.335Z',
-            updatedAt: '2022-11-29T01:06:40.335Z',
+            //updatedAt: '2022-11-29T01:06:40.335Z',
         },
         {
             id_seguimiento: 13,
@@ -707,8 +756,10 @@ export const initialData: SeedData = {
             tiempoDeFuncionamiento: 304,
             tiempoDeReparacion: 48,
             maquina_id_relacion: 1,
+            presentaFalla: 'si',
+            tiempoDeFalla: 10,
             createdAt: '2022-12-29T01:06:40.335Z',
-            updatedAt: '2022-12-29T01:06:40.335Z',
+            //updatedAt: '2022-12-29T01:06:40.335Z',
         },
         {
             id_seguimiento: 14,
@@ -720,8 +771,10 @@ export const initialData: SeedData = {
             tiempoDeFuncionamiento: 598,
             tiempoDeReparacion: 70,
             maquina_id_relacion: 1,
+            presentaFalla: 'si',
+            tiempoDeFalla: 5,
             createdAt: '2022-12-29T01:06:40.335Z',
-            updatedAt: '2022-12-29T01:06:40.335Z',
+            //updatedAt: '2022-12-29T01:06:40.335Z',
         },
         {
             id_seguimiento: 15,
@@ -733,8 +786,10 @@ export const initialData: SeedData = {
             tiempoDeFuncionamiento: 110,
             tiempoDeReparacion: 5,
             maquina_id_relacion: 1,
+            presentaFalla: 'si',
+            tiempoDeFalla: 2,
             createdAt: '2022-12-29T01:06:40.335Z',
-            updatedAt: '2022-12-29T01:06:40.335Z',
+            //updatedAt: '2022-12-29T01:06:40.335Z',
         },
         {
             id_seguimiento: 16,
@@ -746,8 +801,10 @@ export const initialData: SeedData = {
             tiempoDeFuncionamiento: 500,
             tiempoDeReparacion: 8,
             maquina_id_relacion: 1,
+            presentaFalla: 'si',
+            tiempoDeFalla: 6,
             createdAt: '2022-12-20T01:06:40.335Z',
-            updatedAt: '2022-12-20T01:06:40.335Z',
+            //updatedAt: '2022-12-20T01:06:40.335Z',
         },
         {
             id_seguimiento: 17,
@@ -759,8 +816,10 @@ export const initialData: SeedData = {
             tiempoDeFuncionamiento: 20,
             tiempoDeReparacion: 9,
             maquina_id_relacion: 1,
+            presentaFalla: 'si',
+            tiempoDeFalla: 8,
             createdAt: '2022-12-29T01:06:40.335Z',
-            updatedAt: '2022-12-29T01:06:40.335Z',
+            //updatedAt: '2022-12-29T01:06:40.335Z',
         },
     ],
     counterTable: {

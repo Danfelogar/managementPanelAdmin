@@ -42,7 +42,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query }) => 
 
     const { id = '' } = query
 
-    console.log('id ===>', id)
+    //console.log('id ===>', id)
 
     let inventory: IInventario | null
 
@@ -51,14 +51,14 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query }) => 
         //al crearme un nuevo objeto crea con sus valores por defecto y crea los arreglos sin necesidad de colocar valores erroneos
         const tempInventory = JSON.parse(JSON.stringify(new Inventario()))
 
-        console.log('catch ===>', tempInventory)
+        //console.log('catch ===>', tempInventory)
         delete tempInventory._id
         // tempInventory.imagenes = ['img1.jpg', 'img2.jpg']
         inventory = tempInventory
     } else {
         inventory = await dbInventories.getProductById(id.toString())
     }
-    console.log('inventory ===>', inventory)
+    //console.log('inventory ===>', inventory)
     if (!inventory) {
         return {
             redirect: {

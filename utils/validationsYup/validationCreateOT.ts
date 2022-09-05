@@ -15,11 +15,8 @@ export const validationCreateOT = yup.object().shape({
         .positive()
         .min(1, 'El tiempo de ejecución tiene que ser un número y no puede ser negativo'),
     fecha_cierre: yup.date().required('Campo requerido.'),
-    imgDeLaMaquina: yup.string().min(1, 'mínimo 1 imagen por ot'),
+    imgDeLaMaquina: yup.string().required('Campo requerido').min(1, 'mínimo 1 imagen por ot'),
     tareas: yup.string().required('Campo requerido.').min(3, 'Las tareas deben tener más de 2 caracteres'),
-    comentario: yup
-        .string()
-        .required('Campo requerido.')
-        .min(3, 'Los comentarios generales deben tener más de 2 caracteres'),
+    comentario: yup.string().min(3, 'Los comentarios generales deben tener más de 2 caracteres'),
     maquina: yup.number().required('Campo requerido.'),
 })

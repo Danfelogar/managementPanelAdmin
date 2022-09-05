@@ -4,7 +4,7 @@ import EditIcon from '@mui/icons-material/Edit'
 import SaveAsOutlinedIcon from '@mui/icons-material/SaveAsOutlined'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
-import { Grid, MenuItem, Button, Typography, Box } from '@mui/material'
+import { Grid, MenuItem, Button, Typography, Box, FormHelperText, Link } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 
 import { useInventory } from '../../hooks'
@@ -37,6 +37,10 @@ export const SingleInventory: FC<Props> = ({ toggleTheme, inventory }) => {
     const changeTypeWatcher = useWatch({
         control,
         name: 'tipoInventario', // without supply name will watch the entire form, or ['firstName', 'lastName'] to watch both
+    })
+    const changeValGPSWatcher = useWatch({
+        control,
+        name: 'validacionPorGPS', // without supply name will watch the entire form, or ['firstName', 'lastName'] to watch both
     })
     const [idxIdRelationMaq, setIdxIdRelationMaq] = useState<Array<{ _id: string; id_maquina: number }>>([])
     const handlerIndexOfIdMaq = async () => {
@@ -89,8 +93,15 @@ export const SingleInventory: FC<Props> = ({ toggleTheme, inventory }) => {
                         <InputText fullWidth control={control} label="Nombre" name="nombre" type="text" />
                     </Grid>
                     {inventory?._id && (
-                        <Grid item md={5.5} sx={{ m: 2, display: 'flex', flexDirection: 'row' }} xs={12}>
+                        <Grid item md={5.5} sx={{ m: 2, display: 'flex', flexDirection: 'column' }} xs={12}>
                             <InputSingleImg control={control} label="Image del código QR" name="imgQR" />
+                            <FormHelperText>
+                                Necesitas crear un codigo QR en este link:{' '}
+                                <Link href="https://es.qr-code-generator.com/" target="_blank">
+                                    Generador de codigos QR
+                                </Link>{' '}
+                                y debe de tener este codigo: {`"/${inventory._id}"`}
+                            </FormHelperText>
                         </Grid>
                     )}
                     <Grid item md={5.5} sx={{ m: 2, display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }} xs={12}>
@@ -139,6 +150,20 @@ export const SingleInventory: FC<Props> = ({ toggleTheme, inventory }) => {
                             <MenuItem value={'bueno'}>Bueno</MenuItem>
                         </InputSelector>
                     </Grid>
+                    <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
+                        <InputText fullWidth control={control} label="Existencia" name="existencia" type="number" />
+                    </Grid>
+                    <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
+                        <InputSelector control={control} label="Locación" name="locacion">
+                            <MenuItem value={'produccion'}>Producción</MenuItem>
+                            <MenuItem value={'taller'}>Taller</MenuItem>
+                            <MenuItem value={'bodega'}>Bodega</MenuItem>
+                            <MenuItem value={'oficina_administrativa'}>Oficina Administrativa</MenuItem>
+                        </InputSelector>
+                    </Grid>
+                    <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
+                        <InputText fullWidth control={control} label="Sublocación" name="subLocacion" type="number" />
+                    </Grid>
                     {changeTypeWatcher === 'maquina' && (
                         <>
                             <Grid item sx={{ pl: 0, pt: 0 }} xs={12}>
@@ -185,23 +210,6 @@ export const SingleInventory: FC<Props> = ({ toggleTheme, inventory }) => {
                                     name="observacionGeneral"
                                 />
                             </Grid>
-                            <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
-                                <InputSelector control={control} label="Locación" name="locacion">
-                                    <MenuItem value={'produccion'}>Producción</MenuItem>
-                                    <MenuItem value={'taller'}>Taller</MenuItem>
-                                    <MenuItem value={'bodega'}>Bodega</MenuItem>
-                                    <MenuItem value={'oficina_administrativa'}>Oficina Administrativa</MenuItem>
-                                </InputSelector>
-                            </Grid>
-                            <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
-                                <InputText
-                                    fullWidth
-                                    control={control}
-                                    label="Sublocación"
-                                    name="subLocacion"
-                                    type="number"
-                                />
-                            </Grid>
                         </>
                     )}
 
@@ -216,22 +224,35 @@ export const SingleInventory: FC<Props> = ({ toggleTheme, inventory }) => {
                                 </Typography>
                             </Grid>
                             <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
-                                <InputText
-                                    fullWidth
-                                    control={control}
-                                    label="Existencia"
-                                    name="existencia"
-                                    type="number"
-                                />
+                                <InputSelector control={control} label="Validar por GPS?" name="validacionPorGPS">
+                                    <MenuItem value={'si'}>Si</MenuItem>
+                                    <MenuItem value={'no'}>No</MenuItem>
+                                </InputSelector>
                             </Grid>
+                            {changeValGPSWatcher === 'si' && (
+                                <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
+                                    <InputText
+                                        fullWidth
+                                        control={control}
+                                        label="Coordenadas GPS"
+                                        name="coordenadas_gps"
+                                        type="text"
+                                    />
+                                    <FormHelperText>
+                                        Necesitas buscar en este link:{' '}
+                                        <Link href="https://www.google.com/maps" target="_blank">
+                                            GoogelMaps
+                                        </Link>{' '}
+                                        las coordenadas de tu ubicación para copiar y pegar como en este ejemplo:{' '}
+                                        {`"38.160566, -92.614842"`}
+                                    </FormHelperText>
+                                </Grid>
+                            )}
                             <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
-                                <InputText
-                                    fullWidth
-                                    control={control}
-                                    label="Coordenadas GPS"
-                                    name="coordenadas_gps"
-                                    type="text"
-                                />
+                                <InputSelector control={control} label="Validar por IMG?" name="validacionPorIMG">
+                                    <MenuItem value={'si'}>Si</MenuItem>
+                                    <MenuItem value={'no'}>No</MenuItem>
+                                </InputSelector>
                             </Grid>
                             <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
                                 <InputMultSelector

@@ -139,6 +139,21 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
                 )
             },
         },
+        {
+            field: 'existencia',
+            headerName: 'Existencia',
+            width: 110,
+        },
+        {
+            field: 'locacion',
+            headerName: 'Locación',
+            width: 140,
+        },
+        {
+            field: 'subLocacion',
+            headerName: 'Sublocación',
+            width: 110,
+        },
         //maquina
         {
             field: 'id_maquina',
@@ -217,16 +232,6 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
                 )
             },
         },
-        {
-            field: 'locacion',
-            headerName: 'Locación',
-            width: 140,
-        },
-        {
-            field: 'subLocacion',
-            headerName: 'Sublocación',
-            width: 110,
-        },
         //repuesto
         {
             field: 'id_repuesto',
@@ -247,14 +252,37 @@ const InventariosPage: NextPage<ITheme> = ({ toggleTheme }) => {
             },
         },
         {
-            field: 'existencia',
-            headerName: 'Existencia',
-            width: 110,
+            field: 'validacionPorGPS',
+            headerName: 'Validar por GPS ?',
+            width: 150,
+            renderCell: ({ row }: GridValueGetterParams) => {
+                return row.validacionPorGPS === 'no' ? (
+                    <Chip color="error" label="No" variant="outlined" />
+                ) : row.validacionPorGPS === 'si' ? (
+                    <Chip color="success" label="Si" variant="outlined" />
+                ) : (
+                    <></>
+                )
+            },
         },
         {
             field: 'coordenadas_gps',
             headerName: 'Coordenadas GPS',
             width: 150,
+        },
+        {
+            field: 'validacionPorIMG',
+            headerName: 'Validar por IMG ?',
+            width: 150,
+            renderCell: ({ row }: GridValueGetterParams) => {
+                return row.validacionPorIMG === 'no' ? (
+                    <Chip color="error" label="No" variant="outlined" />
+                ) : row.validacionPorIMG === 'si' ? (
+                    <Chip color="success" label="Si" variant="outlined" />
+                ) : (
+                    <></>
+                )
+            },
         },
         {
             field: 'maquina_id_relacion',

@@ -2,8 +2,7 @@ import { useContext } from 'react'
 import { Modal, Backdrop, Box, Typography, IconButton, Grid, MenuItem } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import SaveIcon from '@mui/icons-material/Save'
-import CloudUploadIcon from '@mui/icons-material/CloudUpload'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { LoadingButton } from '@mui/lab'
 
 import { WrapperModalHeaderFollow, WrapperModalFollow } from '../styles'
@@ -18,6 +17,10 @@ export const ModalFollows = () => {
     const { isLoading, isUpdateFollow, followForUpdate } = useContext(FollowsContext)
     const { idxIdRelationMaq, handleCreateOrUpdateFollow } = useFollows()
     const { control, handleSubmit: onSubmit } = useFormContext<ISeguimiento>()
+    const changeTypeWatcher = useWatch({
+        control,
+        name: 'presentaFalla', // without supply name will watch the entire form, or ['firstName', 'lastName'] to watch both
+    })
 
     return (
         <Modal
@@ -71,7 +74,7 @@ export const ModalFollows = () => {
                         <InputText
                             fullWidth
                             control={control}
-                            label="Tiempo de Funcionamiento"
+                            label="Tiempo de Funcionamiento (en Horas)"
                             name="tiempoDeFuncionamiento"
                             type="number"
                         />
@@ -80,11 +83,28 @@ export const ModalFollows = () => {
                         <InputText
                             fullWidth
                             control={control}
-                            label="Tiempo de Reaparición"
+                            label="Tiempo de Reaparición (en Horas)"
                             name="tiempoDeReparacion"
                             type="number"
                         />
                     </Grid>
+                    <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
+                        <InputSelector control={control} label="Presenta falla?" name="presentaFalla">
+                            <MenuItem value={'si'}>Si</MenuItem>
+                            <MenuItem value={'no'}>No</MenuItem>
+                        </InputSelector>
+                    </Grid>
+                    {changeTypeWatcher === 'si' && (
+                        <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
+                            <InputText
+                                fullWidth
+                                control={control}
+                                label="Tiempo de Falla (en Horas)"
+                                name="tiempoDeFalla"
+                                type="number"
+                            />
+                        </Grid>
+                    )}
                     <Grid item md={5.5} sx={{ m: 2 }} xs={12}>
                         <InputSelector control={control} label="Maquina de Relación" name="maquina_id_relacion">
                             {idxIdRelationMaq.map((item) => (

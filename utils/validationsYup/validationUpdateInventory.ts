@@ -28,6 +28,20 @@ export const validationUpdateInventory = yup.object().shape({
         .required('Campo requerido')
         .min(1, 'mínimo 1 imágenes por inventario')
         .max(3, 'máximo 3 imágenes por inventario'),
+    existencia: yup
+        .number()
+        .required('Campo requerido.')
+        .positive()
+        .min(0, 'Las existencia tiene que ser un número y no puede ser negativo'),
+    locacion: yup
+        .string()
+        .required('Campo requerido.')
+        .oneOf(['produccion', 'taller', 'bodega', 'oficina_administrativa'], 'Debe de escoger entre estas opciones'),
+    subLocacion: yup
+        .number()
+        .required('Campo requerido.')
+        .positive()
+        .min(1, 'La subLocacion tiene que ser un número y no puede ser negativo'),
 
     //si es una maquina validar los siguientes campos
     capacidadNominal: yup.string().when('tipoInventario', {
@@ -68,36 +82,14 @@ export const validationUpdateInventory = yup.object().shape({
             .required('Campo requerido.')
             .min(3, 'Los comentarios generales deben tener más de 2 caracteres'),
     }),
-    locacion: yup.string().when('tipoInventario', {
-        is: 'maquina',
-        then: yup
-            .string()
-            .required('Campo requerido.')
-            .oneOf(
-                ['produccion', 'taller', 'bodega', 'oficina_administrativa'],
-                'Debe de escoger entre estas opciones',
-            ),
-    }),
-    subLocacion: yup.number().when('tipoInventario', {
-        is: 'maquina',
-        then: yup
-            .number()
-            .required('Campo requerido.')
-            .positive()
-            .min(1, 'La subLocacion tiene que ser un número y no puede ser negativo'),
-    }),
 
     //si es un repuesto validar los siguientes campos
-    existencia: yup.number().when('tipoInventario', {
+    validacionPorGPS: yup.string().when('tipoInventario', {
         is: 'repuesto',
-        then: yup
-            .number()
-            .required('Campo requerido.')
-            .positive()
-            .min(0, 'Las existencia tiene que ser un número y no puede ser negativo'),
+        then: yup.string().required('Campo requerido.').oneOf(['si', 'no'], 'Debe de escoger entre estas opciones'),
     }),
-    coordenadas_gps: yup.string().when('tipoInventario', {
-        is: 'repuesto',
+    coordenadas_gps: yup.string().when('validacionPorGPS', {
+        is: 'si',
         then: yup
             .string()
             .required(
@@ -108,6 +100,10 @@ export const validationUpdateInventory = yup.object().shape({
                     return originalValue
                 }
             }),
+    }),
+    validacionPorIMG: yup.string().when('tipoInventario', {
+        is: 'repuesto',
+        then: yup.string().required('Campo requerido.').oneOf(['si', 'no'], 'Debe de escoger entre estas opciones'),
     }),
     maquina_id_relacion: yup.array().when('tipoInventario', {
         is: 'repuesto',

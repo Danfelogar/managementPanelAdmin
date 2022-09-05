@@ -1,4 +1,4 @@
-import { PeopleOutline } from '@mui/icons-material'
+import { HourglassBottom } from '@mui/icons-material'
 import { Box, CircularProgress, Container, Typography } from '@mui/material'
 import { FC } from 'react'
 
@@ -14,9 +14,9 @@ interface Props {
 export const Loading: FC<Props> = ({ toggleTheme, title, size, color = 'text.primary' }) => {
     return (
         <AdminLayout
-            icon={<PeopleOutline color="secondary" />}
-            subTitle={'Gestión de Usuarios'}
-            title={'Usurarios'}
+            icon={<HourglassBottom color="secondary" />}
+            subTitle={'Espere un momento'}
+            title={'Loading...'}
             toggleTheme={toggleTheme}
         >
             <Container

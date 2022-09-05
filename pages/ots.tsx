@@ -9,6 +9,7 @@ import { ConfirmationNumberOutlined } from '@mui/icons-material'
 import { getSession } from 'next-auth/react'
 import { FormProvider } from 'react-hook-form'
 import moment from 'moment'
+import { string } from 'yup'
 
 import { ITheme } from '../interface'
 import { UIContext, OTsContext, AuthContext } from '../context'
@@ -326,11 +327,20 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     const session = await getSession({ req })
 
-    // console.log({ session })
+    //console.log({ session })
     if (!session) {
         return {
             redirect: {
                 destination: '/auth/login?p=/ots',
+                permanent: false,
+            },
+        }
+    }
+
+    if (!['super_admin', 'admin_mtto', 'mtto'].includes(session?.user?.rol)) {
+        return {
+            redirect: {
+                destination: '/',
                 permanent: false,
             },
         }

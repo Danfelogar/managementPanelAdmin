@@ -22,6 +22,18 @@ const seguimientoSchema = new Schema(
         tiempoDeFuncionamiento: { type: Number, required: true },
         tiempoDeReparacion: { type: Number, required: true },
 
+        presentaFalla: {
+            type: String,
+            enum: {
+                values: ['si', 'no'],
+                message: '{VALUE} no es una respuesta valida',
+                default: 'no',
+                required: true,
+            },
+        },
+
+        tiempoDeFalla: { type: Number, default: 0 },
+
         maquina_id_relacion: { type: String, required: true },
     },
     {
