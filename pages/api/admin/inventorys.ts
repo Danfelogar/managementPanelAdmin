@@ -200,28 +200,44 @@ const createInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
             //const test = await CounterTable.find().lean()
 
             //console.log({ test })
-            await CounterTable.findOneAndUpdate(
-                { idInventarioRep: 'autoIDRep' },
-                { $inc: { seqRep: 1 } },
-                { new: true },
-                async (err, cd) => {
-                    // console.log('value incresent:', cd)
-                    let seqId: Number = 0
+            // const resRep = CounterTable.findOneAndUpdate(
+            //     { idInventarioRep: 'autoIDRep' },
+            //     { $inc: { seqRep: 1 } },
+            //     { new: true },
+            //     async (err, cd) => {
+            //         // console.log('value incresent:', cd)
+            //         let seqId: Number = 0
 
-                    if (!cd) {
-                        const newVal = new CounterTable({ idInventarioRep: 'autoIDRep', seqRep: 1 })
+            //         if (!cd) {
+            //             const newVal = new CounterTable({ idInventarioRep: 'autoIDRep', seqRep: 1 })
 
-                        newVal.save()
-                        seqId = 1
-                    } else {
-                        seqId = cd.seqRep
-                    }
+            //             newVal.save()
+            //             seqId = 1
+            //         } else {
+            //             seqId = cd.seqRep
+            //         }
 
-                    const newInventory = new Inventario({ ...req.body, id_repuesto: seqId })
+            //         return seqId
+            //     },
+            // )
+            const resRep = await CounterTable.findOne({ idInventarioRep: 'autoIDRep' })
 
-                    await newInventory.save({ validateBeforeSave: true })
-                },
-            )
+            console.log({ resRep })
+            let seqId: Number = 0
+
+            if (!resRep) {
+                const newVal = new CounterTable({ idInventarioRep: 'autoIDRep', seqRep: 1 })
+
+                await newVal.save({ validateBeforeSave: true })
+                seqId = 1
+            } else {
+                seqId = (resRep.seqRep as number) + 1
+                await resRep.updateOne({ seqRep: (resRep.seqRep as number) + 1 })
+            }
+            console.log({ seqId })
+            const newInventory = new Inventario({ ...req.body, id_repuesto: seqId })
+
+            await newInventory.save({ validateBeforeSave: true })
 
             await db.disconnect()
 

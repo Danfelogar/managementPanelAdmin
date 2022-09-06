@@ -1,6 +1,6 @@
 import mongoose, { model, Model, Schema } from 'mongoose'
 
-interface ICounterTable {
+export interface ICounterTable {
     idInventarioMaq: String
     seqMaq: Number
     idInventarioRep: String
@@ -12,14 +12,14 @@ interface ICounterTable {
 }
 
 const counterTableSchema = new Schema({
-    idInventarioMaq: { type: String, unique: false },
-    seqMaq: { type: Number, unique: false },
-    idInventarioRep: { type: String, unique: false },
-    seqRep: { type: Number, unique: false },
-    idOT: { type: String, unique: false },
-    seqOT: { type: Number, unique: false },
-    idSeg: { type: String, unique: false },
-    seqSeg: { type: Number, unique: false },
+    idInventarioMaq: { type: String, unique: false, default: 'autoIDMaq' },
+    seqMaq: { type: Number, unique: false, default: 0 },
+    idInventarioRep: { type: String, unique: false, default: 'autoIDRep' },
+    seqRep: { type: Number, unique: false, default: 0 },
+    idOT: { type: String, unique: false, default: 'autoIDOT' },
+    seqOT: { type: Number, unique: false, default: 0 },
+    idSeg: { type: String, unique: false, default: 'autoIDSeg' },
+    seqSeg: { type: Number, unique: false, default: 0 },
 })
 
 const CounterTable: Model<ICounterTable> = mongoose.models.CounterTable || model('CounterTable', counterTableSchema)

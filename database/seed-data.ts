@@ -87,7 +87,7 @@ interface SeedData {
     inventarios: SeedInventario[]
     ots: SeedOT[]
     seguimientos: SeedSeguimiento[]
-    counterTable: SeedCounterTable
+    counterTable: SeedCounterTable[]
 }
 
 export const initialData: SeedData = {
@@ -822,14 +822,16 @@ export const initialData: SeedData = {
             //updatedAt: '2022-12-29T01:06:40.335Z',
         },
     ],
-    counterTable: {
-        idInventarioMaq: 'autoIDMaq',
-        seqMaq: 8,
-        idInventarioRep: 'autoIDRep',
-        seqRep: 5,
-        idOT: 'autoIDOT',
-        seqOT: 3,
-        idSeg: 'autoIDSeg',
-        seqSeg: 17,
-    },
+    counterTable: [
+        {
+            idInventarioMaq: 'autoIDMaq',
+            seqMaq: 8,
+            idInventarioRep: 'autoIDRep',
+            seqRep: 5,
+            idOT: 'autoIDOT',
+            seqOT: 3,
+            idSeg: 'autoIDSeg',
+            seqSeg: 17,
+        },
+    ],
 }

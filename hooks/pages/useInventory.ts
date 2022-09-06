@@ -82,8 +82,8 @@ export const useInventory = (sendDataInv?: IInventario) => {
             changeIsLoading()
             //console.log('creando', data)
         }
-        navigateToUpdate('/inventory')
-        toggleSnackBarSuccess()
+        // navigateToUpdate('/inventory')
+        // toggleSnackBarSuccess()
     }
 
     const handleUpdateInventario = () => {
