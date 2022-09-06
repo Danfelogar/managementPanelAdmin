@@ -48,6 +48,7 @@ const getOTs = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
             // .limit(limit)
             .lean()
 
+        console.log({ ots })
         await db.disconnect()
 
         return res.status(200).send(
