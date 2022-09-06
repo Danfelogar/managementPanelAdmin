@@ -39,25 +39,31 @@ const getOTs = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
     // if (Math.sign(last_page - page) === 1) next_page = true
     // if ((Math.sign(page - last_page) === -1 || Math.sign(page - last_page) === 0) && page !== 1) previous_page = true
-    const ots = await OT.find({
-        $or: [{ slug: regex }, { numero_de_orden_de_compra: regex }],
-    })
-        .sort({ updatedAt: -1 })
-        // .skip((page - 1) * limit)
-        // .limit(limit)
-        .lean()
+    try {
+        const ots = await OT.find({
+            $or: [{ slug: regex }, { numero_de_orden_de_compra: regex }],
+        })
+            .sort({ updatedAt: -1 })
+            // .skip((page - 1) * limit)
+            // .limit(limit)
+            .lean()
 
-    await db.disconnect()
+        await db.disconnect()
 
-    return res.status(200).send(
-        ots,
-        // page,
-        // limit,
-        // last_page,
-        // previous_page,
-        // next_page,
-        // total,
-    )
+        return res.status(200).send(
+            ots,
+            // page,
+            // limit,
+            // last_page,
+            // previous_page,
+            // next_page,
+            // total,
+        )
+    } catch (error) {
+        console.log('errorMsm ===>', error)
+        await db.disconnect()
+        res.status(400).send({ message: 'internals logs' })
+    }
 }
 
 const createOT = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
