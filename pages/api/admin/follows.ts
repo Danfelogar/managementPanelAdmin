@@ -114,28 +114,23 @@ const createFollow = async (req: NextApiRequest, res: NextApiResponse<Data>) => 
     await db.connect()
 
     try {
-        CounterTable.findOneAndUpdate(
-            { idSeg: 'autoIDSeg' },
-            { $inc: { seqSeg: 1 } },
-            { new: true },
-            async (err, cd) => {
-                // console.log('value incresent:', cd)
-                let seqId: Number = 0
+        const resSeg = await CounterTable.findOne({ idSeg: 'autoIDSeg' })
 
-                if (cd === null) {
-                    const newVal = new CounterTable({ idSeg: 'autoIDSeg', seqSeg: 1 })
+        let seqId: Number = 0
 
-                    newVal.save()
-                    seqId = 1
-                } else {
-                    seqId = cd.seqSeg
-                }
+        if (!resSeg) {
+            const newVal = new CounterTable({ idSeg: 'autoIDSeg', seqSeg: 1 })
 
-                const newFollow = new Seguimiento({ ...req.body, id_seguimiento: seqId })
+            await newVal.save({ validateBeforeSave: true })
+            seqId = 1
+        } else {
+            seqId = (resSeg.seqSeg as number) + 1
+            await resSeg.updateOne({ seqSeg: (resSeg.seqSeg as number) + 1 })
+        }
 
-                await newFollow.save({ validateBeforeSave: true })
-            },
-        )
+        const newFollow = new Seguimiento({ ...req.body, id_seguimiento: seqId })
+
+        await newFollow.save({ validateBeforeSave: true })
 
         await db.disconnect()
 

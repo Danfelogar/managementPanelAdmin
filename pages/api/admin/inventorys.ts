@@ -142,28 +142,23 @@ const createInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
         await db.connect()
 
         try {
-            CounterTable.findOneAndUpdate(
-                { idInventarioMaq: 'autoIDMaq' },
-                { $inc: { seqMaq: 1 } },
-                { new: true },
-                async (err, cd) => {
-                    // console.log('value incresent:', cd)
-                    let seqId: Number = 0
+            const resMaq = await CounterTable.findOne({ idInventarioMaq: 'autoIDMaq' })
 
-                    if (cd === null) {
-                        const newVal = new CounterTable({ idInventarioMaq: 'autoIDMaq', seqMaq: 1 })
+            let seqId: Number = 0
 
-                        newVal.save()
-                        seqId = 1
-                    } else {
-                        seqId = cd.seqMaq
-                    }
+            if (!resMaq) {
+                const newVal = new CounterTable({ idInventarioMaq: 'autoIDMaq', seqMaq: 1 })
 
-                    const newInventory = new Inventario({ ...req.body, id_maquina: seqId })
+                await newVal.save({ validateBeforeSave: true })
+                seqId = 1
+            } else {
+                seqId = (resMaq.seqMaq as number) + 1
+                await resMaq.updateOne({ seqMaq: (resMaq.seqMaq as number) + 1 })
+            }
 
-                    await newInventory.save({ validateBeforeSave: true })
-                },
-            )
+            const newInventory = new Inventario({ ...req.body, id_maquina: seqId })
+
+            await newInventory.save({ validateBeforeSave: true })
 
             await db.disconnect()
 
@@ -197,32 +192,9 @@ const createInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
         await db.connect()
 
         try {
-            //const test = await CounterTable.find().lean()
-
-            //console.log({ test })
-            // const resRep = CounterTable.findOneAndUpdate(
-            //     { idInventarioRep: 'autoIDRep' },
-            //     { $inc: { seqRep: 1 } },
-            //     { new: true },
-            //     async (err, cd) => {
-            //         // console.log('value incresent:', cd)
-            //         let seqId: Number = 0
-
-            //         if (!cd) {
-            //             const newVal = new CounterTable({ idInventarioRep: 'autoIDRep', seqRep: 1 })
-
-            //             newVal.save()
-            //             seqId = 1
-            //         } else {
-            //             seqId = cd.seqRep
-            //         }
-
-            //         return seqId
-            //     },
-            // )
             const resRep = await CounterTable.findOne({ idInventarioRep: 'autoIDRep' })
 
-            console.log({ resRep })
+            // console.log({ resRep })
             let seqId: Number = 0
 
             if (!resRep) {
@@ -234,7 +206,7 @@ const createInventory = async (req: NextApiRequest, res: NextApiResponse<Data>) 
                 seqId = (resRep.seqRep as number) + 1
                 await resRep.updateOne({ seqRep: (resRep.seqRep as number) + 1 })
             }
-            console.log({ seqId })
+            // console.log({ seqId })
             const newInventory = new Inventario({ ...req.body, id_repuesto: seqId })
 
             await newInventory.save({ validateBeforeSave: true })

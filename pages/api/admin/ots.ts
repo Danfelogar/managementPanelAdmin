@@ -130,22 +130,24 @@ const createOT = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     }
 
     try {
-        CounterTable.findOneAndUpdate({ idOT: 'autoIDOT' }, { $inc: { seqOT: 1 } }, { new: true }, async (err, cd) => {
-            // console.log('value incresent:', cd)
-            let seqId: Number = 0
+        const resOT = await CounterTable.findOne({ idOT: 'autoIDOT' })
 
-            if (cd === null) {
-                const newVal = new CounterTable({ idOT: 'autoIDOT', seqOT: 1 })
+        let seqId: Number = 0
 
-                newVal.save()
-                seqId = 1
-            } else {
-                seqId = cd.seqOT
-            }
-            const newOT = new OT({ ...req.body, ot_id: seqId })
+        if (!resOT) {
+            const newVal = new CounterTable({ idOT: 'autoIDOT', seqOT: 1 })
 
-            await newOT.save({ validateBeforeSave: true })
-        })
+            await newVal.save({ validateBeforeSave: true })
+
+            seqId = 1
+        } else {
+            seqId = (resOT.seqOT as number) + 1
+            await resOT.updateOne({ seqOT: (resOT.seqOT as number) + 1 })
+        }
+
+        const newOT = new OT({ ...req.body, ot_id: seqId })
+
+        await newOT.save({ validateBeforeSave: true })
 
         await db.disconnect()
 
