@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios'
+import moment from 'moment'
 import { FC, ReactNode, useReducer } from 'react'
 
 import { IOT } from '../../interface'
@@ -55,7 +56,11 @@ export const OTsProvider: FC<Props> = ({ children }) => {
 
     const handleCreateOT = async (data: Partial<IOT>): Promise<AxiosResponse> => {
         return await managementApi
-            .post('/admin/ots', { ...data })
+            .post('/admin/ots', {
+                ...data,
+                fecha_expedicion: new Date(data.fecha_expedicion as string).toISOString(),
+                fecha_cierre: new Date(data.fecha_cierre as string).toISOString(),
+            })
             .then((x) => {
                 return x
             })
@@ -68,7 +73,11 @@ export const OTsProvider: FC<Props> = ({ children }) => {
 
     const handleUpdateOT = async (data: Partial<IOT>): Promise<AxiosResponse> => {
         return await managementApi
-            .put('/admin/ots', { ...data })
+            .put('/admin/ots', {
+                ...data,
+                fecha_expedicion: new Date(data.fecha_expedicion as string).toISOString(),
+                fecha_cierre: new Date(data.fecha_cierre as string).toISOString(),
+            })
             .then((res) => {
                 getOTsData()
 

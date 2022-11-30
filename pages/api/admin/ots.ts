@@ -22,7 +22,12 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
 const getOTs = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     // const page: number = parseInt(req.query.page as any) || 1
     // const limit: number = parseInt(req.query.limit as any) || 10
-    const { searchParams = '' } = req.query
+    const {
+        searchParams = '',
+        slug,
+        numero_de_orden_de_compra,
+        fecha_expedicion,
+    } = req.query as { searchParams: string; slug: string; numero_de_orden_de_compra: string; fecha_expedicion: string }
 
     const regex = new RegExp(searchParams.toString() as string, 'i')
 
@@ -41,7 +46,16 @@ const getOTs = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     // if ((Math.sign(page - last_page) === -1 || Math.sign(page - last_page) === 0) && page !== 1) previous_page = true
     try {
         const ots = await OT.find({
-            $or: [{ slug: regex }, { numero_de_orden_de_compra: regex }],
+            $or: [
+                { slug: slug ? slug : regex },
+                { numero_de_orden_de_compra: numero_de_orden_de_compra ? numero_de_orden_de_compra : regex },
+            ],
+            fecha_expedicion: fecha_expedicion
+                ? {
+                      $gte: new Date(fecha_expedicion).toISOString(),
+                      $lte: new Date('2022-12-31').toISOString(),
+                  }
+                : regex,
         })
             .sort({ updatedAt: -1 })
             // .skip((page - 1) * limit)
