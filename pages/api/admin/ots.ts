@@ -27,8 +27,17 @@ const getOTs = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
         slug,
         numero_de_orden_de_compra,
         fecha_expedicion,
-    } = req.query as { searchParams: string; slug: string; numero_de_orden_de_compra: string; fecha_expedicion: string }
+        fecha_expedicion_exacta,
+    } = req.query as {
+        searchParams: string
+        slug: string
+        numero_de_orden_de_compra: string
+        fecha_expedicion: string
+        fecha_cierre: string
+        fecha_expedicion_exacta: string
+    }
 
+    // console.log({ fecha_expedicion_exacta })
     const regex = new RegExp(searchParams.toString() as string, 'i')
 
     await db.connect()
@@ -52,8 +61,13 @@ const getOTs = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
             ],
             fecha_expedicion: fecha_expedicion
                 ? {
-                      $gte: new Date(fecha_expedicion).toISOString(),
-                      $lte: new Date('2022-12-31').toISOString(),
+                      $gte: new Date(`${fecha_expedicion}-1`).toISOString(),
+                      $lte: new Date(`${fecha_expedicion}-31`).toISOString(),
+                  }
+                : fecha_expedicion_exacta
+                ? {
+                      $gte: `${fecha_expedicion_exacta}T00:00:00.000Z`,
+                      $lte: `${fecha_expedicion_exacta}T23:59:59:999Z`,
                   }
                 : regex,
         })
