@@ -58,8 +58,12 @@ export const OTsProvider: FC<Props> = ({ children }) => {
         return await managementApi
             .post('/admin/ots', {
                 ...data,
-                fecha_expedicion: new Date(data.fecha_expedicion as string).toISOString(),
-                fecha_cierre: new Date(data.fecha_cierre as string).toISOString(),
+                fecha_expedicion: new Date(
+                    data?.fecha_expedicion!.getTime() - data?.fecha_expedicion!.getTimezoneOffset() * 60000,
+                ).toISOString(),
+                fecha_cierre: new Date(
+                    data?.fecha_cierre!.getTime() - data?.fecha_cierre!.getTimezoneOffset() * 60000,
+                ).toISOString(),
             })
             .then((x) => {
                 return x
@@ -72,11 +76,17 @@ export const OTsProvider: FC<Props> = ({ children }) => {
     }
 
     const handleUpdateOT = async (data: Partial<IOT>): Promise<AxiosResponse> => {
+        console.log({ data })
+
         return await managementApi
             .put('/admin/ots', {
                 ...data,
-                fecha_expedicion: new Date(data.fecha_expedicion as string).toISOString(),
-                fecha_cierre: new Date(data.fecha_cierre as string).toISOString(),
+                fecha_expedicion: new Date(
+                    data?.fecha_expedicion!.getTime() - data?.fecha_expedicion!.getTimezoneOffset() * 60000,
+                ).toISOString(),
+                fecha_cierre: new Date(
+                    data?.fecha_cierre!.getTime() - data?.fecha_cierre!.getTimezoneOffset() * 60000,
+                ).toISOString(),
             })
             .then((res) => {
                 getOTsData()
