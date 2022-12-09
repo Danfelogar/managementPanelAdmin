@@ -40,7 +40,7 @@ const parseFile = async (req: NextApiRequest): Promise<string> => {
 
         form.parse(req, async (err, fields, files) => {
             // console.log({err, fields, files})
-
+            console.log({ files })
             if (err) return reject(err)
             const filePath = await saveFile(files.file as formidable.File)
 
@@ -50,7 +50,10 @@ const parseFile = async (req: NextApiRequest): Promise<string> => {
 }
 const uploadFile = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     //tendremos una sola img asi mandemos varias puesto que la promesa resuelve una por una no todas al tiempo
+    console.log({ req })
     const imageUrl = await parseFile(req)
+
+    // console.log({ imageUrl })
 
     return res.status(200).json({ message: imageUrl })
 }

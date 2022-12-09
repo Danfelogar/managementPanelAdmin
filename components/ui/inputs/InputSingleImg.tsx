@@ -28,7 +28,7 @@ export const InputSingleImg: FC<Props> = ({ label, name, control }) => {
                     if (!target.files || target.files.length === 0) {
                         return
                     }
-
+                    console.log(target.files[0])
                     try {
                         //investigar mas sobre FormData
                         const formData = new FormData()

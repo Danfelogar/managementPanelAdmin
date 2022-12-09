@@ -40,7 +40,7 @@ export const OTsProvider: FC<Props> = ({ children }) => {
             })
             .then(({ data }) => {
                 dispatch({ type: '[OTS] Get ots data', payload: data })
-                console.log({ data })
+                // console.log({ data })
 
                 return data
             })
