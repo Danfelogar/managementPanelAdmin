@@ -27,9 +27,29 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
 const getInventorys = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     // const page: number = parseInt(req.query.page as any) || 1
     // const limit: number = parseInt(req.query.limit as any) || 10
-    const { searchParams = '' } = req.query
+    const {
+        searchParams = '',
+        tipoInventario = '',
+        estado = '',
+        existencia_init = '0',
+        existencia_end = '99999999999',
+    } = req.query as {
+        searchParams: string
+        tipoInventario: string
+        estado: string
+        existencia_init: string
+        existencia_end: string
+    }
+    let queryObj = {}
+    let auxArr = [{ tipoInventario }, { estado }]
 
-    const regex = new RegExp(searchParams.toString() as string, 'i')
+    // for(let i = 0; i < auxArr.length; i++){
+    //     auxArr[i] && (queryObj[`${auxArr[i]}`] = [auxArr[i]]);
+    // }
+    auxArr.forEach((item) => {
+        Object.values(item)[0] && (queryObj[Object.keys(item)[0]] = Object.values(item)[0])
+    })
+    const regex = new RegExp(searchParams.toString(), 'i')
 
     await db.connect()
 
@@ -44,14 +64,26 @@ const getInventorys = async (req: NextApiRequest, res: NextApiResponse<Data>) =>
 
     // if (Math.sign(last_page - page) === 1) next_page = true
     // if ((Math.sign(page - last_page) === -1 || Math.sign(page - last_page) === 0) && page !== 1) previous_page = true
+    console.log({ queryObj })
     const inventorys = await Inventario.find({
+        // $and: [
+        //     { $or: [{ nombre: searchParams }] },
+        //     { $or: [{ tipoInventario: tipoInventario }] },
+        //     { $or: [{ estado: estado }] },
+        // ],
+        ...queryObj,
         $or: [{ nombre: regex }],
+        existencia: {
+            $gte: existencia_init,
+            $lte: existencia_end,
+        },
     })
         .sort({ updatedAt: -1 })
         // .skip((page - 1) * limit)
         // .limit(limit)
         .lean()
 
+    console.log({ inventorys })
     await db.disconnect()
 
     return res.status(200).send(
