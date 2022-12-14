@@ -31,17 +31,19 @@ const getInventorys = async (req: NextApiRequest, res: NextApiResponse<Data>) =>
         searchParams = '',
         tipoInventario = '',
         estado = '',
-        existencia_init = '0',
+        existencia_init = '-1',
         existencia_end = '99999999999',
+        _id = '',
     } = req.query as {
         searchParams: string
         tipoInventario: string
         estado: string
         existencia_init: string
         existencia_end: string
+        _id: string
     }
     let queryObj = {}
-    let auxArr = [{ tipoInventario }, { estado }]
+    let auxArr = [{ tipoInventario }, { estado }, { _id }]
 
     // for(let i = 0; i < auxArr.length; i++){
     //     auxArr[i] && (queryObj[`${auxArr[i]}`] = [auxArr[i]]);
@@ -64,7 +66,7 @@ const getInventorys = async (req: NextApiRequest, res: NextApiResponse<Data>) =>
 
     // if (Math.sign(last_page - page) === 1) next_page = true
     // if ((Math.sign(page - last_page) === -1 || Math.sign(page - last_page) === 0) && page !== 1) previous_page = true
-    console.log({ queryObj })
+
     const inventorys = await Inventario.find({
         // $and: [
         //     { $or: [{ nombre: searchParams }] },
