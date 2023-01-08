@@ -61,17 +61,19 @@ export const useOTs = () => {
             .catch((err) => console.log(err))
     }
 
-    //console.log({ inventory })
-    useEffect(() => {
-        handlerIndexOfIdMaq()
-        handlerIndexOfIdRep()
-        handlerIndexOfUsersMttos()
-    }, [])
-
     useEffect(() => {
         changeIsLoading()
         getOTsData()
-        changeIsLoading()
+        .finally(()=>{
+            handlerIndexOfIdMaq()
+            .finally(()=>{
+                handlerIndexOfIdRep()
+                .finally(()=>{
+                    handlerIndexOfUsersMttos()
+                    .finally(()=>changeIsLoading())
+                })
+            })
+        })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
