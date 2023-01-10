@@ -61,19 +61,26 @@ export const useOTs = () => {
             .catch((err) => console.log(err))
     }
 
-    useEffect(() => {
+    const allPromises = async () => {
         changeIsLoading()
-        getOTsData()
-        .finally(()=>{
-            handlerIndexOfIdMaq()
-            .finally(()=>{
-                handlerIndexOfIdRep()
-                .finally(()=>{
-                    handlerIndexOfUsersMttos()
-                    .finally(()=>changeIsLoading())
+        getOTsData().finally(() => {
+            handlerIndexOfIdMaq().finally(() => {
+                handlerIndexOfIdRep().finally(() => {
+                    handlerIndexOfUsersMttos().finally(() => changeIsLoading())
                 })
             })
         })
+        // await Promise.all([getOTsData(), handlerIndexOfIdMaq(), handlerIndexOfIdRep(), handlerIndexOfUsersMttos()])
+        // changeIsLoading()
+    }
+
+    useEffect(() => {
+        // changeIsLoading()
+        // getOTsData()
+        // handlerIndexOfIdMaq()
+        // handlerIndexOfIdRep()
+        // handlerIndexOfUsersMttos()
+        allPromises()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 

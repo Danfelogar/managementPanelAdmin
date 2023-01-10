@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { IOT } from '../../../interface'
 import { db } from '../../../database'
 import { OT } from '../../../models'
-type Data = { message: string } | Array<{fecha_expedicion: Date}>
+type Data = { message: string } | Array<{ fecha_expedicion: Date }>
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
     switch (req.method) {
@@ -14,10 +14,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
     }
 }
 const getOTsByMonth = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
-    const {
-        searchParams = '',
-        fecha_expedicion,
-    } = req.query as {
+    const { searchParams = '', fecha_expedicion } = req.query as {
         searchParams: string
         slug: string
         numero_de_orden_de_compra: string
@@ -39,15 +36,15 @@ const getOTsByMonth = async (req: NextApiRequest, res: NextApiResponse<Data>) =>
                   }
                 : regex,
         })
-            .select('-ot_id -slug -repuesto -tecnico_ing -estado_de_OT -numero_de_orden_de_compra -tiempoDeEjecucion -fecha_cierre -imgDeLaMaquina -tareas -comentario -maquina -createdAt -updatedAt')
+            .select(
+                '-ot_id -slug -repuesto -tecnico_ing -estado_de_OT -numero_de_orden_de_compra -tiempoDeEjecucion -fecha_cierre -imgDeLaMaquina -tareas -comentario -maquina -createdAt -updatedAt',
+            )
             .sort({ updatedAt: -1 })
             .lean()
 
         await db.disconnect()
 
-        return res.status(200).send(
-            ots,
-        )
+        return res.status(200).send(ots)
     } catch (error) {
         console.log('errorMsm ===>', error)
         await db.disconnect()

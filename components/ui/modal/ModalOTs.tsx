@@ -6,6 +6,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import CloseIcon from '@mui/icons-material/Close'
 import { useFormContext } from 'react-hook-form'
 import { LoadingButton } from '@mui/lab'
+import { NextPage } from 'next'
 
 import { AuthContext, OTsContext, UIContext } from '../../../context'
 import { useOTs } from '../../../hooks'
@@ -13,11 +14,33 @@ import { WrapperModalHeaderOT, WrapperModalOT } from '../styles'
 import { IOT } from '../../../interface'
 import { InputDateDesktop, InputDateMobile, InputSelector, InputSingleImg, InputText, InputTextMult } from '../inputs'
 
-export const ModalOTs = () => {
+interface Props {
+    idxIdRelationMaq: {
+        _id: string
+        id_maquina: number
+    }[]
+    idxIdRelationRep: {
+        _id: string
+        nombre: string
+        existencia: number
+    }[]
+    idxUsersMttos: {
+        nombre: string
+        rol: string
+    }[]
+    handleCreateOrUpdateOT: (data: IOT) => void
+}
+
+export const ModalOTs: NextPage<Props> = ({
+    idxIdRelationMaq,
+    idxIdRelationRep,
+    idxUsersMttos,
+    handleCreateOrUpdateOT,
+}) => {
     const { user } = useContext(AuthContext)
     const { toggleModalOTs, isModalOTsOpen } = useContext(UIContext)
     const { isLoading, isUpdateOT, oTForUpdate } = useContext(OTsContext)
-    const { idxIdRelationMaq, idxIdRelationRep, idxUsersMttos, handleCreateOrUpdateOT } = useOTs()
+
     const { control, handleSubmit: onSubmit } = useFormContext<IOT>()
 
     return (

@@ -29,6 +29,10 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
         changeModalUpdate,
         handleDeletedOT,
         warningDeletedOT,
+        idxIdRelationMaq,
+        idxIdRelationRep,
+        idxUsersMttos,
+        handleCreateOrUpdateOT,
     } = useOTs()
 
     const columns: GridColDef[] = [
@@ -292,12 +296,22 @@ const OtsPage: NextPage<ITheme> = ({ toggleTheme }) => {
             {/* condicional para evitar que se queden guardados los datos de los inputs */}
             {isModalOTsOpen && isUpdateOT && (
                 <FormProvider {...formMethodsUpdate}>
-                    <ModalOTs />
+                    <ModalOTs
+                        handleCreateOrUpdateOT={handleCreateOrUpdateOT}
+                        idxIdRelationMaq={idxIdRelationMaq}
+                        idxIdRelationRep={idxIdRelationRep}
+                        idxUsersMttos={idxUsersMttos}
+                    />
                 </FormProvider>
             )}
             {isModalOTsOpen && !isUpdateOT && (
                 <FormProvider {...formMethodsCreate}>
-                    <ModalOTs />
+                    <ModalOTs
+                        handleCreateOrUpdateOT={handleCreateOrUpdateOT}
+                        idxIdRelationMaq={idxIdRelationMaq}
+                        idxIdRelationRep={idxIdRelationRep}
+                        idxUsersMttos={idxUsersMttos}
+                    />
                 </FormProvider>
             )}
             <ModalWarringDeleted
