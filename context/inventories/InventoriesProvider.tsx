@@ -1,4 +1,5 @@
-import { FC, ReactNode, useEffect, useReducer } from 'react'
+import { AxiosResponse } from 'axios'
+import { FC, ReactNode, useReducer } from 'react'
 
 import { IInventario } from '../../interface'
 import { managementApi } from '../../services'
@@ -49,25 +50,33 @@ export const InventoriesProvider: FC<Props> = ({ children }) => {
             })
     }
 
-    const handleCreateInventory = async (data: IInventario) => {
-        await managementApi
+    const handleCreateInventory = async (data: IInventario): Promise<AxiosResponse> => {
+        return await managementApi
             .post('/admin/inventorys', { ...data })
-            .then(() => {
+            .then((res) => {
                 getInventoriesData()
+
+                return res
             })
             .catch((err) => {
                 console.log(err.message)
+
+                return err.message
             })
     }
 
-    const handleUpdateInventory = async (data: Partial<IInventario>) => {
-        await managementApi
+    const handleUpdateInventory = async (data: Partial<IInventario>): Promise<AxiosResponse> => {
+        return await managementApi
             .put('/admin/inventorys', { ...data })
-            .then(() => {
+            .then((res) => {
                 getInventoriesData()
+
+                return res
             })
             .catch((err) => {
                 console.log(err.message)
+
+                return err.message
             })
     }
 
@@ -87,7 +96,10 @@ export const InventoriesProvider: FC<Props> = ({ children }) => {
     }
 
     const changeIsUpdateInventory = (val: boolean) => {
-        dispatch({ type: '[INVENTORIES] Change is updated inventories', payload: val })
+        dispatch({
+            type: '[INVENTORIES] Change is updated inventories',
+            payload: val,
+        })
     }
 
     // const changeInvetoryForUpdate = (singleInventory: IInventario | undefined) => {
@@ -95,10 +107,16 @@ export const InventoriesProvider: FC<Props> = ({ children }) => {
     // }
 
     const changeMsmTextDelete = (email: string) => {
-        dispatch({ type: '[INVENTORIES] Change msm text for delete inventories', payload: email })
+        dispatch({
+            type: '[INVENTORIES] Change msm text for delete inventories',
+            payload: email,
+        })
     }
     const changeMsmTextUpdate = (_id: string) => {
-        dispatch({ type: '[INVENTORIES] Change msm text for update inventories', payload: _id })
+        dispatch({
+            type: '[INVENTORIES] Change msm text for update inventories',
+            payload: _id,
+        })
     }
 
     return (

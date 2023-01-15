@@ -1,3 +1,4 @@
+import { AxiosResponse } from 'axios'
 import { createContext } from 'react'
 
 import { IInventario } from '../../interface'
@@ -19,8 +20,8 @@ interface ContextProps {
     changeMsmTextDelete: (email: string) => void
     changeMsmTextUpdate: (_id: string) => void
     //TODO:
-    handleCreateInventory: (data: IInventario) => void
-    handleUpdateInventory: (data: Partial<IInventario>) => void
+    handleCreateInventory: (data: IInventario) => Promise<AxiosResponse>
+    handleUpdateInventory: (data: Partial<IInventario>) => Promise<AxiosResponse>
     handleDeleteInventory: (_id: string) => void
 }
 

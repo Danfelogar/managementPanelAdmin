@@ -72,18 +72,44 @@ export const useInventory = (sendDataInv?: IInventario) => {
             //TODO: hacer funcionalidad correspondiente al clg
             changeIsLoading()
             handleUpdateInventory(data)
-            changeIsLoading()
+                .then((res) => {
+                    // console.log({ res })
+                    if (res.status === 201) {
+                        setTimeout(() => {
+                            navigateToUpdate('/inventory')
+                            changeIsLoading()
+                            toggleSnackBarSuccess()
+                        }, 170)
+                    }
+                })
+                .catch((res) => {
+                    changeIsLoading()
+                    // console.log({ res })
+                    alert(res)
+                })
             // console.log('actualizando:', data)
         } else {
             changeMsmTextUpdate('')
             //TODO: hacer funcionalidad correspondiente al clg
             changeIsLoading()
             handleCreateInventory(data)
-            changeIsLoading()
+                .then((res) => {
+                    // console.log({ res })
+                    if (res.status === 201) {
+                        setTimeout(() => {
+                            navigateToUpdate('/inventory')
+                            changeIsLoading()
+                            toggleSnackBarSuccess()
+                        }, 170)
+                    }
+                })
+                .catch((res) => {
+                    changeIsLoading()
+                    // console.log({ res })
+                    alert(res)
+                })
             //console.log('creando', data)
         }
-        navigateToUpdate('/inventory')
-        toggleSnackBarSuccess()
     }
 
     const handleUpdateInventario = () => {
