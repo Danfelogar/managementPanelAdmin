@@ -56,13 +56,24 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query }) => 
         // tempInventory.imagenes = ['img1.jpg', 'img2.jpg']
         inventory = tempInventory
     } else {
-        inventory = await dbInventories.getProductById(id.toString())
+        return await dbInventories.getProductById(id.toString())
+        .then((res: any)=>{
+            return {
+                props: {
+                    inventory: res,
+                },
+            }
+        })
+        .catch((err) => {
+            console.log(err.message)
+            return {
+                redirect: {
+                    destination: '/admin/inventory',
+                    permanent: false,
+                },
+            }
+        })
 
-        return {
-            props: {
-                inventory,
-            },
-        }
     }
     //console.log('inventory ===>', inventory)
     if (!inventory) {
