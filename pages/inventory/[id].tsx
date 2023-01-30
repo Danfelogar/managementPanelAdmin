@@ -57,6 +57,12 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query }) => 
         inventory = tempInventory
     } else {
         inventory = await dbInventories.getProductById(id.toString())
+
+        return {
+            props: {
+                inventory,
+            },
+        }
     }
     //console.log('inventory ===>', inventory)
     if (!inventory) {
@@ -67,7 +73,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query }) => 
             },
         }
     }
-
+    //console.log({inventory});
     return {
         props: {
             inventory,
