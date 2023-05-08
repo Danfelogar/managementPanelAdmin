@@ -7,3 +7,8 @@ si no se ve la carpeta "node_modules" ejecutar el comando: yarn install
 
 levantar proyecto: yarn dev
 
+##Link de la web
+https://admin-management.onrender.com/
+
+## Link del video en youtube
+[![Alt text](https://img.youtube.com/vi/vvbmbf-UG2A/0.jpg)](https://www.youtube.com/watch?v=vvbmbf-UG2A)
